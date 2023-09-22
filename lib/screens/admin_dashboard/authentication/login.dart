@@ -1,11 +1,11 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
-import 'package:bsims/screens/widgets/textfield_widget.dart';
+import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../../const/colors.dart';
-import '../admin_dashboard/home.dart';
-import '../widgets/main_button.dart';
+import '../../../const/colors.dart';
+import '../home.dart';
+import '../../../widgets/main_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -52,8 +52,8 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: const Text(
+                    const Center(
+                      child: Text(
                         'LOGIN',
                         style: TextStyle(
                             color: Colors.green,
@@ -64,17 +64,17 @@ class _LoginPageState extends State<LoginPage> {
                     TextFieldWidget(
                         controller: emailAddressController,
                         label: 'Email Address'),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     TextFieldWidget(
                         controller: passwordController, label: 'Password'),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     TextButton(
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           'Show password',
                           style: TextStyle(color: Colors.green),
                         )),
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Home()));
+                                  builder: (context) => const Home()));
                         },
                         color: Colors.black,
                         child: Text(

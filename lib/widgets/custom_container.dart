@@ -21,7 +21,7 @@ class CustomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return Container(padding: EdgeInsets.all(10),margin: EdgeInsets.only(right:20),
+    return Container(padding: const EdgeInsets.all(10),margin: const EdgeInsets.only(right:20),
       
        decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5), color: bgColor),
@@ -33,14 +33,14 @@ class CustomContainer extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: iconColor),
             child: Icon(icon, color: white, size: 20,),
-          ),SizedBox(width:7),
+          ),const SizedBox(width:7),
           Column(
             children: [
               Text(
                 label,
                 style: headline(black, 12),
               ),
-              SizedBox(height:5),
+              const SizedBox(height:5),
               Text(
                 quantity.toString(),
                 style: bodyText(black, 12),

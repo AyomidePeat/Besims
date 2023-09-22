@@ -1,8 +1,8 @@
 import 'package:bsims/const/textstyle.dart';
-import 'package:bsims/screens/widgets/textfield_widget.dart';
+import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../const/colors.dart';
+import '../../const/colors.dart';
 
 class Supplier extends StatefulWidget {
   final double screenWidth;
@@ -77,14 +77,14 @@ class _SupplierState extends State<Supplier> {
                       'S/N',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       '1',
                       style: bodyText(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
@@ -100,14 +100,14 @@ class _SupplierState extends State<Supplier> {
                       'COMPANY',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'Supplier company',
                       style: bodyText(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
@@ -123,14 +123,14 @@ class _SupplierState extends State<Supplier> {
                       'REGDATE',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'Fri, Jun 2nd 2023',
                       style: bodyText(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
@@ -146,14 +146,14 @@ class _SupplierState extends State<Supplier> {
                       'E-MAIL',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'peat@gmail.com',
                       style: bodyText(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
@@ -169,14 +169,14 @@ class _SupplierState extends State<Supplier> {
                       'PHONE',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Text(
                       '090234566',
                       style: bodyText(white, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Text(
@@ -192,14 +192,14 @@ class _SupplierState extends State<Supplier> {
                       'ADDRESS',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Text(
                       'Supplier Address',
                       style: bodyText(white, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Text(
@@ -215,14 +215,14 @@ class _SupplierState extends State<Supplier> {
                       'ACTIONS',
                       style: headline(black, 10),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Row(
                       children: [
                         InkWell(
                             onTap: () {},
                             child: Icon(Icons.edit_document,
                                 size: 15, color: green)),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         InkWell(
@@ -231,14 +231,14 @@ class _SupplierState extends State<Supplier> {
                                 size: 15, color: red)),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         InkWell(
                             onTap: () {},
                             child: Icon(Icons.edit_document,
                                 size: 15, color: green)),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         InkWell(

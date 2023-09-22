@@ -48,7 +48,7 @@ class Dashboard extends StatelessWidget {
     Colors.yellow[300],
     Colors.blue[300]
   ];
-  List standardIconColors=[Colors.pink, Colors.indigo, Colors.teal, Colors.indigoAccent, Colors.blue, Color.fromARGB(255, 34, 155, 60), Colors.pink, Colors.yellow, Colors.indigo];
+  List standardIconColors=[Colors.pink, Colors.indigo, Colors.teal, Colors.indigoAccent, Colors.blue, const Color.fromARGB(255, 34, 155, 60), Colors.pink, Colors.yellow, Colors.indigo];
 String currentDate = DateFormat(' EEEE,  MMMM dd, yyyy').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ String currentDate = DateFormat(' EEEE,  MMMM dd, yyyy').format(DateTime.now());
               BoxConstraints(maxHeight: 100, maxWidth: size.width - 293),
           child: GridView.builder(
               physics: const BouncingScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
@@ -81,7 +81,7 @@ String currentDate = DateFormat(' EEEE,  MMMM dd, yyyy').format(DateTime.now());
               BoxConstraints(maxHeight: 250, maxWidth: size.width - 293),
           child: GridView.builder(
               physics: const BouncingScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 15,
@@ -96,7 +96,7 @@ String currentDate = DateFormat(' EEEE,  MMMM dd, yyyy').format(DateTime.now());
                     quantity: 0);
               }),
         ),
-      SizedBox(height:20),
+      const SizedBox(height:20),
         Text('Today\'s ($currentDate) Transactions', style: headline(green, screenWidth*0.015),),
       ],
     );

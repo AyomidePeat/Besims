@@ -2,8 +2,8 @@ import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/widgets/standard_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../const/colors.dart';
-import '../../widgets/custom_container.dart';
+import '../../../const/colors.dart';
+import '../../../widgets/custom_container.dart';
 
 class Sales extends StatefulWidget {
   Sales({

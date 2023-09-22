@@ -1,10 +1,10 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
-import 'package:bsims/screens/sales.dart';
-import 'package:bsims/screens/stock_inventory.dart';
-import 'package:bsims/screens/store.dart';
-import 'package:bsims/screens/supplier.dart';
-import 'package:bsims/screens/users.dart';
+import 'package:bsims/screens/admin_dashboard/sales.dart';
+import 'package:bsims/screens/admin_dashboard/stock_inventory.dart';
+import 'package:bsims/screens/admin_dashboard/store.dart';
+import 'package:bsims/screens/admin_dashboard/supplier.dart';
+import 'package:bsims/screens/admin_dashboard/users.dart';
 import 'package:bsims/widgets/custom_container.dart';
 import 'package:bsims/widgets/menu_container.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(backgroundColor: Color.fromARGB(255, 230, 221, 221),
+    return Scaffold(backgroundColor: const Color.fromARGB(255, 230, 221, 221),
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
        double screenWidth = constraints.maxWidth;
@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
             children: [
               MenuContainer(),
               
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
                Column(crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
                    Header(screenWidth: screenWidth),
@@ -70,7 +70,7 @@ class Header extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
             
               decoration: BoxDecoration(
        borderRadius: BorderRadius.circular(10),
@@ -96,7 +96,7 @@ class Header extends StatelessWidget {
      ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             CircleAvatar(

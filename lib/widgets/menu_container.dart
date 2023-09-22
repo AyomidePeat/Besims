@@ -29,7 +29,7 @@ class MenuContainer extends StatelessWidget {
 
     return Container(
       width: 200,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: green,
         borderRadius: BorderRadius.circular(10),
@@ -37,7 +37,7 @@ class MenuContainer extends StatelessWidget {
       child: Column(
         children: [
           Text('BESIMS', style: headline(white, 20),),
-         SizedBox(height:40),
+         const SizedBox(height:40),
           Flexible(
             child: ListView.builder(
                 itemCount: screens.length,
@@ -47,7 +47,7 @@ class MenuContainer extends StatelessWidget {
                     child: Row( 
                       children: [
                         Icon(icons[index], color: white,),
-                        SizedBox(width:10),
+                        const SizedBox(width:10),
                         Text(screens[index], style: bodyText(white, 14),)
                       ],
                     ),

@@ -1,9 +1,9 @@
 import 'package:bsims/const/textstyle.dart';
-import 'package:bsims/screens/widgets/textfield_widget.dart';
+import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../const/colors.dart';
+import '../../const/colors.dart';
 
 class StockInventory extends StatefulWidget {
   final double screenWidth;
@@ -286,7 +286,7 @@ class _StockInventoryState extends State<StockInventory> {
                       'STATUS',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
@@ -298,7 +298,7 @@ class _StockInventoryState extends State<StockInventory> {
                         style: bodyText(white, 10),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
@@ -311,7 +311,7 @@ class _StockInventoryState extends State<StockInventory> {
                         style: bodyText(white, 10),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
@@ -336,7 +336,7 @@ class _StockInventoryState extends State<StockInventory> {
                         'ACTIONS',
                         style: headline(black, 10),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -345,7 +345,7 @@ class _StockInventoryState extends State<StockInventory> {
                               onTap: () {},
                               child: Icon(Icons.edit_document,
                                   size: 15, color: green)),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           InkWell(
@@ -363,7 +363,7 @@ class _StockInventoryState extends State<StockInventory> {
                               onTap: () {},
                               child: Icon(Icons.edit_document,
                                   size: 15, color: green)),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           InkWell(
@@ -381,7 +381,7 @@ class _StockInventoryState extends State<StockInventory> {
                               onTap: () {},
                               child: Icon(Icons.edit_document,
                                   size: 15, color: green)),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           InkWell(
@@ -390,7 +390,7 @@ class _StockInventoryState extends State<StockInventory> {
                                   size: 15, color: red)),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
@@ -407,7 +407,7 @@ class _StockInventoryState extends State<StockInventory> {
 
   void addProduct() {
     final nameController = TextEditingController();
-    final categoryController = TextEditingController();
+   
     final expiryDateController = TextEditingController();
     final priceController = TextEditingController();
     String? supplier;
@@ -484,7 +484,7 @@ class _StockInventoryState extends State<StockInventory> {
                                           child: Text(e.toString()),
                                         ))
                                     .toList(),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   border: InputBorder.none,
                                 ),
                               ),
@@ -521,7 +521,7 @@ class _StockInventoryState extends State<StockInventory> {
                                         child: Text(e.toString()),
                                       ))
                                   .toList(),
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
                             ),
@@ -552,7 +552,7 @@ class _StockInventoryState extends State<StockInventory> {
                                         child: Text(e.toString()),
                                       ))
                                   .toList(),
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
                             ),
@@ -561,7 +561,7 @@ class _StockInventoryState extends State<StockInventory> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30,),
+                  const SizedBox(height: 30,),
                   Row(
                     children: [
                       SizedBox(

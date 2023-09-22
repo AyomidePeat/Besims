@@ -1,8 +1,8 @@
 import 'package:bsims/const/textstyle.dart';
-import 'package:bsims/screens/widgets/textfield_widget.dart';
+import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../const/colors.dart';
+import '../../const/colors.dart';
 
 class Store extends StatefulWidget {
   final double screenWidth;
@@ -76,14 +76,14 @@ class _StoreState extends State<Store> {
                       'NAME',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'First store',
                       style: bodyText(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
@@ -98,14 +98,14 @@ class _StoreState extends State<Store> {
                       'LOCATION',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'Sample address',
                       style: bodyText(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
@@ -120,14 +120,14 @@ class _StoreState extends State<Store> {
                       'MANAGER',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       'John Doe',
                       style: bodyText(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
@@ -142,14 +142,14 @@ class _StoreState extends State<Store> {
                       'PHONE',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
                       '11234567',
                       style: bodyText(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Text(
@@ -164,7 +164,7 @@ class _StoreState extends State<Store> {
                       'STATUS',
                       style: headline(black, 10),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
@@ -177,7 +177,7 @@ class _StoreState extends State<Store> {
                         style: bodyText(white, 10),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
@@ -197,26 +197,26 @@ class _StoreState extends State<Store> {
                       'ACTIONS',
                       style: headline(black, 10),
                     ),
-                    SizedBox(height:5),
+                    const SizedBox(height:5),
                     Row(
                       children: [
                          InkWell(
                             onTap: () {},
                             child: Icon(Icons.edit_document,size: 15, color: green)),
-                        SizedBox(
+                        const SizedBox(
                       width: 8,
                     ), InkWell(
                             onTap: () {},
                             child: Icon(Icons.delete_outlined,size: 15, color: red)),
                       ],
                     ),
-                    SizedBox(height:10),
+                    const SizedBox(height:10),
                     Row(
                       children: [
                         InkWell(
                             onTap: () {},
                             child: Icon(Icons.edit_document, size: 15, color: green)),
-                       SizedBox(
+                       const SizedBox(
                       width: 8,
                     ),   InkWell(
                             onTap: () {},
@@ -311,7 +311,7 @@ class _StoreState extends State<Store> {
                                       child: Text(e.toString()),
                                     ))
                                 .toList(),
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                             ),
                           ),

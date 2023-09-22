@@ -1,8 +1,8 @@
 import 'package:bsims/const/textstyle.dart';
-import 'package:bsims/screens/widgets/textfield_widget.dart';
+import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../const/colors.dart';
+import '../../const/colors.dart';
 
 class Users extends StatefulWidget {
   final double screenWidth;
@@ -183,7 +183,7 @@ class _UsersState extends State<Users> {
                     Text(
                       'ROLE',
                       style: headline(black, 10),
-                    ),SizedBox(
+                    ),const SizedBox(
                     height: 5,
                   ),
                     Container(
@@ -195,7 +195,7 @@ class _UsersState extends State<Users> {
                         style: bodyText(white, 10),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                     height: 5,
                   ),
                     Container(
@@ -207,7 +207,7 @@ class _UsersState extends State<Users> {
                         'Cashier',
                         style: bodyText(white, 10),
                       ),
-                    ),SizedBox(
+                    ),const SizedBox(
                     height: 5,
                   ),
                     Container(
@@ -230,7 +230,7 @@ class _UsersState extends State<Users> {
                         'ACTIONS',
                         style: headline(black, 10),
                       ),
-                      SizedBox(
+                      const SizedBox(
                       height: 5,
                     ),
                       Row(
@@ -239,7 +239,7 @@ class _UsersState extends State<Users> {
                               onTap: () {},
                               child: Icon(Icons.edit_document,
                                   size: 15, color: green)),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           InkWell(
@@ -257,7 +257,7 @@ class _UsersState extends State<Users> {
                               onTap: () {},
                               child: Icon(Icons.edit_document,
                                   size: 15, color: green)),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           InkWell(
@@ -275,7 +275,7 @@ class _UsersState extends State<Users> {
                               onTap: () {},
                               child: Icon(Icons.edit_document,
                                   size: 15, color: green)),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           InkWell(
@@ -284,7 +284,7 @@ class _UsersState extends State<Users> {
                                   size: 15, color: red)),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
