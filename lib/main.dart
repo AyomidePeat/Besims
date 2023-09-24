@@ -1,4 +1,3 @@
-import 'package:bsims/screens/admin_dashboard/dashboard.dart';
 import 'package:bsims/screens/admin_dashboard/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
@@ -25,19 +24,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Inventory app',
       theme: FlexThemeData.light(
         scheme: FlexScheme.green,
        // textTheme: GoogleFonts.sourceSerifProTextTheme(),
       ),      
-      // localizationsDelegates: const [
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      // ],
-      // supportedLocales: const [
-      //   Locale('en'), // Inglés
-      //   Locale('es'), // Español
-      // ],
+     
       home: const Home(),
     );
   }

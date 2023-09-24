@@ -4,19 +4,18 @@ import 'package:flutter/material.dart';
 
 import '../../const/colors.dart';
 
-class Supplier extends StatefulWidget {
+class ProductCategoryList extends StatefulWidget {
   final double screenWidth;
-  const Supplier({super.key, required this.screenWidth});
+  const ProductCategoryList({super.key, required this.screenWidth});
 
   @override
-  State<Supplier> createState() => _SupplierState();
+  State<ProductCategoryList> createState() => _ProductCategoryListState();
 }
 
-class _SupplierState extends State<Supplier> {
+class _ProductCategoryListState extends State<ProductCategoryList> {
   @override
   Widget build(BuildContext context) {
     const double space = 30;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,16 +23,15 @@ class _SupplierState extends State<Supplier> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Suppliers Information',
+              'Product Category List',
               style: headline(black, widget.screenWidth * 0.013),
             ),
             SizedBox(
-              width: widget.screenWidth * 0.5,
+              width: widget.screenWidth * 0.3,
             ),
             InkWell(
               onTap: addStore,
               child: Container(
-            
                 height: 40,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -47,7 +45,7 @@ class _SupplierState extends State<Supplier> {
                     ),
                     const SizedBox(width: 5),
                     Text(
-                      'Add Supplier',
+                      'Add Category',
                       style: bodyText(black, 12),
                     )
                   ],
@@ -64,7 +62,7 @@ class _SupplierState extends State<Supplier> {
         ),
         Container(
           width: widget.screenWidth - 293,
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),
           child:
@@ -80,40 +78,24 @@ class _SupplierState extends State<Supplier> {
                       style: headline(black, 10),
                     ),
                     const SizedBox(
-                     height:space,
+                      height: space,
                     ),
                     Text(
                       '1',
                       style: bodyText(black, 10),
                     ),
                     const SizedBox(
-                     height:space,
+                      height: space,
                     ),
                     Text(
                       '2',
                       style: bodyText(black, 10),
                     ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'COMPANY',
-                      style: headline(black, 10),
-                    ),
                     const SizedBox(
-                     height:space,
+                      height: space,
                     ),
                     Text(
-                      'Supplier company',
-                      style: bodyText(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'Supplier company',
+                      '3',
                       style: bodyText(black, 10),
                     ),
                   ],
@@ -122,67 +104,28 @@ class _SupplierState extends State<Supplier> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'REGDATE',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'Fri, Jun 2nd 2023',
-                      style: bodyText(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'Fri, Jun 2nd 2023',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'E-MAIL',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'peat@gmail.com',
-                      style: bodyText(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'tim@gmail.com',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'PHONE',
+                      'CATEGORY NAME',
                       style: headline(black, 10),
                     ),
                     const SizedBox(
                       height: space,
                     ),
                     Text(
-                      '090234566',
+                      'Beverage',
                       style: bodyText(black, 10),
                     ),
                     const SizedBox(
                       height: space,
                     ),
                     Text(
-                      '90909999',
+                      'Tablet',
+                      style: bodyText(black, 10),
+                    ),
+                    const SizedBox(
+                      height: space,
+                    ),
+                    Text(
+                      'Syrup',
                       style: bodyText(black, 10),
                     ),
                   ],
@@ -191,24 +134,82 @@ class _SupplierState extends State<Supplier> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'ADDRESS',
+                      'CREATED ON',
                       style: headline(black, 10),
                     ),
                     const SizedBox(
                       height: space,
                     ),
                     Text(
-                      'Supplier Address',
+                      'May 31st, 2022',
                       style: bodyText(black, 10),
                     ),
                     const SizedBox(
                       height: space,
                     ),
                     Text(
-                      'Supplier Address',
+                      ' April 2nd, 2022',
+                      style: bodyText(black, 10),
+                    ),
+                    const SizedBox(
+                      height: space,
+                    ),
+                    Text(
+                      ' April 4th, 2022',
                       style: bodyText(black, 10),
                     ),
                   ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'STATUS',
+                        style: headline(black, 10),
+                      ),
+                      const SizedBox(
+                        height: space-10,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: green,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Text(
+                          'ACTIVE',
+                          style: bodyText(white, 10),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: space - 10,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: red, borderRadius: BorderRadius.circular(5)),
+                        child: Text(
+                          'INACTIVE',
+                          style: bodyText(white, 10),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: space - 10
+                        ,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: green,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Text(
+                          'ACTIVE',
+                          style: bodyText(white, 10),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,6 +217,22 @@ class _SupplierState extends State<Supplier> {
                     Text(
                       'ACTIONS',
                       style: headline(black, 10),
+                    ),
+                    const SizedBox(height: space),
+                    Row(
+                      children: [
+                        InkWell(
+                            onTap: () {},
+                            child: Icon(Icons.edit_document,
+                                size: 15, color: green)),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        InkWell(
+                            onTap: () {},
+                            child: Icon(Icons.delete_outlined,
+                                size: 15, color: red)),
+                      ],
                     ),
                     const SizedBox(height: space),
                     Row(
@@ -268,6 +285,7 @@ class _SupplierState extends State<Supplier> {
     final addressController = TextEditingController();
     final phoneController = TextEditingController();
     final emailController = TextEditingController();
+    const double space = 10;
     showDialog(
         context: context,
         builder: (context) {
@@ -292,33 +310,33 @@ class _SupplierState extends State<Supplier> {
                       ],
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: space,
                     ),
                     TextFieldWidget(
                         controller: nameController, label: 'Supplier Name'),
                     const SizedBox(
-                      height: 10,
+                      height: space,
                     ),
                     TextFieldWidget(
                         controller: companyController, label: 'Company Name'),
                     const SizedBox(
-                      height: 10,
+                      height: space,
                     ),
                     TextFieldWidget(
                         controller: emailController, label: 'E-mail'),
                     const SizedBox(
-                      height: 10,
+                      height: space,
                     ),
                     TextFieldWidget(
                         controller: phoneController, label: 'Supplier Phone'),
                     const SizedBox(
-                      height: 10,
+                      height: space,
                     ),
                     TextFieldWidget(
                         controller: addressController,
                         label: 'Supplier Address'),
                     const SizedBox(
-                      height: 10,
+                      height: space,
                     ),
                     const SizedBox(
                       height: 40,

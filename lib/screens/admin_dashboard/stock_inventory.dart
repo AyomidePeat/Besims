@@ -450,48 +450,26 @@ class _StockInventoryState extends State<StockInventory> {
                   ),
                   
                   
-                  Row(
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
 
         
-                      SizedBox(width:300,
-                        child: TextFieldWidget(controller: priceController, label: 'Price')),
+                      SizedBox(width:250,
+                        child: TextFieldWidget(controller: priceController, label: 'Cost price')),
                      const SizedBox(
-                    width: 10,
+                    width: 30,
                   ),
-                     Padding(
-                       padding: const EdgeInsets.symmetric(vertical:20),
-                       child: Container(
-                          height: 60,
-                          width: 300,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, ),
-                            child: Center(
-                              child: DropdownButtonFormField(
-                                hint: const Text('Supplier'),
-                                value: supplier,
-                                onChanged: (value) {
-                                  setState(() {
-                                    supplier = value as String;
-                                  });
-                                },
-                                items: supplierOptions
-                                    .map((e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e.toString()),
-                                        ))
-                                    .toList(),
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                     ),],
+        
+                      SizedBox(width:250,
+                        child: TextFieldWidget(controller: priceController, label: 'Selling price')),
+                     const SizedBox(
+                    width: 30,
+                  ),
+        
+                      SizedBox(width:250,
+                        child: TextFieldWidget(controller: priceController, label: 'Qty(Carton)')),
+                    
+                     ],
                   ),
                   const SizedBox(
                     height: 30,
@@ -500,7 +478,7 @@ class _StockInventoryState extends State<StockInventory> {
                     children: [ 
                       Container(
                         height: 50,
-                        width: 250,
+                        width: 400,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -530,8 +508,8 @@ class _StockInventoryState extends State<StockInventory> {
                       ),
                      
                       Container(
-                        height: 40,
-                        width: 250,
+                        height: 50,
+                        width: 400,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -562,10 +540,42 @@ class _StockInventoryState extends State<StockInventory> {
                     ],
                   ),
                   const SizedBox(height: 30,),
-                  Row(
-                    children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [Padding(
+                       padding: const EdgeInsets.symmetric(vertical:20),
+                       child: Container(
+                          height: 50,
+                          width: 400,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, ),
+                            child: Center(
+                              child: DropdownButtonFormField(
+                                hint: const Text('Supplier'),
+                                value: supplier,
+                                onChanged: (value) {
+                                  setState(() {
+                                    supplier = value as String;
+                                  });
+                                },
+                                items: supplierOptions
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.toString()),
+                                        ))
+                                    .toList(),
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                     ),SizedBox(width:10),
                       SizedBox(
-                        width: 250,
+                        width: 400,
                         height: 50,
                         child: TextField(
                           decoration: const InputDecoration(

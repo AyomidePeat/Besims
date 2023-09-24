@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore: ^4.9.1
   flutter_riverpod: ^2.4.0
   persistent_bottom_nav_bar: ^5.0.2
+  flex_color_scheme: ^7.3.1
 
 dev_dependencies:
   flutter_test:
@@ -55,7 +56,6 @@ dev_dependencies:
   
   
   intl: ^0.18.1
-  flex_color_scheme: ^4.1.1
   #google_fonts: ^2.2.0
 
   flutter_slidable: ^3.0.0

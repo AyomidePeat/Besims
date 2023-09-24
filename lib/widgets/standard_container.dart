@@ -7,7 +7,7 @@ class StandardContainer extends StatelessWidget {
   final Color iconColor;
   final String label;
  
-  final quantity;
+  final double quantity;
   const StandardContainer(
       {super.key,
       required this.icon,

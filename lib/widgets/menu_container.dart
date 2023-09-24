@@ -1,9 +1,28 @@
 import 'package:bsims/const/colors.dart';
 import 'package:bsims/const/textstyle.dart';
+
+import 'package:bsims/widgets/drawer_pane.dart';
+
 import 'package:flutter/material.dart';
 
-class MenuContainer extends StatelessWidget {
-  MenuContainer({super.key});
+class MenuContainer extends StatefulWidget {
+  final double screenWidth;
+  final MenuStuff currentItem;
+  final Size size;
+  final ValueChanged<MenuStuff> onSelectedItem;
+
+  MenuContainer(
+      {super.key,
+      required this.screenWidth,
+      required this.size,
+      required this.onSelectedItem,
+      required this.currentItem});
+
+  @override
+  State<MenuContainer> createState() => _MenuContainerState();
+}
+
+class _MenuContainerState extends State<MenuContainer> {
   List icons = [
     Icons.home,
     Icons.store,
@@ -14,6 +33,7 @@ class MenuContainer extends StatelessWidget {
     Icons.delivery_dining,
     Icons.bar_chart
   ];
+
   List screens = [
     'DashBoard',
     'Stores',
@@ -24,9 +44,13 @@ class MenuContainer extends StatelessWidget {
     'Orders',
     'Reports'
   ];
+
+  
+
+ 
+
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: 200,
       padding: const EdgeInsets.all(20),
@@ -36,24 +60,15 @@ class MenuContainer extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text('BESIMS', style: headline(white, 20),),
-         const SizedBox(height:40),
-          Flexible(
-            child: ListView.builder(
-                itemCount: screens.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom:30.0),
-                    child: Row( 
-                      children: [
-                        Icon(icons[index], color: white,),
-                        const SizedBox(width:10),
-                        Text(screens[index], style: bodyText(white, 14),)
-                      ],
-                    ),
-                  );
-                }),
+          Text(
+            'BESIMS',
+            style: headline(white, 20),
           ),
+          const SizedBox(height: 40),
+          Flexible(
+              child: NavigationPane(
+                  currentItem: widget.currentItem,
+                  onSelectedItem: widget.onSelectedItem)),
         ],
       ),
     );
