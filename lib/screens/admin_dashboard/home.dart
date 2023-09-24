@@ -47,33 +47,33 @@ class _HomeState extends State<Home> {
   
   Widget getScreen() {
     switch (currentItem) {
-      case MenuItems.Dashboard:
+      case MenuItems.dashboard:
         return Dashboard(
           screenWidth: screenWidth,
           size: size,
         );
-      case MenuItems.Category:
+      case MenuItems.category:
         return ProductCategoryList(
           screenWidth: screenWidth,
         );
-      case MenuItems.Orders:
+      case MenuItems.orders:
         return ProductCategoryList(
           screenWidth: screenWidth,
         );
-      case MenuItems.Products:
+      case MenuItems.products:
         return StockInventory(
           screenWidth: screenWidth,
         );
-      case MenuItems.Reports:
+      case MenuItems.reports:
         return Sales(
           screenWidth: screenWidth,
           size: size,
         );
-      case MenuItems.Suppliers:
+      case MenuItems.suppliers:
         return Supplier(screenWidth: screenWidth);
-      case MenuItems.Users:
+      case MenuItems.users:
         return Users(screenWidth: screenWidth);
-      case MenuItems.Stores:
+      case MenuItems.stores:
         return Store(
           screenWidth: screenWidth,
         );
@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  MenuStuff currentItem = MenuItems.Dashboard;
+  MenuStuff currentItem = MenuItems.dashboard;
 
   @override
   Widget build(BuildContext context) {

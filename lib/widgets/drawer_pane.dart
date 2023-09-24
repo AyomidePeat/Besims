@@ -1,33 +1,35 @@
+import 'package:bsims/const/colors.dart';
+import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class MenuStuff {
   final String title;
+  final IconData icon;
 
-  const MenuStuff( this.title,);
+  const MenuStuff(this.title, this.icon);
 }
 
 
 class MenuItems {
-  static const Dashboard = MenuStuff('DashBoard' );
-  static const Stores = MenuStuff('Stores', );
-  static const Users = MenuStuff( 'Users',);
-  static const Suppliers = MenuStuff('Suppliers');
-  static const Category = MenuStuff('Category');
-  static const Products = MenuStuff('Products' );
-  static const Orders = MenuStuff('Orders');
-  static const Reports = MenuStuff('Reports');
- 
-  static const all = <MenuStuff>[
-    Dashboard,
-    Stores,
-   Users,
-    Suppliers,
-    Category,
-    Products,
-    Orders,
-    Reports,
-    
+  static const dashboard = MenuStuff('DashBoard',  Icons.home,);
+  static const stores = MenuStuff('Stores', Icons.store,);
+  static const users = MenuStuff('Users',  Icons.person,);
+  static const suppliers = MenuStuff('Suppliers', Icons.supervised_user_circle_sharp,);
+  static const category = MenuStuff('Category', Icons.category_outlined,);
+  static const products = MenuStuff('Products', Icons.shopify_rounded,);
+  static const orders = MenuStuff('Orders', Icons.delivery_dining,);
+  static const reports = MenuStuff('Reports', Icons.bar_chart);
+
+  static final all = <MenuStuff>[
+    dashboard,
+    stores,
+    users,
+    suppliers,
+    category,
+    products,
+    orders,
+    reports,
   ];
 }
 
@@ -35,33 +37,33 @@ class NavigationPane extends StatelessWidget {
   final MenuStuff currentItem;
   final ValueChanged<MenuStuff> onSelectedItem;
   const NavigationPane({
-   
     required this.currentItem,
-     required this.onSelectedItem,
-  }) ;
+    required this.onSelectedItem,
+  });
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-       
-                         //Spacer(),
+          //Spacer(),
 
           ...MenuItems.all.map(buildMenuItem).toList(),
-       
-         Spacer(flex: 2),
+
+          Spacer(flex: 2),
         ],
       );
   Widget buildMenuItem(MenuStuff item) => ListTileTheme(
-        selectedColor: Colors.white,
-        child: ListTile(
-          selectedTileColor: Colors.black26,
-          selected: currentItem == item,
-          minLeadingWidth: 20,
+        selectedColor: black,selectedTileColor: green, 
         
-          title: Text(item.title),
+        child: ListTile(
+          //selectedTileColor: Colors.black26,
+          selected: currentItem == item,
+          minLeadingWidth: 20, hoverColor: red,
+leading: Icon(item.icon, color:white),
+          title: Text(item.title, ),
           onTap: () {
             onSelectedItem(item);
           },
+          
         ),
       );
 }
