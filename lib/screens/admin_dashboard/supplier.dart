@@ -31,7 +31,7 @@ class _SupplierState extends State<Supplier> {
               width: widget.screenWidth * 0.5,
             ),
             InkWell(
-              onTap: addStore,
+              onTap: addSupplier,
               child: Container(
             
                 height: 40,
@@ -262,7 +262,7 @@ class _SupplierState extends State<Supplier> {
     );
   }
 
-  void addStore() {
+  void addSupplier() {
     final nameController = TextEditingController();
     final companyController = TextEditingController();
     final addressController = TextEditingController();

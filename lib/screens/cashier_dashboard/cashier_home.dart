@@ -3,44 +3,39 @@ import 'package:bsims/screens/admin_dashboard/category.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
 import 'package:bsims/screens/admin_dashboard/sales.dart';
 import 'package:bsims/screens/admin_dashboard/stock_inventory.dart';
-import 'package:bsims/screens/admin_dashboard/store.dart';
-import 'package:bsims/screens/admin_dashboard/supplier.dart';
-import 'package:bsims/screens/admin_dashboard/users.dart';
-import 'package:bsims/screens/admin_dashboard/widgets/drawer_pane.dart';
 
-import 'package:bsims/screens/admin_dashboard/widgets/menu_container.dart';
+import 'package:bsims/screens/cashier_dashboard/sell_product.dart';
+import 'package:bsims/screens/cashier_dashboard/widgets/cashier_drawer.dart';
+import 'package:bsims/screens/cashier_dashboard/widgets/cashier_menu_container.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../const/colors.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class CashierHome extends StatefulWidget {
+  const CashierHome({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<CashierHome> createState() => _CashierHomeState();
 }
 
-class _HomeState extends State<Home> {
+class _CashierHomeState extends State<CashierHome> {
   double screenWidth = 0;
   Size size = Size(0, 0);
   List icons = [
     Icons.home,
-    Icons.store,
-    Icons.person,
-    Icons.supervised_user_circle_sharp,
     Icons.category_outlined,
     Icons.shopify_rounded,
+    Icons.shopping_cart_checkout,
     Icons.delivery_dining,
     Icons.bar_chart
   ];
 
   List screens = [
     'DashBoard',
-    'Stores',
-    'Users',
-    'Suppliers',
     'Category',
     'Products',
+    'Sales'
     'Orders',
     'Reports'
   ];
@@ -69,14 +64,10 @@ class _HomeState extends State<Home> {
           screenWidth: screenWidth,
           size: size,
         );
-      case MenuItems.suppliers:
-        return Supplier(screenWidth: screenWidth);
-      case MenuItems.users:
-        return Users(screenWidth: screenWidth);
-      case MenuItems.stores:
-        return Store(
-          screenWidth: screenWidth,
-        );
+      case MenuItems.sales:
+        return SellProduct(screenWidth: screenWidth, size: size,);
+     
+       
 
       default:
         return Dashboard(
@@ -103,7 +94,7 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.all(20.0),
           child: Row(
             children: [
-              MenuContainer(onSelectedItem: (item) {
+              CashierMenuContainer(onSelectedItem: (item) {
                     setState(() => currentItem = item);
                     
                   },currentItem: currentItem,

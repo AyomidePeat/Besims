@@ -30,7 +30,7 @@ class _ProductCategoryListState extends State<ProductCategoryList> {
               width: widget.screenWidth * 0.3,
             ),
             InkWell(
-              onTap: addStore,
+              onTap: addCategory,
               child: Container(
                 height: 40,
                 padding: const EdgeInsets.all(10),
@@ -279,12 +279,10 @@ class _ProductCategoryListState extends State<ProductCategoryList> {
     );
   }
 
-  void addStore() {
+  void addCategory() {
     final nameController = TextEditingController();
-    final companyController = TextEditingController();
-    final addressController = TextEditingController();
-    final phoneController = TextEditingController();
-    final emailController = TextEditingController();
+    
+  
     const double space = 10;
     showDialog(
         context: context,
@@ -301,7 +299,7 @@ class _ProductCategoryListState extends State<ProductCategoryList> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Add Suppliers', style: headline(black, 20)),
+                        Text('Add Category', style: headline(black, 20)),
                         IconButton(
                             onPressed: () {
                               Navigator.pop(context);
@@ -313,31 +311,11 @@ class _ProductCategoryListState extends State<ProductCategoryList> {
                       height: space,
                     ),
                     TextFieldWidget(
-                        controller: nameController, label: 'Supplier Name'),
+                        controller: nameController, label: 'Category name'),
                     const SizedBox(
                       height: space,
                     ),
-                    TextFieldWidget(
-                        controller: companyController, label: 'Company Name'),
-                    const SizedBox(
-                      height: space,
-                    ),
-                    TextFieldWidget(
-                        controller: emailController, label: 'E-mail'),
-                    const SizedBox(
-                      height: space,
-                    ),
-                    TextFieldWidget(
-                        controller: phoneController, label: 'Supplier Phone'),
-                    const SizedBox(
-                      height: space,
-                    ),
-                    TextFieldWidget(
-                        controller: addressController,
-                        label: 'Supplier Address'),
-                    const SizedBox(
-                      height: space,
-                    ),
+                  
                     const SizedBox(
                       height: 40,
                     ),
