@@ -45,10 +45,6 @@ class _MenuContainerState extends State<MenuContainer> {
     'Reports'
   ];
 
-  
-
- 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,7 +57,7 @@ class _MenuContainerState extends State<MenuContainer> {
       child: Column(
         children: [
           Text(
-            'BESIMS',
+            'Be Seamless',
             style: headline(white, 20),
           ),
           const SizedBox(height: 40),

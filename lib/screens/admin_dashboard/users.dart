@@ -13,7 +13,7 @@ class Users extends StatefulWidget {
 }
 
 class _UsersState extends State<Users> {
-  double space = 10;
+  double space = 30;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -184,7 +184,7 @@ class _UsersState extends State<Users> {
                       'ROLE',
                       style: headline(black, 10),
                     ),const SizedBox(
-                    height: 5,
+                    height: 15,
                   ),
                     Container(
                       padding: const EdgeInsets.all(3),
@@ -196,7 +196,7 @@ class _UsersState extends State<Users> {
                       ),
                     ),
                     const SizedBox(
-                    height: 5,
+                    height: 30,
                   ),
                     Container(
                       padding: const EdgeInsets.all(3),
@@ -208,7 +208,7 @@ class _UsersState extends State<Users> {
                         style: bodyText(white, 10),
                       ),
                     ),const SizedBox(
-                    height: 5,
+                    height: 30,
                   ),
                     Container(
                       padding: const EdgeInsets.all(3),
@@ -231,7 +231,7 @@ class _UsersState extends State<Users> {
                         style: headline(black, 10),
                       ),
                       const SizedBox(
-                      height: 5,
+                      height: 15,
                     ),
                       Row(
                         children: [

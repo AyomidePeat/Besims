@@ -47,6 +47,7 @@ class _SalesState extends State<Sales> {
 
   @override
   Widget build(BuildContext context) {
+     const double space = 30;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -1,7 +1,6 @@
 import 'package:bsims/const/colors.dart';
 import 'package:bsims/const/textstyle.dart';
 
-
 import 'package:bsims/screens/cashier_dashboard/widgets/cashier_drawer.dart';
 
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ class CashierMenuContainer extends StatefulWidget {
 class _CashierMenuContainerState extends State<CashierMenuContainer> {
   List icons = [
     Icons.home,
-   
     Icons.category_outlined,
     Icons.shopify_rounded,
     Icons.shopping_cart_checkout,
@@ -36,17 +34,12 @@ class _CashierMenuContainerState extends State<CashierMenuContainer> {
 
   List screens = [
     'DashBoard',
-   
     'Category',
     'Products',
     'Sales'
-    'Orders',
+        'Orders',
     'Reports'
   ];
-
-  
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +53,7 @@ class _CashierMenuContainerState extends State<CashierMenuContainer> {
       child: Column(
         children: [
           Text(
-            'BESIMS',
+            'Be Seamless',
             style: headline(white, 20),
           ),
           const SizedBox(height: 40),

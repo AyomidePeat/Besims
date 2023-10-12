@@ -1,24 +1,29 @@
 import 'package:bsims/const/textstyle.dart';
+import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/models/stock_inventory_model.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../const/colors.dart';
 
-class StockInventory extends StatefulWidget {
+class StockInventory extends ConsumerStatefulWidget {
   final double screenWidth;
   const StockInventory({super.key, required this.screenWidth});
 
   @override
-  State<StockInventory> createState() => _StockInventoryState();
+  ConsumerState<StockInventory> createState() => _StockInventoryState();
 }
 
-class _StockInventoryState extends State<StockInventory> {
-  double space = 10;
+class _StockInventoryState extends ConsumerState<StockInventory> {
+  double space = 30;
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
+    final cloudStoreRef = ref.watch(cloudStoreProvider);
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,7 +38,6 @@ class _StockInventoryState extends State<StockInventory> {
             InkWell(
               onTap: addProduct,
               child: Container(
-                
                 height: 40,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -46,7 +50,7 @@ class _StockInventoryState extends State<StockInventory> {
                       color: white,
                     ),
                     const SizedBox(width: 5),
-                     Text('Add New Product', style:bodyText(black, 10))
+                    Text('Add New Product', style: bodyText(black, 10))
                   ],
                 ),
               ),
@@ -59,361 +63,334 @@ class _StockInventoryState extends State<StockInventory> {
         const SizedBox(
           height: 30,
         ),
-        Container(
-          width: widget.screenWidth - 293,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: white),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'PRODUCTS',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'Product One',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'Product Two',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'Product Three',
-                      style: headline(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Breverage',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'Food',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'Drug',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'Timothy',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'EXPIRE',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '04/06/2025',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '04/05/2025',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '04/09/2024',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'PRICE',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '200',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '5000',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '2500',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'IN STOCK',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'YES',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'YES',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'YES',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Supplier',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'T&D',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'SamDech',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      'PerPee',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Quantity',
-                      style: headline(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '1',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '1',
-                      style: bodyText(black, 10),
-                    ),
-                    SizedBox(
-                      height: space,
-                    ),
-                    Text(
-                      '1',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'STATUS',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(3),
+        StreamBuilder(
+            stream: cloudStoreRef.getStocks(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator(color: Colors.green);
+              } else {
+                final stocks = snapshot.data!;
+                if (stocks.isNotEmpty) {
+                  int index = 0;
+                  for (; index >= 0 && index < stocks.length;) {
+                    index++;
+                    String productName = stocks[index].name;
+                    String category = stocks[index].category;
+                    String costPrice = stocks[index].costPrice;
+                    String sellingPrice = stocks[index].sellingPrice;
+                    String quantity = stocks[index].quantity;
+                    String supplier = stocks[index].supplier;
+                    String expiryDate = stocks[index].expiryDate;
+                    String status = stocks[index].status;
+
+                    return Container(
+                      width: widget.screenWidth - 293,
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          color: green, borderRadius: BorderRadius.circular(5)),
-                      child: Text(
-                        'Available',
-                        style: bodyText(white, 10),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          color: green,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Text(
-                        'Available',
-                        style: bodyText(white, 10),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          color: red,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Text(
-                        'Unavailble',
-                        style: bodyText(white, 10),
-                      ),
-                    ),
-                  ],
-                ),
-                
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'ACTIONS',
-                        style: headline(black, 10),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
+                          borderRadius: BorderRadius.circular(5), color: white),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.edit_document,
-                                  size: 15, color: green)),
-                          const SizedBox(
-                            width: 8,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'S/N',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 70,
+                                child: ListView.builder(
+                                    itemCount: stocks.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
+                                        child: Text(
+                                          '${index + 1}',
+                                          style: bodyText(black, 10),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
                           ),
-                          InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.delete_outlined,
-                                  size: 15, color: red)),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'PRODUCTS',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 70,
+                                child: ListView.builder(
+                                    itemCount: stocks.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
+                                        child: Text(
+                                          productName,
+                                          style: bodyText(black, 10),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'CATEGORY',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 70,
+                                child: ListView.builder(
+                                    itemCount: stocks.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
+                                        child: Text(
+                                          category,
+                                          style: bodyText(black, 10),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'EXPIRE',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 70,
+                                child: ListView.builder(
+                                    itemCount: stocks.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
+                                        child: Text(
+                                          expiryDate,
+                                          style: bodyText(black, 10),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'PRICE',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 70,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: ListView.builder(
+                                      itemCount: stocks.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 20),
+                                          child: Text(
+                                            sellingPrice,
+                                            style: bodyText(black, 10),
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'STATUS',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 70,
+                                child: ListView.builder(
+                                    itemCount: stocks.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
+                                        child: Text(
+                                          status,
+                                          style: bodyText(black, 10),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'SUPPLIER',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 70,
+                                child: ListView.builder(
+                                    itemCount: stocks.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
+                                        child: Text(
+                                          supplier,
+                                          style: bodyText(black, 10),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'QUANTITY',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 70,
+                                child: ListView.builder(
+                                    itemCount: stocks.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
+                                        child: Text(
+                                          quantity,
+                                          style: bodyText(black, 10),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'ACTIONS',
+                                style: headline(black, 10),
+                              ),
+                              SizedBox(
+                                height: space,
+                              ),
+                              SizedBox(
+                                height: 300,
+                                width: 50,
+                                child: ListView.builder(
+                                    itemCount: stocks.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20),
+                                        child: Row(
+                                          children: [
+                                            InkWell(
+                                                onTap: () {},
+                                                child: Icon(Icons.edit_document,
+                                                    size: 15, color: green)),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            InkWell(
+                                                onTap: () {},
+                                                child: Icon(
+                                                    Icons.delete_outlined,
+                                                    size: 15,
+                                                    color: red)),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                      SizedBox(
-                        height: space,
-                      ),
-                      Row(
-                        children: [
-                          InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.edit_document,
-                                  size: 15, color: green)),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.delete_outlined,
-                                  size: 15, color: red)),
-                        ],
-                      ),
-                      SizedBox(
-                        height: space,
-                      ),
-                      Row(
-                        children: [
-                          InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.edit_document,
-                                  size: 15, color: green)),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          InkWell(
-                              onTap: () {},
-                              child: Icon(Icons.delete_outlined,
-                                  size: 15, color: red)),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ]),
-        )
+                    );
+                  }
+                }
+              }
+              return SizedBox();
+            }),
       ],
     );
   }
 
-  void addProduct() {
+  addProduct() {
     final nameController = TextEditingController();
-   
+    FirestoreClass fireStore = FirestoreClass();
     final expiryDateController = TextEditingController();
-    final priceController = TextEditingController();
+    final sellingPriceController = TextEditingController();
+    final costPriceController = TextEditingController();
+    final quantityController = TextEditingController();
+    var isLoading = false;
     String? supplier;
+
     final supplierOptions = ['A&B', 'SamDech', 'T&D'];
     String? category;
-    final categoryOptions = ['Drug', 'Foodstuff', 'Cosmetic', 'Brevaerage', 'Skin Care', 'Baby Products'];
+    final categoryOptions = [
+      'Drug',
+      'Foodstuff',
+      'Cosmetic',
+      'Brevaerage',
+      'Skin Care',
+      'Baby Products'
+    ];
     final statusOptions = ['Available', 'Unavailable'];
     String? status;
     showDialog(
@@ -444,38 +421,41 @@ class _StockInventoryState extends State<StockInventory> {
                   const SizedBox(
                     height: 10,
                   ),
-                  
                   const SizedBox(
                     height: 10,
                   ),
-                  
-                  
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
-        
-                      SizedBox(width:250,
-                        child: TextFieldWidget(controller: priceController, label: 'Cost price')),
-                     const SizedBox(
-                    width: 30,
-                  ),
-        
-                      SizedBox(width:250,
-                        child: TextFieldWidget(controller: priceController, label: 'Selling price')),
-                     const SizedBox(
-                    width: 30,
-                  ),
-        
-                      SizedBox(width:250,
-                        child: TextFieldWidget(controller: priceController, label: 'Qty(Carton)')),
-                    
-                     ],
+                      SizedBox(
+                          width: 250,
+                          child: TextFieldWidget(
+                              controller: costPriceController,
+                              label: 'Cost price')),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      SizedBox(
+                          width: 250,
+                          child: TextFieldWidget(
+                              controller: sellingPriceController,
+                              label: 'Selling price')),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      SizedBox(
+                          width: 250,
+                          child: TextFieldWidget(
+                              controller: quantityController,
+                              label: 'Qty(Carton)')),
+                    ],
                   ),
                   const SizedBox(
                     height: 30,
                   ),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [ 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Container(
                         height: 50,
                         width: 400,
@@ -506,7 +486,6 @@ class _StockInventoryState extends State<StockInventory> {
                           ),
                         ),
                       ),
-                     
                       Container(
                         height: 50,
                         width: 400,
@@ -539,18 +518,24 @@ class _StockInventoryState extends State<StockInventory> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30,),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [Padding(
-                       padding: const EdgeInsets.symmetric(vertical:20),
-                       child: Container(
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Container(
                           height: 50,
                           width: 400,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
                             child: Center(
                               child: DropdownButtonFormField(
                                 hint: const Text('Supplier'),
@@ -573,21 +558,24 @@ class _StockInventoryState extends State<StockInventory> {
                             ),
                           ),
                         ),
-                     ),SizedBox(width:10),
+                      ),
+                      const SizedBox(width: 10),
                       SizedBox(
                         width: 400,
                         height: 50,
                         child: TextField(
                           decoration: const InputDecoration(
-                              hintText: 'Expiry Date', border: InputBorder.none),
+                              hintText: 'Expiry Date',
+                              border: InputBorder.none),
                           style: TextStyle(
                             fontSize: 16,
                             height: 1.188,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Kanit',
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : Colors.black,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black,
                           ),
                           controller: expiryDateController,
                           onTap: () async {
@@ -597,7 +585,8 @@ class _StockInventoryState extends State<StockInventory> {
                                   .now(), // Initial date when the picker opens
                               firstDate: DateTime(2000),
                               // Minimum selectable date
-                              lastDate: DateTime(2100), // Maximum selectable date
+                              lastDate:
+                                  DateTime(2100), // Maximum selectable date
                             );
 
                             if (pickeddate != null) {
@@ -608,13 +597,13 @@ class _StockInventoryState extends State<StockInventory> {
                             }
                           },
                         ),
-                      ),const SizedBox(
-                    width: 10,
-                  ),
-                       const Icon(Icons.calendar_month),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Icon(Icons.calendar_month),
                     ],
                   ),
-                 
                   const SizedBox(
                     height: 40,
                   ),
@@ -622,7 +611,40 @@ class _StockInventoryState extends State<StockInventory> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          final uploadSuccess =
+                              await fireStore.addStockInventory(
+                                  name: nameController.text,
+                                  expiryDate: expiryDateController.text,
+                                  sellingPrice: sellingPriceController.text,
+                                  costPrice: costPriceController.text,
+                                  quantity: quantityController.text,
+                                  supplier: supplier!,
+                                  category: category!,
+                                  status: status!);
+                          if (uploadSuccess == 'Added') {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text(uploadSuccess,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 16))));
+                          } else {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text(uploadSuccess,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 16))));
+                          }
+                        },
                         child: Container(
                           width: 103,
                           height: 40,
@@ -631,10 +653,12 @@ class _StockInventoryState extends State<StockInventory> {
                               borderRadius: BorderRadius.circular(5),
                               color: green),
                           child: Center(
-                              child: Text(
-                            'Submit',
-                            style: headline(white, 15),
-                          )),
+                              child: isLoading
+                                  ? const CircularProgressIndicator()
+                                  : Text(
+                                      'Submit',
+                                      style: headline(white, 15),
+                                    )),
                         ),
                       ),
                       const SizedBox(width: 30),

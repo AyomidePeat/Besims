@@ -15,6 +15,7 @@ class Store extends StatefulWidget {
 class _StoreState extends State<Store> {
   @override
   Widget build(BuildContext context) {
+     const double space = 30;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -77,14 +78,14 @@ class _StoreState extends State<Store> {
                       style: headline(black, 10),
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:space,
                     ),
                     Text(
                       'First store',
                       style: bodyText(black, 10),
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:space,
                     ),
                     Text(
                       'Second store',
@@ -99,14 +100,14 @@ class _StoreState extends State<Store> {
                       style: headline(black, 10),
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:space,
                     ),
                     Text(
                       'Sample address',
                       style: bodyText(black, 10),
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:space,
                     ),
                     Text(
                       'Second address',
@@ -121,14 +122,14 @@ class _StoreState extends State<Store> {
                       style: headline(black, 10),
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:space,
                     ),
                     Text(
                       'John Doe',
                       style: bodyText(black, 10),
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:space,
                     ),
                     Text(
                       'Alex Walker',
@@ -143,14 +144,14 @@ class _StoreState extends State<Store> {
                       style: headline(black, 10),
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:space,
                     ),
                     Text(
                       '11234567',
                       style: bodyText(black, 10),
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:space,
                     ),
                     Text(
                       '1234567',
@@ -165,7 +166,7 @@ class _StoreState extends State<Store> {
                       style: headline(black, 10),
                     ),
                     const SizedBox(
-                      height: 5,
+                  height: space,
                     ),
                     Container(
                       padding: const EdgeInsets.all(3),
@@ -178,7 +179,7 @@ class _StoreState extends State<Store> {
                       ),
                     ),
                     const SizedBox(
-                      height: 5,
+                    height:15,
                     ),
                     Container(
                       padding: const EdgeInsets.all(3),
@@ -197,7 +198,7 @@ class _StoreState extends State<Store> {
                       'ACTIONS',
                       style: headline(black, 10),
                     ),
-                    const SizedBox(height:5),
+                    const SizedBox(height:15),
                     Row(
                       children: [
                          InkWell(
@@ -210,7 +211,7 @@ class _StoreState extends State<Store> {
                             child: Icon(Icons.delete_outlined,size: 15, color: red)),
                       ],
                     ),
-                    const SizedBox(height:10),
+                    const SizedBox(height:space),
                     Row(
                       children: [
                         InkWell(
@@ -267,7 +268,7 @@ class _StoreState extends State<Store> {
                       ],
                     ),
                     const SizedBox(
-                      height: 10,
+                     height:10,
                     ),
                     TextFieldWidget(controller: nameController, label: 'Name'),
                     const SizedBox(

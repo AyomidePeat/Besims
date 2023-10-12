@@ -150,7 +150,7 @@ class Header extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: green),
           child: Text(
-            'BESIMS (Business Enterprise Sales and Inventory Management System)',
+            'Be Seamless (Business Enterprise Sales and Inventory Management System)',
             style: headline(white, screenWidth * 0.015),
           ),
         ),

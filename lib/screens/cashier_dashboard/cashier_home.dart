@@ -36,10 +36,10 @@ class _CashierHomeState extends State<CashierHome> {
     'Category',
     'Products',
     'Sales'
-    'Orders',
+        'Orders',
     'Reports'
   ];
-  
+
   Widget getScreen() {
     switch (currentItem) {
       case MenuItems.dashboard:
@@ -65,9 +65,10 @@ class _CashierHomeState extends State<CashierHome> {
           size: size,
         );
       case MenuItems.sales:
-        return SellProduct(screenWidth: screenWidth, size: size,);
-     
-       
+        return SellProduct(
+          screenWidth: screenWidth,
+          size: size,
+        );
 
       default:
         return Dashboard(
@@ -81,23 +82,24 @@ class _CashierHomeState extends State<CashierHome> {
 
   @override
   Widget build(BuildContext context) {
-     size = MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 221, 221),
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-         screenWidth = constraints.maxWidth;
+        screenWidth = constraints.maxWidth;
 
 //double containerWidth =
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
             children: [
-              CashierMenuContainer(onSelectedItem: (item) {
-                    setState(() => currentItem = item);
-                    
-                  },currentItem: currentItem,
+              CashierMenuContainer(
+                onSelectedItem: (item) {
+                  setState(() => currentItem = item);
+                },
+                currentItem: currentItem,
                 screenWidth: screenWidth,
                 size: size,
               ),
@@ -141,7 +143,7 @@ class Header extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: green),
           child: Text(
-            'BESIMS (Business Enterprise Sales and Inventory Management System)',
+            'Be Seamless (Business Enterprise Sales and Inventory Management System)',
             style: headline(white, screenWidth * 0.015),
           ),
         ),
