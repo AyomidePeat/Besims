@@ -75,15 +75,15 @@ class NavigationPane extends StatelessWidget {
         ],
       );
   Widget buildMenuItem(MenuStuff item) => ListTileTheme(
-        selectedColor: black,
-        selectedTileColor: green,
+       enableFeedback:true ,
+       
         child: ListTile(
-          //selectedTileColor: Colors.black26,
+         selectedColor: purple, 
           selected: currentItem == item,
-          minLeadingWidth: 20, hoverColor: red,
-          leading: Icon(item.icon, color: white),
+          minLeadingWidth: 20, hoverColor: Colors.red[600],
+          leading: Icon(item.icon, ),
           title: Text(
-            item.title,
+            item.title, 
           ),
           onTap: () {
             onSelectedItem(item);

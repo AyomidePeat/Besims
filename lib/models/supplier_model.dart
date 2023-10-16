@@ -4,6 +4,7 @@ class SupplierModel {
   final String address;
   final String email;
   final String phone;
+  final String date;
 
   SupplierModel({
     required this.name,
@@ -11,6 +12,7 @@ class SupplierModel {
     required this.address,
     required this.email,
     required this.phone,
+    required this.date
   });
 
   Map<String, dynamic> toJson() => {
@@ -18,7 +20,8 @@ class SupplierModel {
         'company': company,
         'address': address,
         'email': email,
-        'phone': phone
+        'phone': phone,
+        'date':date
       };
 
   factory SupplierModel.getModelFromJson(Map<String, dynamic> json) {
@@ -26,7 +29,7 @@ class SupplierModel {
         name: json['name'],
         company: json['company'],
         address: json['address'],
-        email: json['email'],
+        email: json['email'],date:json['date'],
         phone: json['phone']);
   }
 }

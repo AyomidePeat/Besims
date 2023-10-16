@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Inventory app',
       theme: FlexThemeData.light(
-        scheme: FlexScheme.green,
-       // textTheme: GoogleFonts.sourceSerifProTextTheme(),
+        scheme: FlexScheme.deepPurple,
+       fontFamily: 'Poppins'
       ),      
      
       home: const Home(),

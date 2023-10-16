@@ -51,14 +51,19 @@ class _MenuContainerState extends State<MenuContainer> {
       width: 200,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: green,
+      color: white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
-          Text(
-            'Be Seamless',
-            style: headline(white, 20),
+          Row(
+            children: [ 
+              Text(
+                'Be Seamless',
+                style: headline(purple!, 20),
+              ),SizedBox(width:10),
+              Icon(Icons.show_chart_sharp, color: Colors.purple[900],),
+            ],
           ),
           const SizedBox(height: 40),
           Flexible(

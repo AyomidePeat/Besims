@@ -1,21 +1,24 @@
 import 'package:bsims/const/textstyle.dart';
+import 'package:bsims/firebase_repos/cloud_firestore.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../const/colors.dart';
 
-class Store extends StatefulWidget {
+class Store extends ConsumerStatefulWidget {
   final double screenWidth;
   const Store({super.key, required this.screenWidth});
 
   @override
-  State<Store> createState() => _StoreState();
+  ConsumerState<Store> createState() => _StoreState();
 }
 
-class _StoreState extends State<Store> {
+class _StoreState extends ConsumerState<Store> {
   @override
   Widget build(BuildContext context) {
-     const double space = 30;
+    final cloudStoreRef = ref.watch(cloudStoreProvider);
+    const double space = 30;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -61,183 +64,279 @@ class _StoreState extends State<Store> {
         const SizedBox(
           height: 30,
         ),
-        Container(
-          width: widget.screenWidth - 293,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: white),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'NAME',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'First store',
-                      style: bodyText(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'Second store',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'LOCATION',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'Sample address',
-                      style: bodyText(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'Second address',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'MANAGER',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'John Doe',
-                      style: bodyText(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      'Alex Walker',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'PHONE',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      '11234567',
-                      style: bodyText(black, 10),
-                    ),
-                    const SizedBox(
-                     height:space,
-                    ),
-                    Text(
-                      '1234567',
-                      style: bodyText(black, 10),
-                    ),
-                  ],
-                ),
-                Column(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'STATUS',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(
-                  height: space,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(3),
+        StreamBuilder(
+            stream: cloudStoreRef.getStores(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                    child: CircularProgressIndicator(color: Colors.green));
+              } else {
+                final stores = snapshot.data!;
+                if (stores.isNotEmpty) {
+                  for (int index = 0; index <= 0 && index <= stores.length;) {
+                    
+                    String storeName = stores[index].name;
+                    String location = stores[index].location;
+                    String manager = stores[index].manager;
+                    String phone = stores[index].phone;
+                    String status = stores[index].status;
+
+                    return Container(
+                      width: widget.screenWidth - 293,
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          color: green,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Text(
-                        'Open',
-                        style: bodyText(white, 10),
-                      ),
-                    ),
-                    const SizedBox(
-                    height:15,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          color: red, borderRadius: BorderRadius.circular(5)),
-                      child: Text(
-                        'Closed',
-                        style: bodyText(white, 10),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'ACTIONS',
-                      style: headline(black, 10),
-                    ),
-                    const SizedBox(height:15),
-                    Row(
-                      children: [
-                         InkWell(
-                            onTap: () {},
-                            child: Icon(Icons.edit_document,size: 15, color: green)),
-                        const SizedBox(
-                      width: 8,
-                    ), InkWell(
-                            onTap: () {},
-                            child: Icon(Icons.delete_outlined,size: 15, color: red)),
-                      ],
-                    ),
-                    const SizedBox(height:space),
-                    Row(
-                      children: [
-                        InkWell(
-                            onTap: () {},
-                            child: Icon(Icons.edit_document, size: 15, color: green)),
-                       const SizedBox(
-                      width: 8,
-                    ),   InkWell(
-                            onTap: () {},
-                            child: Icon(Icons.delete_outlined,size: 15, color: red)),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ]),
-        )
+                          borderRadius: BorderRadius.circular(5), color: white),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'S/N',
+                                      style: headline(black, 10),
+                                    ),
+                                    const SizedBox(
+                                      height: space,
+                                    ),
+                                    SizedBox(
+                                      height: 300,
+                                      width: 70,
+                                      child: ListView.builder(
+                                          itemCount: stores.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 25),
+                                              child: Text(
+                                                '${index + 1}',
+                                                style: bodyText(black, 10),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'NAME',
+                                      style: headline(black, 10),
+                                    ),
+                                    const SizedBox(
+                                      height: space,
+                                    ),
+                                    SizedBox(
+                                      height: 300,
+                                      width: 70,
+                                      child: ListView.builder(
+                                          itemCount: stores.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 25),
+                                              child: Text(
+                                                storeName,
+                                                style: bodyText(black, 10),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'LOCATION',
+                                      style: headline(black, 10),
+                                    ),
+                                    const SizedBox(
+                                      height: space,
+                                    ),
+                                    SizedBox(
+                                      height: 300,
+                                      width: 70,
+                                      child: ListView.builder(
+                                          itemCount: stores.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 25),
+                                              child: Text(
+                                                location,
+                                                style: bodyText(black, 10),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'MANAGER',
+                                      style: headline(black, 10),
+                                    ),
+                                    const SizedBox(
+                                      height: space,
+                                    ),
+                                    SizedBox(
+                                      height: 300,
+                                      width: 70,
+                                      child: ListView.builder(
+                                          itemCount: stores.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 25),
+                                              child: Text(
+                                                manager,
+                                                style: bodyText(black, 10),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'PHONE',
+                                      style: headline(black, 10),
+                                    ),
+                                    const SizedBox(
+                                      height: space,
+                                    ),
+                                    SizedBox(
+                                      height: 300,
+                                      width: 70,
+                                      child: ListView.builder(
+                                          itemCount: stores.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 25),
+                                              child: Text(
+                                                phone,
+                                                style: bodyText(black, 10),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'STATUS',
+                                      style: headline(black, 10),
+                                    ),
+                                    const SizedBox(
+                                      height: space,
+                                    ),
+                                    SizedBox(
+                                      height: 300,
+                                      width: 70,
+                                      child: ListView.builder(
+                                          itemCount: stores.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 10),
+                                              child: Container(
+                                                padding: EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    color: status == 'Closed'
+                                                        ? red
+                                                        : green,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                child: Center(
+                                                  child: Text(
+                                                    status,
+                                                    style: bodyText(white, 10),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'ACTIONS',
+                                      style: headline(black, 10),
+                                    ),
+                                    const SizedBox(height: space),
+                                    SizedBox(
+                                      height: 300,
+                                      width: 50,
+                                      child: ListView.builder(
+                                          itemCount: stores.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 25),
+                                              child: Row(
+                                                children: [
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: Icon(
+                                                          Icons.edit_document,
+                                                          size: 15,
+                                                          color: green)),
+                                                  const SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: Icon(
+                                                          Icons.delete_outlined,
+                                                          size: 15,
+                                                          color: red)),
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ]),
+                    );
+                  }
+                }
+                return Container(
+                    width: widget.screenWidth - 293,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5), color: white),
+                    child: const Center(
+                        child: Text('You have not added any store yet')));
+              }
+            })
       ],
     );
   }
 
   void addStore() {
+    FirestoreClass fireStore = FirestoreClass();
     final nameController = TextEditingController();
     final managerController = TextEditingController();
     final locationController = TextEditingController();
@@ -268,7 +367,7 @@ class _StoreState extends State<Store> {
                       ],
                     ),
                     const SizedBox(
-                     height:10,
+                      height: 10,
                     ),
                     TextFieldWidget(controller: nameController, label: 'Name'),
                     const SizedBox(
@@ -326,7 +425,34 @@ class _StoreState extends State<Store> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: () async {
+                            final uploadSuccess = await fireStore.addStore(
+                                name: nameController.text,
+                                manager: managerController.text,
+                                location: locationController.text,
+                                phone: phoneController.text,
+                                status: status!);
+
+                            if (uploadSuccess == 'Added') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Colors.green,
+                                      content: Text(
+                                          uploadSuccess,
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 16))));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Colors.green,
+                                      content: Text(
+                                          uploadSuccess,
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 16))));
+                            }
+                          },
                           child: Container(
                             width: 103,
                             height: 40,

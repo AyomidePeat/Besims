@@ -1,6 +1,5 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
-import 'package:bsims/models/stock_inventory_model.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,352 +22,269 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final widgetSize = (widget.screenWidth - 293) / 12;
+
+    return Column(children: [
+      Container(
+        width: widget.screenWidth - 293,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15), color: white),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Stock Inventory',
-              style: headline(black, widget.screenWidth * 0.013),
-            ),
-            SizedBox(
-              width: widget.screenWidth * 0.5,
-            ),
-            InkWell(
-              onTap: addProduct,
-              child: Container(
-                height: 40,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5), color: green),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.add_circle_sharp,
-                      size: 20,
-                      color: white,
-                    ),
-                    const SizedBox(width: 5),
-                    Text('Add New Product', style: bodyText(black, 10))
-                  ],
+            Text('Overall Inventory', style: headline(black, 17)),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Boxes(
+                  icon: Icons.category,
+                  circleColor: Colors.purple[50]!,
+                  iconColor: const Color.fromARGB(255, 106, 71, 188),
+                  title: 'Categories',
+                  total: '14',
                 ),
-              ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
+                Boxes(
+                  icon: Icons.shopping_cart,
+                  circleColor: Colors.green[50]!,
+                  iconColor: const Color.fromARGB(255, 85, 196, 89),
+                  title: 'Total Products',
+                  total: '110',
+                ),
+                Boxes(
+                  icon: Icons.sell,
+                  circleColor: Colors.blue[50]!,
+                  iconColor: Colors.blue,
+                  title: 'Top Selling',
+                  total: '5',
+                ),
+                Boxes(
+                  icon: Icons.production_quantity_limits,
+                  circleColor: Colors.red[50]!,
+                  iconColor: Colors.red,
+                  title: 'Low Stocks',
+                  total: '12',
+                ),
+              ],
+            )
           ],
         ),
-        const SizedBox(
-          height: 30,
-        ),
-        StreamBuilder(
-            stream: cloudStoreRef.getStocks(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator(color: Colors.green);
-              } else {
-                final stocks = snapshot.data!;
-                if (stocks.isNotEmpty) {
-                  int index = 0;
-                  for (; index >= 0 && index < stocks.length;) {
-                    index++;
-                    String productName = stocks[index].name;
-                    String category = stocks[index].category;
-                    String costPrice = stocks[index].costPrice;
-                    String sellingPrice = stocks[index].sellingPrice;
-                    String quantity = stocks[index].quantity;
-                    String supplier = stocks[index].supplier;
-                    String expiryDate = stocks[index].expiryDate;
-                    String status = stocks[index].status;
-
-                    return Container(
-                      width: widget.screenWidth - 293,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5), color: white),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'S/N',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 70,
-                                child: ListView.builder(
-                                    itemCount: stocks.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          '${index + 1}',
-                                          style: bodyText(black, 10),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'PRODUCTS',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 70,
-                                child: ListView.builder(
-                                    itemCount: stocks.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          productName,
-                                          style: bodyText(black, 10),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'CATEGORY',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 70,
-                                child: ListView.builder(
-                                    itemCount: stocks.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          category,
-                                          style: bodyText(black, 10),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'EXPIRE',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 70,
-                                child: ListView.builder(
-                                    itemCount: stocks.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          expiryDate,
-                                          style: bodyText(black, 10),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'PRICE',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 70,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: ListView.builder(
-                                      itemCount: stocks.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 20),
-                                          child: Text(
-                                            sellingPrice,
-                                            style: bodyText(black, 10),
-                                          ),
-                                        );
-                                      }),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'STATUS',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 70,
-                                child: ListView.builder(
-                                    itemCount: stocks.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          status,
-                                          style: bodyText(black, 10),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'SUPPLIER',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 70,
-                                child: ListView.builder(
-                                    itemCount: stocks.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          supplier,
-                                          style: bodyText(black, 10),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'QUANTITY',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 70,
-                                child: ListView.builder(
-                                    itemCount: stocks.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Text(
-                                          quantity,
-                                          style: bodyText(black, 10),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'ACTIONS',
-                                style: headline(black, 10),
-                              ),
-                              SizedBox(
-                                height: space,
-                              ),
-                              SizedBox(
-                                height: 300,
-                                width: 50,
-                                child: ListView.builder(
-                                    itemCount: stocks.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20),
-                                        child: Row(
-                                          children: [
-                                            InkWell(
-                                                onTap: () {},
-                                                child: Icon(Icons.edit_document,
-                                                    size: 15, color: green)),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            InkWell(
-                                                onTap: () {},
-                                                child: Icon(
-                                                    Icons.delete_outlined,
-                                                    size: 15,
-                                                    color: red)),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
-                        ],
+      ),
+      const SizedBox(
+        height: 30,
+      ),
+      Container(
+          width: widget.screenWidth - 293,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15), color: white),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Products', style: headline(black, 17)),
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: addProduct,
+                        child: Container(
+                          height: 35,
+                          width: 90,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: purple),
+                          child:
+                              Text('Add Product', style: bodyText(white, 10)),
+                        ),
                       ),
-                    );
-                  }
-                }
-              }
-              return SizedBox();
-            }),
-      ],
-    );
+                      const SizedBox(width: 8),
+                      InkWell(
+                        onTap: () async {
+//                                       FilePickerCross result = await FilePickerCross.importFromStorage(
+//   type: FileTypeCross.any,       // Available: `any`, `audio`, `image`, `video`, `custom`. Note: not available using FDE
+//   fileExtension: 'txt, md'     // Only if FileTypeCross.custom . May be any file extension like `dot`, `ppt,pptx,odp`
+// );
+
+//                                       if (result != null) {
+//                                         // Handle the selected Excel file, e.g., parse it
+//                                         var file = result.fileName;
+//                                         // var path = file.path;
+
+//                                         print(file);
+//                                         // You can now parse the Excel file using a package like 'excel'
+//                                         // Example: var excel = Excel.decodeFile(path);
+
+//                                         // You can process the Excel data or perform any actions here
+//                                       } else {
+//                                         print('User canceled file selection');
+//                                       }
+                        },
+                        child: Container(
+                          height: 35,
+                          width: 90,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.grey[400]!)),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.downloading_rounded,
+                                size: 15,
+                              ),
+                              const SizedBox(width: 5),
+                              Text('Import', style: bodyText(black, 10)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      InkWell(
+                        onTap: addProduct,
+                        child: Container(
+                          height: 35,
+                          width: 90,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.grey[400]!)),
+                          child:
+                              Text('Download all', style: bodyText(black, 10)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'S/N',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'PRODUCTS',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'CATEGORY',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'EXPIRY DATE',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'PRICE',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'SUPPLIER',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'QUANTITY',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'STATUS',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          'ACTIONS',
+                          style: headline(black, 10),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(),
+                  StreamBuilder(
+                      stream: cloudStoreRef.getStocks(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator(color: purple);
+                        } else {
+                          final stocks = snapshot.data!;
+                          if (stocks.isNotEmpty) {
+                            return SizedBox(
+                              width: widget.screenWidth - 280,
+                              height: 446,
+                              child: ListView.builder(
+                                  itemCount: stocks.length,
+                                  itemBuilder: (context, index) {
+                                    String productName = stocks[index].name;
+                                    String category = stocks[index].category;
+                                    //String costPrice = stocks[index].costPrice;
+                                    String sellingPrice =
+                                        stocks[index].sellingPrice;
+                                    String quantity = stocks[index].quantity;
+                                    String supplier = stocks[index].supplier;
+                                    String expiryDate =
+                                        stocks[index].expiryDate;
+                                    String status = stocks[index].status;
+
+                                    return ListTile(
+                                      contentPadding: EdgeInsets.all(0),
+                                      title: productList(widget.screenWidth,
+                                          sn: index + 1,
+                                          category: category,
+                                          expiryDate: expiryDate,
+                                          price: sellingPrice,
+                                          productName: productName,
+                                          quantity: quantity,
+                                          status: status,
+                                          supplier: supplier),
+                                    );
+                                  }),
+                            );
+                          }
+                        }
+                        return Center(
+                            child: Text('This is actually empty',
+                                style: headline(black, 20)));
+                      })
+                ],
+              ),
+            ],
+          ))
+    ]);
   }
 
   addProduct() {
@@ -581,12 +497,9 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                           onTap: () async {
                             DateTime? pickeddate = await showDatePicker(
                               context: context,
-                              initialDate: DateTime
-                                  .now(), // Initial date when the picker opens
+                              initialDate: DateTime.now(),
                               firstDate: DateTime(2000),
-                              // Minimum selectable date
-                              lastDate:
-                                  DateTime(2100), // Maximum selectable date
+                              lastDate: DateTime(2100),
                             );
 
                             if (pickeddate != null) {
@@ -651,7 +564,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: green),
+                              color: purple),
                           child: Center(
                               child: isLoading
                                   ? const CircularProgressIndicator()
@@ -687,5 +600,162 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
             ),
           ]);
         });
+  }
+
+  Widget productList(
+    screenWidth, {
+    sn,
+    productName,
+    category,
+    expiryDate,
+    price,
+    supplier,
+    quantity,
+    status,
+  }) {
+    final widgetSize = (screenWidth - 293) / 12;
+    final firestore = FirestoreClass();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              sn.toString(),
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              productName,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              category,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              expiryDate,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              price,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              supplier,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              quantity,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              status,
+              style: bodyText(status == 'Unavailable' ? red : green, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Row(
+              children: [
+                InkWell(
+                    onTap: () {},
+                    child: Icon(Icons.edit, size: 15, color: purple)),
+                const SizedBox(
+                  width: 8,
+                ),
+                InkWell(
+                    onTap: () {
+                      firestore.deleteStock(productName);
+                    },
+                    child: Icon(Icons.delete_outlined, size: 15, color: red)),
+              ],
+            ),
+          ),
+        ]),
+        const Divider()
+      ],
+    );
+  }
+}
+
+class Boxes extends StatelessWidget {
+  const Boxes({
+    super.key,
+    required this.title,
+    required this.total,
+    required this.iconColor,
+    required this.circleColor,
+    required this.icon,
+  });
+  final String title;
+  final String total;
+  final Color iconColor;
+  final Color circleColor;
+  final IconData icon;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 100,
+      width: 300,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: white,
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromARGB(253, 206, 200, 200),
+            offset: Offset(0, 3),
+            blurRadius: 3.0,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: bodyText(black, 13),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(total, style: headline(black, 20)),
+              CircleAvatar(
+                  radius: 20,
+                  backgroundColor: circleColor,
+                  child: Icon(icon, color: iconColor))
+            ],
+          ),
+          Text(
+            'Last 7 days',
+            style: headline(iconColor, 13),
+          )
+        ],
+      ),
+    );
   }
 }
