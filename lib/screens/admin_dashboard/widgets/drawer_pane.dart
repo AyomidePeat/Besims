@@ -67,27 +67,32 @@ class NavigationPane extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          //Spacer(),
+         
 
           ...MenuItems.all.map(buildMenuItem).toList(),
 
-          Spacer(flex: 2),
+         
+            const Spacer(flex:2),
+        TextButton(onPressed:(){}, 
+          child: const Row(
+            children: [Icon(Icons.logout_rounded, color:Colors.grey),
+              Text('Log Out',),
+            ],
+          ),
+        )
+            
         ],
       );
-  Widget buildMenuItem(MenuStuff item) => ListTileTheme(
-       enableFeedback:true ,
-       
-        child: ListTile(
-         selectedColor: purple, 
-          selected: currentItem == item,
-          minLeadingWidth: 20, hoverColor: Colors.red[600],
-          leading: Icon(item.icon, ),
-          title: Text(
-            item.title, 
-          ),
-          onTap: () {
-            onSelectedItem(item);
-          },
-        ),
-      );
+  Widget buildMenuItem(MenuStuff item) => ListTile(
+   selectedColor: purple, contentPadding: EdgeInsets.all(0),
+    selected: currentItem == item,
+    minLeadingWidth: 20, hoverColor: Colors.red[600],
+    leading: Icon(item.icon,),
+    title: Text(
+      item.title, 
+    ),
+    onTap: () {
+      onSelectedItem(item);
+    },
+  );
 }

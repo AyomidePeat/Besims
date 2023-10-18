@@ -11,6 +11,7 @@ import 'package:bsims/screens/admin_dashboard/widgets/drawer_pane.dart';
 import 'package:bsims/screens/admin_dashboard/widgets/menu_container.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../const/colors.dart';
 
@@ -146,6 +147,8 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    String currentDate = DateFormat('EEEE, MMMM dd, yyyy').format(now);
     return Container(
       padding: const EdgeInsets.all(10),
       width: screenWidth - 293,
@@ -156,41 +159,42 @@ class Header extends StatelessWidget {
         children: [
           SizedBox(
               height: 30,
-              width: (screenWidth - 293)/3,
+              width: (screenWidth - 293) / 3,
               child: TextField(
                   controller: searchController,
-                  decoration: InputDecoration(filled: false,
+                  decoration: InputDecoration(
+                      filled: false,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                              color: grey)),
+                          borderSide: BorderSide(color: grey)),
                       label: Text(
                         'Search product, supplier, order',
                         style: bodyText(Colors.grey[400]!, 17),
                       ),
                       prefixIcon: Icon(Icons.search)))),
-          //SizedBox(width: screenWidth * 0.005),
-      
           Row(
-            children: [    Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Admin Name',
-                  style: headline(black, 10),
+            children: [
+              Text(currentDate),
+              SizedBox(width: 20),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Admin Name',
+                      style: headline(black, 10),
+                    ),
+                    Text(
+                      'Admin@email.com',
+                      style: bodyText(purple!, 8),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Admin@email.com',
-                  style: bodyText(purple!, 8),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
               CircleAvatar(
                 backgroundColor: purple,
               ),

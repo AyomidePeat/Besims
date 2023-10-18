@@ -18,319 +18,287 @@ class _StoreState extends ConsumerState<Store> {
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
-    const double space = 30;
+    final widgetSize = (widget.screenWidth - 293) / 10;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Stores',
-              style: headline(black, widget.screenWidth * 0.013),
-            ),
-            SizedBox(
-              width: widget.screenWidth * 0.5,
-            ),
-            InkWell(
-              onTap: addStore,
-              child: Container(
-                width: 103,
-                height: 40,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5), color: green),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.add_circle_sharp,
-                      size: 15,
-                      color: white,
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      'Add Store',
-                      style: bodyText(black, 12),
-                    )
-                  ],
-                ),
+        SizedBox(    width: widget.screenWidth - 293,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Stores',
+                style: headline(black, widget.screenWidth * 0.013),
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        StreamBuilder(
-            stream: cloudStoreRef.getStores(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                    child: CircularProgressIndicator(color: Colors.green));
-              } else {
-                final stores = snapshot.data!;
-                if (stores.isNotEmpty) {
-                  for (int index = 0; index <= 0 && index <= stores.length;) {
-                    
-                    String storeName = stores[index].name;
-                    String location = stores[index].location;
-                    String manager = stores[index].manager;
-                    String phone = stores[index].phone;
-                    String status = stores[index].status;
-
-                    return Container(
-                      width: widget.screenWidth - 293,
+             Row(
+                children: [
+                  InkWell(
+                    onTap: addStore,
+                    child: Container(
+                      height: 35,
+                      width: 90,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5), color: white),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'S/N',
-                                      style: headline(black, 10),
-                                    ),
-                                    const SizedBox(
-                                      height: space,
-                                    ),
-                                    SizedBox(
-                                      height: 300,
-                                      width: 70,
-                                      child: ListView.builder(
-                                          itemCount: stores.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 25),
-                                              child: Text(
-                                                '${index + 1}',
-                                                style: bodyText(black, 10),
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ],
+                          borderRadius: BorderRadius.circular(5), color: purple),
+                      child: Text('Add Store', style: bodyText(white, 10)),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  InkWell(
+                    onTap: () async {
+        //                                       FilePickerCross result = await FilePickerCross.importFromStorage(
+        //   type: FileTypeCross.any,       // Available: `any`, `audio`, `image`, `video`, `custom`. Note: not available using FDE
+        //   fileExtension: 'txt, md'     // Only if FileTypeCross.custom . May be any file extension like `dot`, `ppt,pptx,odp`
+        // );
+        
+        //                                       if (result != null) {
+        //                                         // Handle the selected Excel file, e.g., parse it
+        //                                         var file = result.fileName;
+        //                                         // var path = file.path;
+        
+        //                                         print(file);
+        //                                         // You can now parse the Excel file using a package like 'excel'
+        //                                         // Example: var excel = Excel.decodeFile(path);
+        
+        //                                         // You can process the Excel data or perform any actions here
+        //                                       } else {
+        //                                         print('User canceled file selection');
+        //                                       }
+                    },
+                    child: Container(
+                      height: 35,
+                      width: 90,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey[400]!)),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.downloading_rounded,
+                            size: 15,
+                          ),
+                          const SizedBox(width: 5),
+                          Text('Import', style: bodyText(black, 10)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  InkWell(
+                    onTap: addStore,
+                    child: Container(
+                      height: 35,
+                      width: 90,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey[400]!)),
+                      child: Text('Download all', style: bodyText(black, 10)),
+                    ),
+                  ),
+                ],
+              ),
+             
+            ],
+          ),
+        ),
+       const SizedBox(height: 40,),
+        Container(
+          width: widget.screenWidth - 293,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5), color: white),
+          child: Column(children: [
+            const SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'S/N',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'NAME',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'LOCATION',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'MANAGER',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'PHONE',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'STATUS',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'ACTIONS',
+                    style: headline(black, 10),
+                  ),
+                ),
+              ],
+            ),
+            const Divider(),
+            StreamBuilder(
+                stream: cloudStoreRef.getStores(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(color: purple);
+                  } else {
+                    final stocks = snapshot.data!;
+                    if (stocks.isNotEmpty) {
+                      return SizedBox(
+                        width: widget.screenWidth - 280,
+                        height: 446,
+                        child: ListView.builder(
+                            itemCount: stocks.length,
+                            itemBuilder: (context, index) {
+                              String name = stocks[index].name;
+                              String location = stocks[index].location;
+                              String manager = stocks[index].manager;
+                              String phone = stocks[index].phone;
+                              String status = stocks[index].status;
+                             
+
+                              return ListTile(
+                                contentPadding: const EdgeInsets.all(0),
+                                title: productList(
+                                  widget.screenWidth,
+                                  sn: index + 1,
+                                  name: name,
+                                  status: status,
+                                  manager: manager,
+                                  location: location,
+                                  phone: phone,
+                                 
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'NAME',
-                                      style: headline(black, 10),
-                                    ),
-                                    const SizedBox(
-                                      height: space,
-                                    ),
-                                    SizedBox(
-                                      height: 300,
-                                      width: 70,
-                                      child: ListView.builder(
-                                          itemCount: stores.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 25),
-                                              child: Text(
-                                                storeName,
-                                                style: bodyText(black, 10),
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'LOCATION',
-                                      style: headline(black, 10),
-                                    ),
-                                    const SizedBox(
-                                      height: space,
-                                    ),
-                                    SizedBox(
-                                      height: 300,
-                                      width: 70,
-                                      child: ListView.builder(
-                                          itemCount: stores.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 25),
-                                              child: Text(
-                                                location,
-                                                style: bodyText(black, 10),
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'MANAGER',
-                                      style: headline(black, 10),
-                                    ),
-                                    const SizedBox(
-                                      height: space,
-                                    ),
-                                    SizedBox(
-                                      height: 300,
-                                      width: 70,
-                                      child: ListView.builder(
-                                          itemCount: stores.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 25),
-                                              child: Text(
-                                                manager,
-                                                style: bodyText(black, 10),
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'PHONE',
-                                      style: headline(black, 10),
-                                    ),
-                                    const SizedBox(
-                                      height: space,
-                                    ),
-                                    SizedBox(
-                                      height: 300,
-                                      width: 70,
-                                      child: ListView.builder(
-                                          itemCount: stores.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 25),
-                                              child: Text(
-                                                phone,
-                                                style: bodyText(black, 10),
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'STATUS',
-                                      style: headline(black, 10),
-                                    ),
-                                    const SizedBox(
-                                      height: space,
-                                    ),
-                                    SizedBox(
-                                      height: 300,
-                                      width: 70,
-                                      child: ListView.builder(
-                                          itemCount: stores.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 10),
-                                              child: Container(
-                                                padding: EdgeInsets.all(5),
-                                                decoration: BoxDecoration(
-                                                    color: status == 'Closed'
-                                                        ? red
-                                                        : green,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                                child: Center(
-                                                  child: Text(
-                                                    status,
-                                                    style: bodyText(white, 10),
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'ACTIONS',
-                                      style: headline(black, 10),
-                                    ),
-                                    const SizedBox(height: space),
-                                    SizedBox(
-                                      height: 300,
-                                      width: 50,
-                                      child: ListView.builder(
-                                          itemCount: stores.length,
-                                          itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 25),
-                                              child: Row(
-                                                children: [
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: Icon(
-                                                          Icons.edit_document,
-                                                          size: 15,
-                                                          color: green)),
-                                                  const SizedBox(
-                                                    width: 8,
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: Icon(
-                                                          Icons.delete_outlined,
-                                                          size: 15,
-                                                          color: red)),
-                                                ],
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ]),
-                    );
+                              );
+                            }),
+                      );
+                    }
                   }
-                }
-                return Container(
-                    width: widget.screenWidth - 293,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5), color: white),
-                    child: const Center(
-                        child: Text('You have not added any store yet')));
-              }
-            })
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Center(
+                        child: Text('You have not added any store yet!',
+                            style: bodyText(black, 15))),
+                  );
+                }),
+            const SizedBox(
+              height: 20,
+            ),
+          ]),
+        )
+      ],
+    );
+
+  }
+Widget productList(
+    screenWidth, {
+    sn,
+    name,
+    location,
+   manager,
+    phone,
+    status,
+   
+  }) {
+    final widgetSize = (screenWidth - 293) / 10;
+    final firestore = FirestoreClass();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              sn.toString(),
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              name,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              location,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              manager,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              phone,
+              style: bodyText(black, 13),
+            ),
+          ),
+          
+          SizedBox(
+            width: widgetSize,
+            child: Text(
+              status,
+              style: bodyText(black, 13),
+            ),
+          ),
+          SizedBox(
+            width: widgetSize,
+            child: Row(
+              children: [
+                InkWell(
+                    onTap: () {},
+                    child: Icon(Icons.edit, size: 15, color: green)),
+                const SizedBox(
+                  width: 8,
+                ),
+                InkWell(
+                    onTap: () async {
+                      await firestore.deleteStore(name);
+                    },
+                    child: Icon(Icons.delete_outlined, size: 15, color: red)),
+              ],
+            ),
+          ),
+        ]),
+        const Divider()
       ],
     );
   }
@@ -351,23 +319,13 @@ class _StoreState extends ConsumerState<Store> {
             width: 700,
             child: SimpleDialog(children: [
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Create User Account', style: headline(black, 20)),
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel_outlined))
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
+                    Text('New Store', style: headline(black, 20)),
+                   const SizedBox(
+                      height: 40,
                     ),
                     TextFieldWidget(controller: nameController, label: 'Name'),
                     const SizedBox(
@@ -388,33 +346,23 @@ class _StoreState extends ConsumerState<Store> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      height: 40,
-                      width: 700,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Center(
-                          child: DropdownButtonFormField(
-                            hint: const Text('Status'),
-                            value: status,
-                            onChanged: (value) {
-                              setState(() {
-                                status = value as String;
-                              });
-                            },
-                            items: statusOptions
-                                .map((e) => DropdownMenuItem(
-                                      value: e,
-                                      child: Text(e.toString()),
-                                    ))
-                                .toList(),
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                          ),
+                    Center(
+                      child: DropdownButtonFormField(
+                        hint: const Text('Status'),
+                        value: status,
+                        onChanged: (value) {
+                          setState(() {
+                            status = value as String;
+                          });
+                        },
+                        items: statusOptions
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(e.toString()),
+                                ))
+                            .toList(),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
@@ -422,9 +370,29 @@ class _StoreState extends ConsumerState<Store> {
                       height: 40,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                       
+                        
                         InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child:Container(
+                            width: 110,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey)),
+                            child: Center(
+                                child: Text(
+                              'Discard',
+                              style: bodyText(Colors.black, 10),
+                            )),
+                          ),
+                        ),const SizedBox(width: 10),
+                         InkWell(
                           onTap: () async {
                             final uploadSuccess = await fireStore.addStore(
                                 name: nameController.text,
@@ -436,16 +404,17 @@ class _StoreState extends ConsumerState<Store> {
                             if (uploadSuccess == 'Added') {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                      backgroundColor: Colors.green,
+                                      backgroundColor: purple,
                                       content: Text(
                                           uploadSuccess,
                                           textAlign: TextAlign.center,
                                           style:
                                               const TextStyle(fontSize: 16))));
+                                              Navigator.pop(context);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                      backgroundColor: Colors.green,
+                                      backgroundColor: Colors.purple,
                                       content: Text(
                                           uploadSuccess,
                                           textAlign: TextAlign.center,
@@ -453,37 +422,22 @@ class _StoreState extends ConsumerState<Store> {
                                               const TextStyle(fontSize: 16))));
                             }
                           },
-                          child: Container(
-                            width: 103,
-                            height: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: green),
-                            child: Center(
-                                child: Text(
-                              'Create',
-                              style: headline(white, 15),
-                            )),
-                          ),
-                        ),
-                        const SizedBox(width: 30),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            width: 103,
-                            height: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.grey),
-                            child: Center(
-                                child: Text(
-                              'Dismiss',
-                              style: headline(white, 15),
-                            )),
+                          child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: 110,
+                                height: 40,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: purple),
+                                child: Center(
+                                    child: Text(
+                                  'Add Store',
+                                  style:bodyText(white, 10),
+                                )),
+                              ),
+                            ],
                           ),
                         ),
                       ],

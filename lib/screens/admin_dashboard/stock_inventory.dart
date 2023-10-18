@@ -276,9 +276,12 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                             );
                           }
                         }
-                        return Center(
-                            child: Text('This is actually empty',
-                                style: headline(black, 20)));
+                        return Padding(
+                          padding: const EdgeInsets.only(top:20.0),
+                          child: Center(
+                              child: Text('Your stock inventory is empty',
+                                  style: bodyText(black, 15))),
+                        );
                       })
                 ],
               ),
@@ -314,23 +317,13 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
         builder: (context) {
           return SimpleDialog(children: [
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Add Product', style: headline(black, 20)),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.cancel_outlined))
-                    ],
-                  ),
+                  Text('New Product', style: headline(black, 20)),
                   const SizedBox(
-                    height: 10,
+                    height: 30,
                   ),
                   TextFieldWidget(
                       controller: nameController, label: 'Product Name'),
@@ -340,189 +333,142 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: 250,
-                          child: TextFieldWidget(
-                              controller: costPriceController,
-                              label: 'Cost price')),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      SizedBox(
-                          width: 250,
-                          child: TextFieldWidget(
-                              controller: sellingPriceController,
-                              label: 'Selling price')),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      SizedBox(
-                          width: 250,
-                          child: TextFieldWidget(
-                              controller: quantityController,
-                              label: 'Qty(Carton)')),
-                    ],
+                  TextFieldWidget(
+                      controller: costPriceController,
+                      label: 'Cost price'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFieldWidget(
+                      controller: sellingPriceController,
+                      label: 'Selling price'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFieldWidget(
+                      controller: quantityController,
+                      label: 'Qty(Carton)'),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DropdownButtonFormField(
+                    hint: const Text('Status'),
+                    value: status,
+                    onChanged: (value) {
+                      setState(() {
+                        status = value as String;
+                      });
+                    },
+                    items: statusOptions
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.toString()),
+                            ))
+                        .toList(),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                  ), const SizedBox(
+                    height: 20,
+                  ),
+                  DropdownButtonFormField(
+                    hint: const Text('Category'),
+                    value: category,
+                    onChanged: (value) {
+                      setState(() {
+                        category = value as String;
+                      });
+                    },
+                    items: categoryOptions
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.toString()),
+                            ))
+                        .toList(),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 400,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Center(
-                            child: DropdownButtonFormField(
-                              hint: const Text('Status'),
-                              value: status,
-                              onChanged: (value) {
-                                setState(() {
-                                  status = value as String;
-                                });
-                              },
-                              items: statusOptions
-                                  .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e.toString()),
-                                      ))
-                                  .toList(),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        width: 400,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Center(
-                            child: DropdownButtonFormField(
-                              hint: const Text('Category'),
-                              value: category,
-                              onChanged: (value) {
-                                setState(() {
-                                  category = value as String;
-                                });
-                              },
-                              items: categoryOptions
-                                  .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e.toString()),
-                                      ))
-                                  .toList(),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  DropdownButtonFormField(
+                    hint: const Text('Supplier'),
+                    value: supplier,
+                    onChanged: (value) {
+                      setState(() {
+                        supplier = value as String;
+                      });
+                    },
+                    items: supplierOptions
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.toString()),
+                            ))
+                        .toList(),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Container(
-                          height: 50,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                            ),
-                            child: Center(
-                              child: DropdownButtonFormField(
-                                hint: const Text('Supplier'),
-                                value: supplier,
-                                onChanged: (value) {
-                                  setState(() {
-                                    supplier = value as String;
-                                  });
-                                },
-                                items: supplierOptions
-                                    .map((e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e.toString()),
-                                        ))
-                                    .toList(),
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      SizedBox(
-                        width: 400,
-                        height: 50,
-                        child: TextField(
-                          decoration: const InputDecoration(
-                              hintText: 'Expiry Date',
-                              border: InputBorder.none),
-                          style: TextStyle(
-                            fontSize: 16,
-                            height: 1.188,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Kanit',
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
-                          ),
-                          controller: expiryDateController,
-                          onTap: () async {
-                            DateTime? pickeddate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                            );
+                  TextField(
+                    decoration: const InputDecoration(suffixIcon:  const Icon(Icons.calendar_month),
+                        hintText: 'Expiry Date',
+                        border: InputBorder.none),
+                    style: TextStyle(
+                      fontSize: 16,
+                      height: 1.188,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Kanit',
+                      color:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black,
+                    ),
+                    controller: expiryDateController,
+                    onTap: () async {
+                      DateTime? pickeddate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
 
-                            if (pickeddate != null) {
-                              setState(() {
-                                expiryDateController.text =
-                                    DateFormat('dd/MM/yyyy').format(pickeddate);
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Icon(Icons.calendar_month),
-                    ],
+                      if (pickeddate != null) {
+                        setState(() {
+                          expiryDateController.text =
+                              DateFormat('dd/MM/yyyy').format(pickeddate);
+                        });
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 40,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 103,
+                          height: 40,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                             border:Border.all(color:Colors.grey)),
+                          child: Center(
+                              child: Text(
+                            'Discard',
+                            style: bodyText(black, 10),
+                          )),
+                        ),
+                      ), const SizedBox(width: 30),
                       InkWell(
                         onTap: () async {
                           setState(() {
@@ -543,17 +489,18 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                               isLoading = false;
                             });
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                backgroundColor: Colors.green,
+                                backgroundColor: purple,
                                 content: Text(uploadSuccess,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(fontSize: 16))));
+                                    Navigator.pop(context);
                           } else {
                             setState(() {
                               isLoading = false;
                             });
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                backgroundColor: Colors.green,
-                                content: Text(uploadSuccess,
+                                backgroundColor: purple,
+                                content: Text('An error occured',
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(fontSize: 16))));
                           }
@@ -569,30 +516,12 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                               child: isLoading
                                   ? const CircularProgressIndicator()
                                   : Text(
-                                      'Submit',
-                                      style: headline(white, 15),
+                                      'Add Product',
+                                      style: bodyText(white, 10),
                                     )),
                         ),
                       ),
-                      const SizedBox(width: 30),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: 103,
-                          height: 40,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.grey),
-                          child: Center(
-                              child: Text(
-                            'Dismiss',
-                            style: headline(white, 15),
-                          )),
-                        ),
-                      ),
+                     
                     ],
                   )
                 ],

@@ -1,9 +1,8 @@
 import 'package:bsims/const/textstyle.dart';
-import 'package:bsims/widgets/standard_container.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../const/colors.dart';
-import '../../widgets/custom_container.dart';
 
 class Dashboard extends StatelessWidget {
   Dashboard({
@@ -14,91 +13,121 @@ class Dashboard extends StatelessWidget {
 
   final double screenWidth;
   final Size size;
-  List labels = [
-    'Today\'s Sales',
-    'Expired',
-    'Today\'s Invoice',
-    'New Products'
-  ];
-  List standardLabel = [
-    'Suppliers',
-    'Invoices',
-    'Current Month Sales',
-    'Last 3 Months Record',
-    'Last 6 Months Record Sales',
-    'Users',
-    'Available Products',
-    'Current Year Revenue',
-    'Scores'
-  ];
 
-  List icons = [
-    Icons.attach_money_outlined,
-    Icons.credit_card,
-    Icons.inventory_outlined,
-    Icons.shopping_bag_rounded
-  ];
-  List iconColors = [green, red, yellow, Colors.blue];
-  List standardIcons = [
-    Icons.person, Icons.shopping_cart, Icons.sell, Icons.calculate, Icons.receipt_rounded, Icons.supervised_user_circle_sharp, Icons.shopping_bag_rounded, Icons.star, Icons.auto_graph_outlined
-  ];
-  List bgColors = [
-    Colors.green[300],
-    Colors.pink[300],
-    Colors.yellow[300],
-    Colors.blue[300]
-  ];
-  List standardIconColors=[Colors.pink, Colors.indigo, Colors.teal, Colors.indigoAccent, Colors.blue, const Color.fromARGB(255, 34, 155, 60), Colors.pink, Colors.yellow, Colors.indigo];
-String currentDate = DateFormat(' EEEE,  MMMM dd, yyyy').format(DateTime.now());
+  String currentDate =
+      DateFormat(' EEEE,  MMMM dd, yyyy').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+     
       children: [
-        ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: 100, maxWidth: size.width - 293),
-          child: GridView.builder(
-              physics: const BouncingScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
-                mainAxisExtent: 90,
-              ),
-              itemCount: labels.length,
-              itemBuilder: (BuildContext context, int index) {
-                return CustomContainer(
-                    icon: icons[index],
-                    bgColor: bgColors[index],
-                    iconColor: iconColors[index],
-                    label: labels[index],
-                    quantity: 0);
-              }),
+     
+        SizedBox(    width: screenWidth - 293,
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Box(title: 'Total Sales', total: '\$3,610', percentage: '+12%'),
+              Box(title: 'Total Profit', total: '\$1,479', percentage: '+12%'),
+              Box(title: 'Total Quantity', total: '620', percentage: '+12%'),
+            ],
+          ),
         ),
-        ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: 250, maxWidth: size.width - 293),
-          child: GridView.builder(
-              physics: const BouncingScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 15,
-                mainAxisExtent: 70,
-              ),
-              itemCount: 9,
-              itemBuilder: (BuildContext context, int index) {
-                return StandardContainer(
-                    icon: standardIcons[index],
-                    iconColor: standardIconColors[index],
-                    label: standardLabel[index],
-                    quantity: 0);
-              }),
-        ),
-      const SizedBox(height:20),
-        Text('Today\'s ($currentDate) Transactions', style: headline(green, screenWidth*0.015),),
       ],
+    );
+  }
+}
+
+class Box extends StatefulWidget {
+  Box({
+    super.key,
+    required this.title,
+    required this.total,
+    required this.percentage,
+  });
+  final String title;
+  final String total;
+  final String percentage;
+
+  @override
+  State<Box> createState() => _BoxState();
+}
+
+class _BoxState extends State<Box> {
+  List timeFrame = [
+    'Today',
+    'This week',
+    'This month',
+    'This year',
+  ];
+
+  String? time;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 100,
+      width: 260,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: white,
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromARGB(253, 206, 200, 200),
+            offset: Offset(0, 3),
+            blurRadius: 3.0,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.title,
+                style: bodyText(black, 13),
+              ),SizedBox(width:20),
+              SizedBox(width:140, height:40,
+                child: DropdownButtonFormField(
+                hint:  Text('This month', style: bodyText(Colors.grey, 15),),
+                  value: time,
+                  onChanged: (value) {
+                    setState(() {
+                      time = value as String;
+                    });
+                  },
+                  items: timeFrame
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e.toString()),
+                          ))
+                      .toList(),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(widget.total, style: headline(black, 20)),
+              Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: Colors.green[50],
+                    borderRadius: BorderRadius.circular(5)),
+                child: Text(
+                  widget.percentage,
+                  style: bodyText(Colors.green[500]!, 10),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -18,91 +18,93 @@ class Supplier extends ConsumerStatefulWidget {
 class _SupplierState extends ConsumerState<Supplier> {
   @override
   Widget build(BuildContext context) {
-    const double space = 30;
     final cloudStoreRef = ref.watch(cloudStoreProvider);
     final widgetSize = (widget.screenWidth - 293) / 12;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Suppliers', style: headline(black, 17)),
-            Row(
-              children: [
-                InkWell(
-                  onTap: addSupplier,
-                  child: Container(
-                    height: 35,
-                    width: 90,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5), color: purple),
-                    child: Text('Add Supplier', style: bodyText(white, 10)),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                InkWell(
-                  onTap: () async {
-//                                       FilePickerCross result = await FilePickerCross.importFromStorage(
-//   type: FileTypeCross.any,       // Available: `any`, `audio`, `image`, `video`, `custom`. Note: not available using FDE
-//   fileExtension: 'txt, md'     // Only if FileTypeCross.custom . May be any file extension like `dot`, `ppt,pptx,odp`
-// );
-
-//                                       if (result != null) {
-//                                         // Handle the selected Excel file, e.g., parse it
-//                                         var file = result.fileName;
-//                                         // var path = file.path;
-
-//                                         print(file);
-//                                         // You can now parse the Excel file using a package like 'excel'
-//                                         // Example: var excel = Excel.decodeFile(path);
-
-//                                         // You can process the Excel data or perform any actions here
-//                                       } else {
-//                                         print('User canceled file selection');
-//                                       }
-                  },
-                  child: Container(
-                    height: 35,
-                    width: 90,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey[400]!)),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.downloading_rounded,
-                          size: 15,
-                        ),
-                        const SizedBox(width: 5),
-                        Text('Import', style: bodyText(black, 10)),
-                      ],
+        SizedBox(
+          width: widget.screenWidth - 293,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Suppliers', style: headline(black, 17)),
+              Row(
+                children: [
+                  InkWell(
+                    onTap: addSupplier,
+                    child: Container(
+                      height: 35,
+                      width: 90,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: purple),
+                      child: Text('Add Supplier', style: bodyText(white, 10)),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                InkWell(
-                  onTap: addSupplier,
-                  child: Container(
-                    height: 35,
-                    width: 90,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey[400]!)),
-                    child: Text('Download all', style: bodyText(black, 10)),
+                  const SizedBox(width: 8),
+                  InkWell(
+                    onTap: () async {
+                      //                                       FilePickerCross result = await FilePickerCross.importFromStorage(
+                      //   type: FileTypeCross.any,       // Available: `any`, `audio`, `image`, `video`, `custom`. Note: not available using FDE
+                      //   fileExtension: 'txt, md'     // Only if FileTypeCross.custom . May be any file extension like `dot`, `ppt,pptx,odp`
+                      // );
+
+                      //                                       if (result != null) {
+                      //                                         // Handle the selected Excel file, e.g., parse it
+                      //                                         var file = result.fileName;
+                      //                                         // var path = file.path;
+
+                      //                                         print(file);
+                      //                                         // You can now parse the Excel file using a package like 'excel'
+                      //                                         // Example: var excel = Excel.decodeFile(path);
+
+                      //                                         // You can process the Excel data or perform any actions here
+                      //                                       } else {
+                      //                                         print('User canceled file selection');
+                      //                                       }
+                    },
+                    child: Container(
+                      height: 35,
+                      width: 90,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey[400]!)),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.downloading_rounded,
+                            size: 15,
+                          ),
+                          const SizedBox(width: 5),
+                          Text('Import', style: bodyText(black, 10)),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 8),
+                  InkWell(
+                    onTap: addSupplier,
+                    child: Container(
+                      height: 35,
+                      width: 90,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey[400]!)),
+                      child: Text('Download all', style: bodyText(black, 10)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 10),
         const SizedBox(
-          height: 30,
+          height: 40,
         ),
         Container(
           width: widget.screenWidth - 293,
@@ -110,6 +112,7 @@ class _SupplierState extends ConsumerState<Supplier> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),
           child: Column(children: [
+             const SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -164,7 +167,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                 ),
               ],
             ),
-            Divider(),
+            const Divider(),
             StreamBuilder(
                 stream: cloudStoreRef.getSuppliers(),
                 builder: (context, snapshot) {
@@ -187,7 +190,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                               String company = stocks[index].company;
 
                               return ListTile(
-                                contentPadding: EdgeInsets.all(0),
+                                contentPadding: const EdgeInsets.all(0),
                                 title: productList(
                                   widget.screenWidth,
                                   sn: index + 1,
@@ -207,7 +210,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Center(
                         child: Text('You have not added supplier yet!',
-                            style: headline(black, 20))),
+                            style: bodyText(black, 15))),
                   );
                 }),
             const SizedBox(
@@ -236,23 +239,13 @@ class _SupplierState extends ConsumerState<Supplier> {
             width: 700,
             child: SimpleDialog(children: [
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Add Suppliers', style: headline(black, 20)),
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.cancel_outlined))
-                      ],
-                    ),
+                    Text('New Supplier', style: headline(black, 20)),
                     const SizedBox(
-                      height: 10,
+                      height: 40,
                     ),
                     TextFieldWidget(
                         controller: nameController, label: 'Supplier Name'),
@@ -284,8 +277,27 @@ class _SupplierState extends ConsumerState<Supplier> {
                       height: 40,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey)),
+                            child: Center(
+                                child: Text(
+                              'Discard',
+                              style: bodyText(Colors.black, 10),
+                            )),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
                         InkWell(
                           onTap: () async {
                             final uploadSuccess = await fireStore.addSupplier(
@@ -304,19 +316,18 @@ class _SupplierState extends ConsumerState<Supplier> {
                                           textAlign: TextAlign.center,
                                           style:
                                               const TextStyle(fontSize: 16))));
+                              Navigator.pop(context);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       backgroundColor: purple,
-                                      content: Text(
-                                          uploadSuccess,
+                                      content: const Text('An error occured',
                                           textAlign: TextAlign.center,
-                                          style:
-                                              const TextStyle(fontSize: 16))));
+                                          style: TextStyle(fontSize: 16))));
                             }
                           },
                           child: Container(
-                            width: 103,
+                            width: 110,
                             height: 40,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -324,27 +335,8 @@ class _SupplierState extends ConsumerState<Supplier> {
                                 color: purple),
                             child: Center(
                                 child: Text(
-                              'Create',
-                              style: headline(white, 15),
-                            )),
-                          ),
-                        ),
-                        const SizedBox(width: 30),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            width: 103,
-                            height: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.grey),
-                            child: Center(
-                                child: Text(
-                              'Dismiss',
-                              style: headline(white, 15),
+                              'Add Supplier',
+                              style: bodyText(white, 10),
                             )),
                           ),
                         ),
