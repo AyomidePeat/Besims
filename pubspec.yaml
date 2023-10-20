@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.18.1
   excel: ^2.1.0
   pdf: ^3.10.4
+  fl_chart: ^0.64.0
  
 
 dev_dependencies:

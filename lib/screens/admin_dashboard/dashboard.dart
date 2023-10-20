@@ -1,4 +1,5 @@
 import 'package:bsims/const/textstyle.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,17 +14,28 @@ class Dashboard extends StatelessWidget {
 
   final double screenWidth;
   final Size size;
-
+  final List<FlSpot> data = [
+    FlSpot(0, 3),
+    FlSpot(1, 4),
+    FlSpot(2, 2),
+    FlSpot(3, 5),
+  ];
+  final List<FlSpot> data1 = [
+    FlSpot(0, 5),
+    FlSpot(2, 4),
+    FlSpot(2, 2),
+    FlSpot(3, 5),
+  ];
   String currentDate =
       DateFormat(' EEEE,  MMMM dd, yyyy').format(DateTime.now());
   @override
   Widget build(BuildContext context) {
     return Column(
-     
       children: [
-     
-        SizedBox(    width: screenWidth - 293,
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        SizedBox(
+          width: screenWidth - 293,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Box(title: 'Total Sales', total: '\$3,610', percentage: '+12%'),
               Box(title: 'Total Profit', total: '\$1,479', percentage: '+12%'),
@@ -31,6 +43,43 @@ class Dashboard extends StatelessWidget {
             ],
           ),
         ),
+         SizedBox(height: 500, width: 500,
+      child: LineChart(
+        LineChartData(
+          gridData: FlGridData(show: false),
+          titlesData: FlTitlesData(show: false),
+          borderData: FlBorderData(
+            show: true,
+            border: Border.all(
+              color: const Color(0xff37434d),
+              width: 1,
+            ),
+          ),
+          minX: 0,
+          maxX: data.length.toDouble() - 1,
+          minY: 0,
+          maxY: 10,
+          lineBarsData: [
+            LineChartBarData(
+              spots: data,
+              isCurved: true, // Enables curve for wavy effect
+            color: Colors.blue,// Line color
+              barWidth: 4, // Line width
+              isStrokeCapRound: true, // Rounded line ends
+              belowBarData: BarAreaData(show: false),
+            ),
+            LineChartBarData(
+              spots: data1,
+              isCurved: true, // Enables curve for wavy effect
+            color: Colors.red,// Line color
+              barWidth: 4, // Line width
+              isStrokeCapRound: true, // Rounded line ends
+              belowBarData: BarAreaData(show: false),
+            ),
+          ],
+        ),
+      ),
+    )
       ],
     );
   }
@@ -82,15 +131,22 @@ class _BoxState extends State<Box> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 widget.title,
                 style: bodyText(black, 13),
-              ),SizedBox(width:20),
-              SizedBox(width:140, height:40,
+              ),
+              SizedBox(width: 20),
+              SizedBox(
+                width: 140,
+                height: 40,
                 child: DropdownButtonFormField(
-                hint:  Text('This month', style: bodyText(Colors.grey, 15),),
+                  hint: Text(
+                    'This month',
+                    style: bodyText(Colors.grey, 15),
+                  ),
                   value: time,
                   onChanged: (value) {
                     setState(() {

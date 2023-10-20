@@ -183,7 +183,7 @@ Future deleteStore(String name) async {
   Future addProduct({
     required String category,
     required String paymentMethod,
-    required String customerName,
+    required String status,
     required String productName,
     required String stockQty,
     required String unitPrice,
@@ -193,7 +193,7 @@ Future deleteStore(String name) async {
     ProductModel productmodel = ProductModel(
         category: category,
         paymentMethod: paymentMethod,
-        customerName: customerName,
+        status: status,
         productName: productName,
         stockQty: stockQty,
         unitPrice: unitPrice,
@@ -212,7 +212,7 @@ Future deleteStore(String name) async {
     return message;
   }
 
-  Stream<List<ProductModel>> getProducts(String productName) {
+   Stream<List<ProductModel>> getProducts() {
     return firebaseFirestore
         .collection('products')
         .snapshots()
