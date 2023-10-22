@@ -1,10 +1,10 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/screens/admin_dashboard/excel_picker.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-
 import '../../const/colors.dart';
 
 class StockInventory extends ConsumerStatefulWidget {
@@ -103,26 +103,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                       ),
                       const SizedBox(width: 8),
                       InkWell(
-                        onTap: () async {
-//                                       FilePickerCross result = await FilePickerCross.importFromStorage(
-//   type: FileTypeCross.any,       // Available: `any`, `audio`, `image`, `video`, `custom`. Note: not available using FDE
-//   fileExtension: 'txt, md'     // Only if FileTypeCross.custom . May be any file extension like `dot`, `ppt,pptx,odp`
-// );
-
-//                                       if (result != null) {
-//                                         // Handle the selected Excel file, e.g., parse it
-//                                         var file = result.fileName;
-//                                         // var path = file.path;
-
-//                                         print(file);
-//                                         // You can now parse the Excel file using a package like 'excel'
-//                                         // Example: var excel = Excel.decodeFile(path);
-
-//                                         // You can process the Excel data or perform any actions here
-//                                       } else {
-//                                         print('User canceled file selection');
-//                                       }
-                        },
+                        onTap: excelPicker,
                         child: Container(
                           height: 35,
                           width: 90,
@@ -233,7 +214,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                       ),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   StreamBuilder(
                       stream: cloudStoreRef.getStocks(),
                       builder: (context, snapshot) {
@@ -261,7 +242,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                     String status = stocks[index].status;
 
                                     return ListTile(
-                                      contentPadding: EdgeInsets.all(0),
+                                      contentPadding: const EdgeInsets.all(0),
                                       title: productList(widget.screenWidth,
                                           sn: index + 1,
                                           category: category,
@@ -277,7 +258,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                           }
                         }
                         return Padding(
-                          padding: const EdgeInsets.only(top:20.0),
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: Center(
                               child: Text('Your stock inventory is empty',
                                   style: bodyText(black, 15))),
@@ -334,8 +315,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                     height: 10,
                   ),
                   TextFieldWidget(
-                      controller: costPriceController,
-                      label: 'Cost price'),
+                      controller: costPriceController, label: 'Cost price'),
                   const SizedBox(
                     height: 10,
                   ),
@@ -346,8 +326,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                     height: 10,
                   ),
                   TextFieldWidget(
-                      controller: quantityController,
-                      label: 'Qty(Carton)'),
+                      controller: quantityController, label: 'Qty(Carton)'),
                   const SizedBox(
                     height: 20,
                   ),
@@ -368,7 +347,8 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                     ),
-                  ), const SizedBox(
+                  ),
+                  const SizedBox(
                     height: 20,
                   ),
                   DropdownButtonFormField(
@@ -414,7 +394,8 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                     height: 10,
                   ),
                   TextField(
-                    decoration: const InputDecoration(suffixIcon:  const Icon(Icons.calendar_month),
+                    decoration: const InputDecoration(
+                        suffixIcon: Icon(Icons.calendar_month),
                         hintText: 'Expiry Date',
                         border: InputBorder.none),
                     style: TextStyle(
@@ -422,10 +403,9 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                       height: 1.188,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Kanit',
-                      color:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white
-                              : Colors.black,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
                     ),
                     controller: expiryDateController,
                     onTap: () async {
@@ -450,7 +430,6 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      
                       InkWell(
                         onTap: () {
                           Navigator.pop(context);
@@ -461,14 +440,15 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                             border:Border.all(color:Colors.grey)),
+                              border: Border.all(color: Colors.grey)),
                           child: Center(
                               child: Text(
                             'Discard',
                             style: bodyText(black, 10),
                           )),
                         ),
-                      ), const SizedBox(width: 30),
+                      ),
+                      const SizedBox(width: 30),
                       InkWell(
                         onTap: () async {
                           setState(() {
@@ -493,16 +473,16 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                 content: Text(uploadSuccess,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(fontSize: 16))));
-                                    Navigator.pop(context);
+                            Navigator.pop(context);
                           } else {
                             setState(() {
                               isLoading = false;
                             });
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: purple,
-                                content: Text('An error occured',
+                                content: const Text('An error occured',
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 16))));
+                                    style: TextStyle(fontSize: 16))));
                           }
                         },
                         child: Container(
@@ -521,7 +501,6 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                     )),
                         ),
                       ),
-                     
                     ],
                   )
                 ],
@@ -601,7 +580,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
             width: widgetSize,
             child: Text(
               status,
-              style: bodyText(status == 'Unavailable' ? red : green, 13),
+              style: bodyText(status == 'Unavailable' ||status =='unavailable' ? red : green, 13),
             ),
           ),
           SizedBox(
@@ -626,6 +605,12 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
         const Divider()
       ],
     );
+  }
+
+ 
+
+  excelPicker() {
+    importInventoryFile(pickExcelFile());
   }
 }
 

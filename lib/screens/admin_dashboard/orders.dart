@@ -1,10 +1,9 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/screens/admin_dashboard/excel_picker.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-
 import '../../const/colors.dart';
 
 class Orders extends ConsumerStatefulWidget {
@@ -109,26 +108,7 @@ void updateTotalOrders(int count) {
                       ),
                       const SizedBox(width: 8),
                       InkWell(
-                        onTap: () async {
-//                                       FilePickerCross result = await FilePickerCross.importFromStorage(
-//   type: FileTypeCross.any,       // Available: `any`, `audio`, `image`, `video`, `custom`. Note: not available using FDE
-//   fileExtension: 'txt, md'     // Only if FileTypeCross.custom . May be any file extension like `dot`, `ppt,pptx,odp`
-// );
-
-//                                       if (result != null) {
-//                                         // Handle the selected Excel file, e.g., parse it
-//                                         var file = result.fileName;
-//                                         // var path = file.path;
-
-//                                         print(file);
-//                                         // You can now parse the Excel file using a package like 'excel'
-//                                         // Example: var excel = Excel.decodeFile(path);
-
-//                                         // You can process the Excel data or perform any actions here
-//                                       } else {
-//                                         print('User canceled file selection');
-//                                       }
-                        },
+                        onTap: excelPicker,
                         child: Container(
                           height: 35,
                           width: 90,
@@ -241,7 +221,7 @@ void updateTotalOrders(int count) {
                       ),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   StreamBuilder(
                       stream: cloudStoreRef.getProducts(),
                       builder: (context, snapshot) {
@@ -277,7 +257,7 @@ void updateTotalOrders(int count) {
                                         stocks[index].paymentMethod;
 
                                     return ListTile(
-                                      contentPadding: EdgeInsets.all(0),
+                                      contentPadding: const EdgeInsets.all(0),
                                       title: productList(
                                           widget.screenWidth,
                                           sn: index + 1,
@@ -307,7 +287,9 @@ void updateTotalOrders(int count) {
           ))
     ]);
   }
-
+excelPicker() {
+    importOrderFile(pickExcelFile());
+  }
   addProduct() {
     final nameController = TextEditingController();
     FirestoreClass fireStore = FirestoreClass();
@@ -497,9 +479,9 @@ void updateTotalOrders(int count) {
                             });
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: purple,
-                                content: Text('An error occured',
+                                content: const Text('An error occured',
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 16))));
+                                    style: TextStyle(fontSize: 16))));
                           }
                         },
                         child: Container(
@@ -540,7 +522,6 @@ void updateTotalOrders(int count) {
     status,
   }) {
     final widgetSize = (screenWidth - 293) / 12;
-    final firestore = FirestoreClass();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -1,9 +1,7 @@
 import 'package:bsims/screens/admin_dashboard/home.dart';
-import 'package:bsims/screens/cashier_dashboard/cashier_home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firebase_options.dart';

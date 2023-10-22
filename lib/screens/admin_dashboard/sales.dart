@@ -1,12 +1,11 @@
 import 'package:bsims/const/textstyle.dart';
-import 'package:bsims/widgets/standard_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../const/colors.dart';
 import '../../../widgets/custom_container.dart';
 
 class Sales extends StatefulWidget {
-  Sales({
+  const Sales({
     super.key,
     required this.screenWidth,
     required this.size,
@@ -47,7 +46,6 @@ class _SalesState extends State<Sales> {
 
   @override
   Widget build(BuildContext context) {
-     const double space = 30;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

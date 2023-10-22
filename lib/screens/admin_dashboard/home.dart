@@ -8,9 +8,7 @@ import 'package:bsims/screens/admin_dashboard/store.dart';
 import 'package:bsims/screens/admin_dashboard/supplier.dart';
 import 'package:bsims/screens/admin_dashboard/users.dart';
 import 'package:bsims/screens/admin_dashboard/widgets/drawer_pane.dart';
-
 import 'package:bsims/screens/admin_dashboard/widgets/menu_container.dart';
-import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -25,7 +23,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   double screenWidth = 0;
-  Size size = Size(0, 0);
+  Size size = const Size(0, 0);
   List icons = [
     Icons.home,
     Icons.store,
@@ -90,6 +88,12 @@ class _HomeState extends State<Home> {
   }
 
   MenuStuff currentItem = MenuItems.dashboard;
+  final searchController = TextEditingController();
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +105,6 @@ class _HomeState extends State<Home> {
           builder: (BuildContext context, BoxConstraints constraints) {
         screenWidth = constraints.maxWidth;
 
-//double containerWidth =
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
@@ -118,7 +121,9 @@ class _HomeState extends State<Home> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Header(screenWidth: screenWidth),
+                  Header(
+                      screenWidth: screenWidth,
+                      searchController: searchController),
                   const SizedBox(
                     height: 30,
                   ),
@@ -140,11 +145,11 @@ class Header extends StatelessWidget {
   const Header({
     super.key,
     required this.screenWidth,
-    this.searchController,
+    required this.searchController,
   });
 
   final double screenWidth;
-  final searchController;
+  final TextEditingController searchController;
 
   @override
   Widget build(BuildContext context) {
@@ -170,13 +175,13 @@ class Header extends StatelessWidget {
                           borderSide: BorderSide(color: grey)),
                       label: Text(
                         'Search product, supplier, order',
-                        style: bodyText(Colors.grey[400]!, 17),
+                        style: bodyText(Colors.grey[400]!, 14),
                       ),
-                      prefixIcon: Icon(Icons.search)))),
+                      prefixIcon: const Icon(Icons.search)))),
           Row(
             children: [
               Text(currentDate),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

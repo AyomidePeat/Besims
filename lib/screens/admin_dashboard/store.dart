@@ -1,5 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/screens/admin_dashboard/excel_picker.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,26 +46,7 @@ class _StoreState extends ConsumerState<Store> {
                   ),
                   const SizedBox(width: 8),
                   InkWell(
-                    onTap: () async {
-        //                                       FilePickerCross result = await FilePickerCross.importFromStorage(
-        //   type: FileTypeCross.any,       // Available: `any`, `audio`, `image`, `video`, `custom`. Note: not available using FDE
-        //   fileExtension: 'txt, md'     // Only if FileTypeCross.custom . May be any file extension like `dot`, `ppt,pptx,odp`
-        // );
-        
-        //                                       if (result != null) {
-        //                                         // Handle the selected Excel file, e.g., parse it
-        //                                         var file = result.fileName;
-        //                                         // var path = file.path;
-        
-        //                                         print(file);
-        //                                         // You can now parse the Excel file using a package like 'excel'
-        //                                         // Example: var excel = Excel.decodeFile(path);
-        
-        //                                         // You can process the Excel data or perform any actions here
-        //                                       } else {
-        //                                         print('User canceled file selection');
-        //                                       }
-                    },
+                    onTap: excelPicker,
                     child: Container(
                       height: 35,
                       width: 90,
@@ -220,6 +202,9 @@ class _StoreState extends ConsumerState<Store> {
     );
 
   }
+  excelPicker() {
+    importStoreFile(pickExcelFile());
+  }
 Widget productList(
     screenWidth, {
     sn,
@@ -285,7 +270,7 @@ Widget productList(
               children: [
                 InkWell(
                     onTap: () {},
-                    child: Icon(Icons.edit, size: 15, color: green)),
+                    child: Icon(Icons.edit, size: 15, color: purple)),
                 const SizedBox(
                   width: 8,
                 ),

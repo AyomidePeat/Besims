@@ -1,6 +1,5 @@
 import 'package:bsims/const/colors.dart';
-import 'package:bsims/const/textstyle.dart';
-import 'package:bsims/screens/admin_dashboard/dashboard.dart';
+
 import 'package:flutter/material.dart';
 
 class MenuStuff {
@@ -83,16 +82,19 @@ class NavigationPane extends StatelessWidget {
             
         ],
       );
-  Widget buildMenuItem(MenuStuff item) => ListTile(
-   selectedColor: purple, contentPadding: EdgeInsets.all(0),
-    selected: currentItem == item,
-    minLeadingWidth: 20, hoverColor: Colors.red[600],
-    leading: Icon(item.icon,),
-    title: Text(
-      item.title, 
+  Widget buildMenuItem(MenuStuff item) => Padding(
+    padding: const EdgeInsets.only(bottom:10.0),
+    child: ListTile(
+     selectedColor: purple, contentPadding: const EdgeInsets.all(0),
+      selected: currentItem == item,
+      minLeadingWidth: 20, hoverColor: Colors.red[600],
+      leading: Icon(item.icon,),
+      title: Text(
+        item.title, 
+      ),
+      onTap: () {
+        onSelectedItem(item);
+      },
     ),
-    onTap: () {
-      onSelectedItem(item);
-    },
   );
 }
