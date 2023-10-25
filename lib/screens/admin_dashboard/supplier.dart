@@ -1,5 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/screens/admin_dashboard/excel_downloader.dart';
 import 'package:bsims/screens/admin_dashboard/excel_picker.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                   ),
                   const SizedBox(width: 8),
                   InkWell(
-                    onTap: addSupplier,
+                    onTap: excelDownloader,
                     child: Container(
                       height: 35,
                       width: 90,
@@ -94,7 +95,9 @@ class _SupplierState extends ConsumerState<Supplier> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),
           child: Column(children: [
-             const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -331,9 +334,15 @@ class _SupplierState extends ConsumerState<Supplier> {
           );
         });
   }
-excelPicker() {
+
+  excelPicker() {
     importSupplierFile(pickExcelFile());
   }
+
+  excelDownloader() {
+    exportSupplierExcelFile();
+  }
+
   Widget productList(
     screenWidth, {
     sn,

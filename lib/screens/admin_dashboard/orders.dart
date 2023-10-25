@@ -1,5 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/screens/admin_dashboard/excel_downloader.dart';
 import 'package:bsims/screens/admin_dashboard/excel_picker.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,9 @@ class _OrdersState extends ConsumerState<Orders> {
   bool isLoading = false;
   int totalOrders = 0;
   List? stocks;
-void updateTotalOrders(int count) {
-  totalOrders = count;
-}
+  void updateTotalOrders(int count) {
+    totalOrders = count;
+  }
 
   @override
   @override
@@ -102,8 +103,8 @@ void updateTotalOrders(int count) {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: purple),
-                          child: Text('Add Product',
-                              style: bodyText(white, 10)),
+                          child:
+                              Text('Add Product', style: bodyText(white, 10)),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -115,8 +116,7 @@ void updateTotalOrders(int count) {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              border:
-                                  Border.all(color: Colors.grey[400]!)),
+                              border: Border.all(color: Colors.grey[400]!)),
                           child: Row(
                             children: [
                               const Icon(
@@ -131,17 +131,16 @@ void updateTotalOrders(int count) {
                       ),
                       const SizedBox(width: 8),
                       InkWell(
-                        onTap: addProduct,
+                        onTap: excelDownloader,
                         child: Container(
                           height: 35,
                           width: 90,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              border:
-                                  Border.all(color: Colors.grey[400]!)),
-                          child: Text('Download all',
-                              style: bodyText(black, 10)),
+                              border: Border.all(color: Colors.grey[400]!)),
+                          child:
+                              Text('Download all', style: bodyText(black, 10)),
                         ),
                       ),
                     ],
@@ -230,7 +229,7 @@ void updateTotalOrders(int count) {
                           return CircularProgressIndicator(color: purple);
                         } else {
                           final stocks = snapshot.data!;
-                               updateTotalOrders(stocks.length);
+                          updateTotalOrders(stocks.length);
 
                           if (stocks.isNotEmpty) {
                             return SizedBox(
@@ -239,27 +238,22 @@ void updateTotalOrders(int count) {
                               child: ListView.builder(
                                   itemCount: stocks.length,
                                   itemBuilder: (context, index) {
-                                  
                                     String productName =
                                         stocks[index].productName;
-                                    String category =
-                                        stocks[index].category;
+                                    String category = stocks[index].category;
                                     //String costPrice = stocks[index].costPrice;
                                     String sellingPrice =
                                         stocks[index].unitPrice;
-                                    String quantity =
-                                        stocks[index].quantity;
+                                    String quantity = stocks[index].quantity;
                                     String seller = stocks[index].seller;
-                                    String stockQty =
-                                        stocks[index].stockQty;
+                                    String stockQty = stocks[index].stockQty;
                                     String status = stocks[index].status;
                                     String paymentMethod =
                                         stocks[index].paymentMethod;
 
                                     return ListTile(
                                       contentPadding: const EdgeInsets.all(0),
-                                      title: productList(
-                                          widget.screenWidth,
+                                      title: productList(widget.screenWidth,
                                           sn: index + 1,
                                           category: category,
                                           seller: seller,
@@ -287,9 +281,15 @@ void updateTotalOrders(int count) {
           ))
     ]);
   }
-excelPicker() {
+
+  excelPicker() {
     importOrderFile(pickExcelFile());
   }
+
+  excelDownloader() {
+    exportOrdersExcelFile();
+  }
+
   addProduct() {
     final nameController = TextEditingController();
     FirestoreClass fireStore = FirestoreClass();

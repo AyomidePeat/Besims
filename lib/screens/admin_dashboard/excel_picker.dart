@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:intl/intl.dart';
 
 Future pickExcelFile() async {
   try {
@@ -127,11 +128,10 @@ Future<void> importSupplierFile(pickExcelFile) async {
             : (row[4]!.value is int)
                 ? (row[4]!.value as int).toString()
                 : row[4]!.value ?? '';
-        final date = (row[5]!.value is SharedString)
-            ? (row[5]!.value as SharedString).toString()
-            : (row[5]!.value is int)
-                ? (row[5]!.value as int).toString()
-                : row[5]!.value ?? '';
+        final now = DateTime.now();
+        String currentDate = DateFormat('dd/mm/yyyy').format(now);
+
+        
 
         firestoreClass.addSupplier(
             name: name,
@@ -139,7 +139,7 @@ Future<void> importSupplierFile(pickExcelFile) async {
             address: address,
             email: email,
             phone: phone,
-            date: date);
+            date: currentDate);
       }
     }
   }

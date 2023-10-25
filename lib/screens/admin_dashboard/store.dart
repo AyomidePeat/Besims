@@ -1,5 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/screens/admin_dashboard/excel_downloader.dart';
 import 'package:bsims/screens/admin_dashboard/excel_picker.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,8 @@ class _StoreState extends ConsumerState<Store> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(    width: widget.screenWidth - 293,
+        SizedBox(
+          width: widget.screenWidth - 293,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -31,7 +33,7 @@ class _StoreState extends ConsumerState<Store> {
                 'Stores',
                 style: headline(black, widget.screenWidth * 0.013),
               ),
-             Row(
+              Row(
                 children: [
                   InkWell(
                     onTap: addStore,
@@ -40,7 +42,8 @@ class _StoreState extends ConsumerState<Store> {
                       width: 90,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5), color: purple),
+                          borderRadius: BorderRadius.circular(5),
+                          color: purple),
                       child: Text('Add Store', style: bodyText(white, 10)),
                     ),
                   ),
@@ -68,7 +71,7 @@ class _StoreState extends ConsumerState<Store> {
                   ),
                   const SizedBox(width: 8),
                   InkWell(
-                    onTap: addStore,
+                    onTap: excelDownloader,
                     child: Container(
                       height: 35,
                       width: 90,
@@ -81,18 +84,21 @@ class _StoreState extends ConsumerState<Store> {
                   ),
                 ],
               ),
-             
             ],
           ),
         ),
-       const SizedBox(height: 40,),
+        const SizedBox(
+          height: 40,
+        ),
         Container(
           width: widget.screenWidth - 293,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),
           child: Column(children: [
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -167,7 +173,6 @@ class _StoreState extends ConsumerState<Store> {
                               String manager = stocks[index].manager;
                               String phone = stocks[index].phone;
                               String status = stocks[index].status;
-                             
 
                               return ListTile(
                                 contentPadding: const EdgeInsets.all(0),
@@ -179,7 +184,6 @@ class _StoreState extends ConsumerState<Store> {
                                   manager: manager,
                                   location: location,
                                   phone: phone,
-                                 
                                 ),
                               );
                             }),
@@ -200,20 +204,24 @@ class _StoreState extends ConsumerState<Store> {
         )
       ],
     );
-
   }
+
   excelPicker() {
     importStoreFile(pickExcelFile());
   }
-Widget productList(
+
+  excelDownloader() {
+    exportStoreExcelFile();
+  }
+
+  Widget productList(
     screenWidth, {
     sn,
     name,
     location,
-   manager,
+    manager,
     phone,
     status,
-   
   }) {
     final widgetSize = (screenWidth - 293) / 10;
     final firestore = FirestoreClass();
@@ -256,7 +264,6 @@ Widget productList(
               style: bodyText(black, 13),
             ),
           ),
-          
           SizedBox(
             width: widgetSize,
             child: Text(
@@ -309,7 +316,7 @@ Widget productList(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('New Store', style: headline(black, 20)),
-                   const SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     TextFieldWidget(controller: nameController, label: 'Name'),
@@ -357,13 +364,11 @@ Widget productList(
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                       
-                        
                         InkWell(
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child:Container(
+                          child: Container(
                             width: 110,
                             height: 40,
                             padding: const EdgeInsets.all(10),
@@ -376,8 +381,9 @@ Widget productList(
                               style: bodyText(Colors.black, 10),
                             )),
                           ),
-                        ),const SizedBox(width: 10),
-                         InkWell(
+                        ),
+                        const SizedBox(width: 10),
+                        InkWell(
                           onTap: () async {
                             final uploadSuccess = await fireStore.addStore(
                                 name: nameController.text,
@@ -395,7 +401,7 @@ Widget productList(
                                           textAlign: TextAlign.center,
                                           style:
                                               const TextStyle(fontSize: 16))));
-                                              Navigator.pop(context);
+                              Navigator.pop(context);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -407,7 +413,8 @@ Widget productList(
                                               const TextStyle(fontSize: 16))));
                             }
                           },
-                          child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Container(
                                 width: 110,
@@ -419,7 +426,7 @@ Widget productList(
                                 child: Center(
                                     child: Text(
                                   'Add Store',
-                                  style:bodyText(white, 10),
+                                  style: bodyText(white, 10),
                                 )),
                               ),
                             ],

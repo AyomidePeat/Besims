@@ -1,5 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/screens/admin_dashboard/excel_downloader.dart';
 import 'package:bsims/screens/admin_dashboard/excel_picker.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +126,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                       ),
                       const SizedBox(width: 8),
                       InkWell(
-                        onTap: addProduct,
+                        onTap: excelDownloader,
                         child: Container(
                           height: 35,
                           width: 90,
@@ -580,7 +581,11 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
             width: widgetSize,
             child: Text(
               status,
-              style: bodyText(status == 'Unavailable' ||status =='unavailable' ? red : green, 13),
+              style: bodyText(
+                  status == 'Unavailable' || status == 'unavailable'
+                      ? red
+                      : green,
+                  13),
             ),
           ),
           SizedBox(
@@ -607,10 +612,12 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
     );
   }
 
- 
-
   excelPicker() {
     importInventoryFile(pickExcelFile());
+  }
+
+  excelDownloader() {
+    exportInventoryExcelFile();
   }
 }
 
