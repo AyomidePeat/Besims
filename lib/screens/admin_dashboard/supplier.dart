@@ -159,20 +159,20 @@ class _SupplierState extends ConsumerState<Supplier> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator(color: purple);
                   } else {
-                    final stocks = snapshot.data!;
-                    if (stocks.isNotEmpty) {
+                    final suppliers = snapshot.data!;
+                    if (suppliers.isNotEmpty) {
                       return SizedBox(
                         width: widget.screenWidth - 280,
                         height: 446,
                         child: ListView.builder(
-                            itemCount: stocks.length,
+                            itemCount: suppliers.length,
                             itemBuilder: (context, index) {
-                              String name = stocks[index].name;
-                              String address = stocks[index].address;
-                              String regDate = stocks[index].date;
-                              String email = stocks[index].email;
-                              String phone = stocks[index].phone;
-                              String company = stocks[index].company;
+                              String name = suppliers[index].name;
+                              String address = suppliers[index].address;
+                              String regDate = suppliers[index].date;
+                              String email = suppliers[index].email;
+                              String phone = suppliers[index].phone;
+                              String company = suppliers[index].company;
 
                               return ListTile(
                                 contentPadding: const EdgeInsets.all(0),

@@ -273,6 +273,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
   }
 
   addProduct() {
+    FirestoreClass firestore = FirestoreClass();
     final nameController = TextEditingController();
     FirestoreClass fireStore = FirestoreClass();
     final expiryDateController = TextEditingController();
@@ -373,24 +374,55 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                   const SizedBox(
                     height: 20,
                   ),
-                  DropdownButtonFormField(
-                    hint: const Text('Supplier'),
-                    value: supplier,
-                    onChanged: (value) {
-                      setState(() {
-                        supplier = value as String;
-                      });
-                    },
-                    items: supplierOptions
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e.toString()),
-                            ))
-                        .toList(),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
+                StreamBuilder(
+  stream: firestore.getSuppliers(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return CircularProgressIndicator(color: Colors.purple);
+    } else {
+      if (snapshot.hasData) {
+        final supplierss = snapshot.data;
+        if (supplierss!.isEmpty) {
+          return Center(
+            child: Text('You have not added suppliers yet!', style: TextStyle(fontSize: 15, color: Colors.black)),
+          );
+        }
+        
+        return SizedBox(
+          width: widget.screenWidth - 280,
+          height: 446,
+          child: ListView.builder(
+            itemCount: supplierss.length,
+            itemBuilder: (context, index) {
+              final suppliers = supplierss[index];
+              
+              return ListTile(
+                title: DropdownButtonFormField<String>(
+                  hint: Text('Supplier'),
+                  value: supplier,
+                  onChanged: (value) {
+                    setState(() {
+                      supplier = value!;
+                    });
+                  },
+                  items: supplierss.map((e) => DropdownMenuItem<String>(
+                    value: e.name,
+                    child: Text(e.name),
+                  )).toList(),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
                   ),
+                ),
+              );
+            },
+          ),
+        );
+      }
+    }
+    return CircularProgressIndicator(color: Colors.purple);
+  },
+),
+
                   const SizedBox(
                     height: 10,
                   ),
