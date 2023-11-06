@@ -129,8 +129,7 @@ class _HomeState extends State<Home> {
                   ),
                   getScreen()
 
-                  // SellProduct (screenWidth: screenWidth, size:size)
-                  // Dashboard(screenWidth: screenWidth, size: size, )
+                  
                 ],
               ),
             ],
@@ -164,7 +163,7 @@ class Header extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-              height: 30,
+              height: 40,
               width: (screenWidth - 293) / 3,
               child: TextField(
                   controller: searchController,

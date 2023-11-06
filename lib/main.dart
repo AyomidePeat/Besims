@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
        fontFamily: 'Poppins'
       ),      
      
-      home:  PricePredictionApp(),
+      home:  Home(),
     );
   }
 }

@@ -18,11 +18,6 @@ class Orders extends ConsumerStatefulWidget {
 class _OrdersState extends ConsumerState<Orders> {
   double space = 30;
   bool isLoading = false;
-  int totalOrders = 0;
-  List? stocks;
-  void updateTotalOrders(int count) {
-    totalOrders = count;
-  }
 
   @override
   @override
@@ -31,254 +26,280 @@ class _OrdersState extends ConsumerState<Orders> {
     final widgetSize = (widget.screenWidth - 293) / 12;
 
     return Column(children: [
-      Container(
-        width: widget.screenWidth - 293,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: white),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Overall Orders', style: headline(black, 17)),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Boxes(
-                  icon: Icons.category,
-                  circleColor: Colors.purple[50]!,
-                  iconColor: const Color.fromARGB(255, 106, 71, 188),
-                  title: 'Total Orders',
-                  total: totalOrders.toString(),
-                ),
-                Boxes(
-                  icon: Icons.shopping_cart,
-                  circleColor: Colors.green[50]!,
-                  iconColor: const Color.fromARGB(255, 85, 196, 89),
-                  title: 'Total Delivered',
-                  total: '110',
-                ),
-                Boxes(
-                  icon: Icons.delivery_dining_sharp,
-                  circleColor: Colors.blue[50]!,
-                  iconColor: Colors.blue,
-                  title: ' In Transit',
-                  total: '5',
-                ),
-                Boxes(
-                  icon: Icons.sell,
-                  circleColor: Colors.red[50]!,
-                  iconColor: red,
-                  title: 'Total Returned',
-                  total: '5',
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-      const SizedBox(
-        height: 30,
-      ),
-      Container(
-          width: widget.screenWidth - 293,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), color: white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Orders', style: headline(black, 17)),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: addProduct,
-                        child: Container(
-                          height: 35,
-                          width: 90,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: purple),
-                          child:
-                              Text('Add Product', style: bodyText(white, 10)),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      InkWell(
-                        onTap: excelPicker,
-                        child: Container(
-                          height: 35,
-                          width: 90,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey[400]!)),
-                          child: Row(
+      StreamBuilder(
+          stream: cloudStoreRef.getProducts(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator(color: purple);
+            } else {
+              final stocks = snapshot.data!;
+              final totalOrders = stocks.length;
+              int returnedCount = 0;
+              for (int index = 0; index < stocks.length; index++) {
+                if (stocks[index].status == "Returned") {
+                  returnedCount++;
+                }
+              }
+              int deliveryCount = 0;
+              for(int index = 0; index < stocks.length; index++){
+                 if (stocks[index].status == "Out for delivery") {
+                  deliveryCount++;
+                }
+              }
+              int confirmedCount = 0;
+              for(int index = 0; index < stocks.length; index++){
+                 if (stocks[index].status == "Confirmed") {
+                  confirmedCount++;
+                }
+              }
+
+              if (stocks.isNotEmpty) {
+                return Column(
+                  children: [
+                    Container(
+                      width: widget.screenWidth - 293,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: white),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Overall Orders', style: headline(black, 17)),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(
-                                Icons.downloading_rounded,
-                                size: 15,
+                              Boxes(
+                                icon: Icons.category,
+                                circleColor: Colors.purple[50]!,
+                                iconColor:
+                                    const Color.fromARGB(255, 106, 71, 188),
+                                title: 'Total Orders',
+                                total: totalOrders.toString(),
                               ),
-                              const SizedBox(width: 5),
-                              Text('Import', style: bodyText(black, 10)),
+                              Boxes(
+                                icon: Icons.shopping_cart,
+                                circleColor: Colors.green[50]!,
+                                iconColor:
+                                    const Color.fromARGB(255, 85, 196, 89),
+                                title: 'Total Delivered',
+                                total: confirmedCount.toString(),
+                              ),
+                              Boxes(
+                                icon: Icons.delivery_dining_sharp,
+                                circleColor: Colors.blue[50]!,
+                                iconColor: Colors.blue,
+                                title: ' In Transit',
+                                total: deliveryCount.toString(),
+                              ),
+                              Boxes(
+                                icon: Icons.sell,
+                                circleColor: Colors.red[50]!,
+                                iconColor: red,
+                                title: 'Total Returned',
+                                total: returnedCount.toString(),
+                              ),
                             ],
-                          ),
-                        ),
+                          )
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      InkWell(
-                        onTap: excelDownloader,
-                        child: Container(
-                          height: 35,
-                          width: 90,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey[400]!)),
-                          child:
-                              Text('Download all', style: bodyText(black, 10)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              const Divider(),
-              const SizedBox(height: 10),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'S/N',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'PRODUCTS',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'CATEGORY',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'PRICE',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'STOCK QUANTITY',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'QUANTITY',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'SELLER',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'PAYMENT METHOD',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'STATUS',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(),
-                  StreamBuilder(
-                      stream: cloudStoreRef.getProducts(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator(color: purple);
-                        } else {
-                          final stocks = snapshot.data!;
-                          updateTotalOrders(stocks.length);
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                        width: widget.screenWidth - 293,
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: white),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Orders', style: headline(black, 17)),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: addProduct,
+                                      child: Container(
+                                        height: 35,
+                                        width: 90,
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: purple),
+                                        child: Text('Add Product',
+                                            style: bodyText(white, 10)),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    InkWell(
+                                      onTap: excelPicker,
+                                      child: Container(
+                                        height: 35,
+                                        width: 90,
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border: Border.all(
+                                                color: Colors.grey[400]!)),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.downloading_rounded,
+                                              size: 15,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text('Import',
+                                                style: bodyText(black, 10)),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    InkWell(
+                                      onTap: excelDownloader,
+                                      child: Container(
+                                        height: 35,
+                                        width: 90,
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border: Border.all(
+                                                color: Colors.grey[400]!)),
+                                        child: Text('Download all',
+                                            style: bodyText(black, 10)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            const Divider(),
+                            const SizedBox(height: 10),
+                            Column(children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'S/N',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'PRODUCTS',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'CATEGORY',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'PRICE',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'STOCK QUANTITY',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'QUANTITY',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'SELLER',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'PAYMENT METHOD',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: widgetSize,
+                                    child: Text(
+                                      'STATUS',
+                                      style: headline(black, 10),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Divider(),
+                            ]), SizedBox(
+                      width: widget.screenWidth - 280,
+                      height: 446,
+                      child: ListView.builder(
+                          itemCount: stocks.length,
+                          itemBuilder: (context, index) {
+                            String productName = stocks[index].productName;
+                            String category = stocks[index].category;
+                            String sellingPrice = stocks[index].unitPrice;
+                            String quantity = stocks[index].quantity;
+                            String seller = stocks[index].seller;
+                            String stockQty = stocks[index].stockQty;
+                            String status = stocks[index].status;
+                            String paymentMethod = stocks[index].paymentMethod;
 
-                          if (stocks.isNotEmpty) {
-                            return SizedBox(
-                              width: widget.screenWidth - 280,
-                              height: 446,
-                              child: ListView.builder(
-                                  itemCount: stocks.length,
-                                  itemBuilder: (context, index) {
-                                    String productName =
-                                        stocks[index].productName;
-                                    String category = stocks[index].category;
-                                    //String costPrice = stocks[index].costPrice;
-                                    String sellingPrice =
-                                        stocks[index].unitPrice;
-                                    String quantity = stocks[index].quantity;
-                                    String seller = stocks[index].seller;
-                                    String stockQty = stocks[index].stockQty;
-                                    String status = stocks[index].status;
-                                    String paymentMethod =
-                                        stocks[index].paymentMethod;
-
-                                    return ListTile(
-                                      contentPadding: const EdgeInsets.all(0),
-                                      title: productList(widget.screenWidth,
-                                          sn: index + 1,
-                                          category: category,
-                                          seller: seller,
-                                          price: sellingPrice,
-                                          productName: productName,
-                                          quantity: quantity,
-                                          status: status,
-                                          stockQty: stockQty,
-                                          paymentMethod: paymentMethod),
-                                    );
-                                  }),
+                            return ListTile(
+                              contentPadding: const EdgeInsets.all(0),
+                              title: productList(widget.screenWidth,
+                                  sn: index + 1,
+                                  category: category,
+                                  seller: seller,
+                                  price: sellingPrice,
+                                  productName: productName,
+                                  quantity: quantity,
+                                  status: status,
+                                  stockQty: stockQty,
+                                  paymentMethod: paymentMethod),
                             );
-                          }
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: Center(
-                              child: Text('Your stock inventory is empty',
-                                  style: bodyText(black, 15))),
-                        );
-                      })
-                ],
-              ),
-            ],
-          ))
+                          }),
+                    ),
+                          ],
+                        )),
+                   
+                  ],
+                );
+              }
+            }
+            return Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Center(
+                  child: Text('Your stock inventory is empty',
+                      style: bodyText(black, 15))),
+            );
+          })
     ]);
   }
 
