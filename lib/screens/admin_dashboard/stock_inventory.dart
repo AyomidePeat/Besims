@@ -1,5 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/models/stock_inventory_model.dart';
 import 'package:bsims/screens/admin_dashboard/excel_downloader.dart';
 import 'package:bsims/screens/admin_dashboard/excel_picker.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
@@ -25,207 +26,212 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
     final widgetSize = (widget.screenWidth - 293) / 12;
 
-    return Column(children: [
-      Container(
-        width: widget.screenWidth - 293,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15), color: white),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Overall Inventory', style: headline(black, 17)),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Boxes(
-                  icon: Icons.category,
-                  circleColor: Colors.purple[50]!,
-                  iconColor: const Color.fromARGB(255, 106, 71, 188),
-                  title: 'Categories',
-                  total: '14',
-                ),
-                Boxes(
-                  icon: Icons.shopping_cart,
-                  circleColor: Colors.green[50]!,
-                  iconColor: const Color.fromARGB(255, 85, 196, 89),
-                  title: 'Total Products',
-                  total: '110',
-                ),
-                Boxes(
-                  icon: Icons.sell,
-                  circleColor: Colors.blue[50]!,
-                  iconColor: Colors.blue,
-                  title: 'Top Selling',
-                  total: '5',
-                ),
-                Boxes(
-                  icon: Icons.production_quantity_limits,
-                  circleColor: Colors.red[50]!,
-                  iconColor: Colors.red,
-                  title: 'Low Stocks',
-                  total: '12',
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-      const SizedBox(
-        height: 30,
-      ),
-      Container(
-          width: widget.screenWidth - 293,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), color: white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Products', style: headline(black, 17)),
-                  Row(
+    return StreamBuilder(
+        stream: cloudStoreRef.getStocks(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator(color: purple)]);
+          } else {
+            final List<StockInventoryModel> stocks = snapshot.data!;
+            final totalProducts  = stocks.length;
+            if (stocks.isNotEmpty) {
+              return Column(children: [
+                Container(
+                  width: widget.screenWidth - 293,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15), color: white),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InkWell(
-                        onTap: addProduct,
-                        child: Container(
-                          height: 35,
-                          width: 90,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: purple),
-                          child:
-                              Text('Add Product', style: bodyText(white, 10)),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      InkWell(
-                        onTap: excelPicker,
-                        child: Container(
-                          height: 35,
-                          width: 90,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey[400]!)),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.downloading_rounded,
-                                size: 15,
-                              ),
-                              const SizedBox(width: 5),
-                              Text('Import', style: bodyText(black, 10)),
-                            ],
+                      Text('Overall Inventory', style: headline(black, 17)),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Boxes(
+                            icon: Icons.category,
+                            circleColor: Colors.purple[50]!,
+                            iconColor: const Color.fromARGB(255, 106, 71, 188),
+                            title: 'Categories',
+                            total: '14',
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      InkWell(
-                        onTap: excelDownloader,
-                        child: Container(
-                          height: 35,
-                          width: 90,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey[400]!)),
-                          child:
-                              Text('Download all', style: bodyText(black, 10)),
-                        ),
-                      ),
+                          Boxes(
+                            icon: Icons.shopping_cart,
+                            circleColor: Colors.green[50]!,
+                            iconColor: const Color.fromARGB(255, 85, 196, 89),
+                            title: 'Total Products',
+                            total: totalProducts.toString(),
+                          ),
+                          Boxes(
+                            icon: Icons.sell,
+                            circleColor: Colors.blue[50]!,
+                            iconColor: Colors.blue,
+                            title: 'Top Selling',
+                            total: '5',
+                          ),
+                          Boxes(
+                            icon: Icons.production_quantity_limits,
+                            circleColor: Colors.red[50]!,
+                            iconColor: Colors.red,
+                            title: 'Low Stocks',
+                            total: '12',
+                          ),
+                        ],
+                      )
                     ],
                   ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              const Divider(),
-              const SizedBox(height: 10),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'S/N',
-                          style: headline(black, 10),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Container(
+                    width: widget.screenWidth - 293,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15), color: white),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Products', style: headline(black, 17)),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: addProduct,
+                                  child: Container(
+                                    height: 35,
+                                    width: 90,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: purple),
+                                    child: Text('Add Product',
+                                        style: bodyText(white, 10)),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: excelPicker,
+                                  child: Container(
+                                    height: 35,
+                                    width: 90,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            color: Colors.grey[400]!)),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.downloading_rounded,
+                                          size: 15,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Text('Import',
+                                            style: bodyText(black, 10)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: excelDownloader,
+                                  child: Container(
+                                    height: 35,
+                                    width: 90,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            color: Colors.grey[400]!)),
+                                    child: Text('Download all',
+                                        style: bodyText(black, 10)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'PRODUCTS',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'CATEGORY',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'EXPIRY DATE',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'PRICE',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'SUPPLIER',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'QUANTITY',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'STATUS',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                      SizedBox(
-                        width: widgetSize,
-                        child: Text(
-                          'ACTIONS',
-                          style: headline(black, 10),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(),
-                  StreamBuilder(
-                      stream: cloudStoreRef.getStocks(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator(color: purple);
-                        } else {
-                          final stocks = snapshot.data!;
-                          if (stocks.isNotEmpty) {
-                            return SizedBox(
+                        const SizedBox(height: 10),
+                        const Divider(),
+                        const SizedBox(height: 10),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'S/N',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'PRODUCTS',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'CATEGORY',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'EXPIRY DATE',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'PRICE',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'SUPPLIER',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'QUANTITY',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'STATUS',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'ACTIONS',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(),
+                            SizedBox(
                               width: widget.screenWidth - 280,
                               height: 446,
                               child: ListView.builder(
@@ -255,21 +261,219 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                           supplier: supplier),
                                     );
                                   }),
-                            );
-                          }
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: Center(
-                              child: Text('Your stock inventory is empty',
-                                  style: bodyText(black, 15))),
-                        );
-                      })
-                ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ))
+              ]);
+            }
+            return Column(children: [
+              Container(
+                width: widget.screenWidth - 293,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15), color: white),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Overall Inventory', style: headline(black, 17)),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Boxes(
+                          icon: Icons.category,
+                          circleColor: Colors.purple[50]!,
+                          iconColor: const Color.fromARGB(255, 106, 71, 188),
+                          title: 'Categories',
+                          total: '14',
+                        ),
+                        Boxes(
+                          icon: Icons.shopping_cart,
+                          circleColor: Colors.green[50]!,
+                          iconColor: const Color.fromARGB(255, 85, 196, 89),
+                          title: 'Total Products',
+                          total: '110',
+                        ),
+                        Boxes(
+                          icon: Icons.sell,
+                          circleColor: Colors.blue[50]!,
+                          iconColor: Colors.blue,
+                          title: 'Top Selling',
+                          total: '5',
+                        ),
+                        Boxes(
+                          icon: Icons.production_quantity_limits,
+                          circleColor: Colors.red[50]!,
+                          iconColor: Colors.red,
+                          title: 'Low Stocks',
+                          total: '12',
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ],
-          ))
-    ]);
+              const SizedBox(
+                height: 30,
+              ),
+              Container(
+                  width: widget.screenWidth - 293,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15), color: white),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Products', style: headline(black, 17)),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: addProduct,
+                                  child: Container(
+                                    height: 35,
+                                    width: 90,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: purple),
+                                    child: Text('Add Product',
+                                        style: bodyText(white, 10)),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: excelPicker,
+                                  child: Container(
+                                    height: 35,
+                                    width: 90,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            color: Colors.grey[400]!)),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.downloading_rounded,
+                                          size: 15,
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Text('Import',
+                                            style: bodyText(black, 10)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: excelDownloader,
+                                  child: Container(
+                                    height: 35,
+                                    width: 90,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            color: Colors.grey[400]!)),
+                                    child: Text('Download all',
+                                        style: bodyText(black, 10)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        const Divider(),
+                        const SizedBox(height: 10),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'S/N',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'PRODUCTS',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'CATEGORY',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'EXPIRY DATE',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'PRICE',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'SUPPLIER',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'QUANTITY',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'STATUS',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: widgetSize,
+                                  child: Text(
+                                    'ACTIONS',
+                                    style: headline(black, 10),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: Center(
+                                  child: Text('Your stock inventory is empty',
+                                      style: bodyText(black, 15))),
+                            ),
+                          ],
+                        )
+                      ]))
+            ]);
+          }
+        });
   }
 
   addProduct() {
@@ -283,7 +487,6 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
     var isLoading = false;
     String? supplier;
 
-    final supplierOptions = ['A&B', 'SamDech', 'T&D'];
     String? category;
     final categoryOptions = [
       'Drug',
@@ -374,55 +577,58 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                   const SizedBox(
                     height: 20,
                   ),
-                StreamBuilder(
-  stream: firestore.getSuppliers(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return CircularProgressIndicator(color: Colors.purple);
-    } else {
-      if (snapshot.hasData) {
-        final supplierss = snapshot.data;
-        if (supplierss!.isEmpty) {
-          return Center(
-            child: Text('You have not added suppliers yet!', style: TextStyle(fontSize: 15, color: Colors.black)),
-          );
-        }
-        
-        return SizedBox(
-          width: widget.screenWidth - 280,
-          height: 446,
-          child: ListView.builder(
-            itemCount: supplierss.length,
-            itemBuilder: (context, index) {
-              final suppliers = supplierss[index];
-              
-              return ListTile(
-                title: DropdownButtonFormField<String>(
-                  hint: Text('Supplier'),
-                  value: supplier,
-                  onChanged: (value) {
-                    setState(() {
-                      supplier = value!;
-                    });
-                  },
-                  items: supplierss.map((e) => DropdownMenuItem<String>(
-                    value: e.name,
-                    child: Text(e.name),
-                  )).toList(),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      }
-    }
-    return CircularProgressIndicator(color: Colors.purple);
-  },
-),
+                  StreamBuilder(
+                    stream: firestore.getSuppliers(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator(
+                            color: Colors.purple);
+                      } else {
+                        if (snapshot.hasData) {
+                          final supplierss = snapshot.data;
+                          if (supplierss!.isEmpty) {
+                            return const Center(
+                              child: Text('You have not added suppliers yet!',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.black)),
+                            );
+                          }
 
+                          return SizedBox(
+                            width: widget.screenWidth - 280,
+                            height: 446,
+                            child: ListView.builder(
+                              itemCount: supplierss.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: DropdownButtonFormField<String>(
+                                    hint: const Text('Supplier'),
+                                    value: supplier,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        supplier = value!;
+                                      });
+                                    },
+                                    items: supplierss
+                                        .map((e) => DropdownMenuItem<String>(
+                                              value: e.name,
+                                              child: Text(e.name),
+                                            ))
+                                        .toList(),
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      }
+                      return const CircularProgressIndicator(
+                          color: Colors.purple);
+                    },
+                  ),
                   const SizedBox(
                     height: 10,
                   ),

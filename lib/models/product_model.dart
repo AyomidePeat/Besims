@@ -5,10 +5,11 @@ class ProductModel {
   final String productName;
   final String stockQty;
   final String unitPrice;
+  final String costPrice;
   final String quantity;
   final String seller;
 
-  ProductModel( {
+  ProductModel({
     required this.category,
     required this.paymentMethod,
     required this.status,
@@ -16,7 +17,8 @@ class ProductModel {
     required this.stockQty,
     required this.unitPrice,
     required this.quantity,
-   required this.seller,
+    required this.seller,
+    required this.costPrice
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,18 +29,21 @@ class ProductModel {
         'stockQty': stockQty,
         'unitPrice': unitPrice,
         'quantity': quantity,
-        'seller':seller
+        'seller': seller,
+        'costPrice':costPrice
       };
 
   factory ProductModel.getModelFromJson(Map<String, dynamic> json) {
     return ProductModel(
-      seller :json['seller'],
+        seller: json['seller'],
         category: json['category'],
         paymentMethod: json['paymentMethod'],
         status: json['status'],
         productName: json['productName'],
         stockQty: json['stockQty'],
         unitPrice: json['unitPrice'],
-        quantity: json['quantity']);
+        quantity: json['quantity'],
+        costPrice: json['costPrice']
+        );
   }
 }

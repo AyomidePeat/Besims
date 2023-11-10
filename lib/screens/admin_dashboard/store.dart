@@ -21,6 +21,7 @@ class _StoreState extends ConsumerState<Store> {
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
     final widgetSize = (widget.screenWidth - 293) / 10;
+    final size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,7 +45,7 @@ class _StoreState extends ConsumerState<Store> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: purple),
-                      child: Text('Add Store', style: bodyText(white, 10)),
+                      child: Center(child: Text('Add Store', style: bodyText(white, 10))),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -160,19 +161,19 @@ class _StoreState extends ConsumerState<Store> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator(color: purple);
                   } else {
-                    final stocks = snapshot.data!;
-                    if (stocks.isNotEmpty) {
+                    final stores = snapshot.data!;
+                    if (stores.isNotEmpty) {
                       return SizedBox(
                         width: widget.screenWidth - 280,
-                        height: 446,
+                        height:size.height-320 ,
                         child: ListView.builder(
-                            itemCount: stocks.length,
+                            itemCount: stores.length,
                             itemBuilder: (context, index) {
-                              String name = stocks[index].name;
-                              String location = stocks[index].location;
-                              String manager = stocks[index].manager;
-                              String phone = stocks[index].phone;
-                              String status = stocks[index].status;
+                              String name = stores[index].name;
+                              String location = stores[index].location;
+                              String manager = stores[index].manager;
+                              String phone = stores[index].phone;
+                              String status = stores[index].status;
 
                               return ListTile(
                                 contentPadding: const EdgeInsets.all(0),

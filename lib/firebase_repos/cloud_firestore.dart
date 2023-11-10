@@ -189,6 +189,7 @@ Future deleteStore(String name) async {
     required String unitPrice,
     required String quantity,
     required String seller,
+    required String costPrice
   }) async {
     ProductModel productmodel = ProductModel(
         category: category,
@@ -198,7 +199,9 @@ Future deleteStore(String name) async {
         stockQty: stockQty,
         unitPrice: unitPrice,
         quantity: quantity,
-        seller: seller);
+        seller: seller,
+        costPrice: costPrice
+        );
     String message = 'Something went wrong';
     try {
       await firebaseFirestore

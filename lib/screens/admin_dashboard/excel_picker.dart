@@ -131,8 +131,6 @@ Future<void> importSupplierFile(pickExcelFile) async {
         final now = DateTime.now();
         String currentDate = DateFormat('dd/mm/yyyy').format(now);
 
-        
-
         firestoreClass.addSupplier(
             name: name,
             company: company,
@@ -227,21 +225,26 @@ Future<void> importOrderFile(pickExcelFile) async {
             : (row[4]!.value is int)
                 ? (row[4]!.value as int).toString()
                 : row[4]!.value ?? '';
+        final costPrice = (row[5]!.value is SharedString)
+            ? (row[5]!.value as SharedString).toString()
+            : (row[5]!.value is int)
+                ? (row[5]!.value as int).toString()
+                : row[5]!.value ?? '';
         final quantity = (row[5]!.value is SharedString)
             ? (row[5]!.value as SharedString).toString()
             : (row[5]!.value is int)
                 ? (row[5]!.value as int).toString()
                 : row[5]!.value ?? '';
-        final status = (row[5]!.value is SharedString)
-            ? (row[5]!.value as SharedString).toString()
-            : (row[5]!.value is int)
-                ? (row[5]!.value as int).toString()
-                : row[5]!.value ?? '';
-        final seller = (row[6]!.value is SharedString)
+        final status = (row[6]!.value is SharedString)
             ? (row[6]!.value as SharedString).toString()
             : (row[6]!.value is int)
                 ? (row[6]!.value as int).toString()
                 : row[6]!.value ?? '';
+        final seller = (row[7]!.value is SharedString)
+            ? (row[7]!.value as SharedString).toString()
+            : (row[7]!.value is int)
+                ? (row[7]!.value as int).toString()
+                : row[7]!.value ?? '';
 
         firestoreClass.addProduct(
             category: category,
@@ -250,6 +253,7 @@ Future<void> importOrderFile(pickExcelFile) async {
             productName: productName,
             stockQty: stockQty,
             unitPrice: unitPrice,
+            costPrice: costPrice,
             quantity: quantity,
             seller: seller);
       }

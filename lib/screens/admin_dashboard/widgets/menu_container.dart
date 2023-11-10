@@ -48,7 +48,7 @@ class _MenuContainerState extends State<MenuContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: 210,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
       color: white,
