@@ -8,18 +8,19 @@ class ProductModel {
   final String costPrice;
   final String quantity;
   final String seller;
+  final  dateAdded;
 
-  ProductModel({
-    required this.category,
-    required this.paymentMethod,
-    required this.status,
-    required this.productName,
-    required this.stockQty,
-    required this.unitPrice,
-    required this.quantity,
-    required this.seller,
-    required this.costPrice
-  });
+  ProductModel(
+      {required this.category,
+      required this.paymentMethod,
+      required this.status,
+      required this.productName,
+      required this.stockQty,
+      required this.unitPrice,
+      required this.quantity,
+      required this.seller,
+      required this.costPrice,
+     required  this.dateAdded, });
 
   Map<String, dynamic> toJson() => {
         'category': category,
@@ -30,7 +31,8 @@ class ProductModel {
         'unitPrice': unitPrice,
         'quantity': quantity,
         'seller': seller,
-        'costPrice':costPrice
+        'costPrice': costPrice,
+        'dateAdded':dateAdded
       };
 
   factory ProductModel.getModelFromJson(Map<String, dynamic> json) {
@@ -43,7 +45,8 @@ class ProductModel {
         stockQty: json['stockQty'],
         unitPrice: json['unitPrice'],
         quantity: json['quantity'],
-        costPrice: json['costPrice']
+        costPrice: json['costPrice'],
+        dateAdded: json['dateAdded']
         );
   }
 }

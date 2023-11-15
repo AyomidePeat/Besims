@@ -1,5 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/screens/admin_dashboard/daily_class.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,6 +28,15 @@ class Dashboard extends ConsumerWidget {
     const FlSpot(2, 2),
     const FlSpot(3, 5),
   ];
+  List<DailySalesData> weeklySalesData = [
+  DailySalesData('Mon', 150.0),
+  DailySalesData('Tue', 200.0),
+  DailySalesData('Wed', 180.0),
+  DailySalesData('Thu', 220.0),
+  DailySalesData('Fri', 250.0),
+  DailySalesData('Sat', 300.0),
+  DailySalesData('Sun', 280.0),
+];
   String currentDate = DateFormat('dd MMMM, yyyy').format(DateTime.now());
   final now = DateTime.now();
   Stream<DateTime> currentTimeStream() {
@@ -255,44 +265,33 @@ class Dashboard extends ConsumerWidget {
                 height: 500,
                 width: 500,
                 child: LineChart(
-                  LineChartData(
-                    gridData: const FlGridData(show: false),
-                    titlesData: const FlTitlesData(
-                        leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                      showTitles: true,
-                    ))),
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border.all(
-                        color: const Color(0xff37434d),
-                        width: 1,
-                      ),
-                    ),
-                    minX: 0,
-                    maxX: data.length.toDouble() - 1,
-                    minY: 0,
-                    maxY: 10,
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: data,
-                        isCurved: true, // Enables curve for wavy effect
-                        color: Colors.blue, // Line color
-                        barWidth: 4, // Line width
-                        isStrokeCapRound: true, // Rounded line ends
-                        belowBarData: BarAreaData(show: false),
-                      ),
-                      LineChartBarData(
-                        spots: data1,
-                        isCurved: true, // Enables curve for wavy effect
-                        color: Colors.red, // Line color
-                        barWidth: 4, // Line width
-                        isStrokeCapRound: true, // Rounded line ends
-                        belowBarData: BarAreaData(show: false),
-                      ),
-                    ],
-                  ),
-                ),
+  LineChartData(
+    gridData: FlGridData(show: false),
+    titlesData: FlTitlesData(show: false),
+    borderData: FlBorderData(
+      show: true,
+      border: Border.all(color: const Color(0xff37434d), width: 1),
+    ),
+    minX: 0,
+    maxX: weeklySalesData.length.toDouble() - 1,
+    minY: 0,
+    maxY: 350,
+    lineBarsData: [
+      LineChartBarData(
+        spots: weeklySalesData
+            .asMap()
+            .entries
+            .map((entry) => FlSpot(entry.key.toDouble(), entry.value.sales))
+            .toList(),
+        isCurved: true,
+        color: Colors.blue,
+        dotData: FlDotData(show: false),
+        belowBarData: BarAreaData(show: false),
+      ),
+    ],
+  ),
+)
+
               )
             ]);
           }

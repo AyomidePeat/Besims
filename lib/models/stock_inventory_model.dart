@@ -7,6 +7,8 @@ class StockInventoryModel {
   final String supplier;
   final String category;
   final String status;
+    final  dateAdded;
+
 
   StockInventoryModel(
       {required this.name,
@@ -16,7 +18,8 @@ class StockInventoryModel {
       required this.quantity,
       required this.supplier,
       required this.category,
-      required this.status});
+      required this.status,
+      required this.dateAdded});
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -26,7 +29,8 @@ class StockInventoryModel {
         'quantity': quantity,
         'supplier': supplier,
         'category': category,
-        'status': status
+        'status': status,
+        'dateAdded':dateAdded
       };
 
   factory StockInventoryModel.getModelFromJson(Map<String, dynamic> json) {
@@ -38,6 +42,7 @@ class StockInventoryModel {
         category: json['category'],
         costPrice: json['costPrice'],
         quantity: json['quantity'],
+        dateAdded:json['dateAdded'],
         status: json['status']);
   }
 }

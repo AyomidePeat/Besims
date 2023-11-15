@@ -39,6 +39,7 @@ class FirestoreClass {
       required String supplier,
       required String category,
       required String status}) async {
+    DateTime dateAdded = DateTime.now();
     StockInventoryModel stockInventoryModel = StockInventoryModel(
         name: name,
         expiryDate: expiryDate,
@@ -47,7 +48,8 @@ class FirestoreClass {
         quantity: quantity,
         supplier: supplier,
         category: category,
-        status: status);
+        status: status,
+        dateAdded: dateAdded);
 
     String message = 'Something went wrong';
     try {
@@ -72,16 +74,17 @@ class FirestoreClass {
           .toList();
     });
   }
+
   Future deleteStock(String name) async {
-  String message = 'Something went wrong';
-  try {
-    await firebaseFirestore.collection('stock-inventory').doc(name).delete();
-    message = 'Stock deleted';
-  } catch (e) {
-    return e.toString();
+    String message = 'Something went wrong';
+    try {
+      await firebaseFirestore.collection('stock-inventory').doc(name).delete();
+      message = 'Stock deleted';
+    } catch (e) {
+      return e.toString();
+    }
+    return message;
   }
-  return message;
-}
 
   Future addStore({
     required String name,
@@ -120,16 +123,18 @@ class FirestoreClass {
           .toList();
     });
   }
-Future deleteStore(String name) async {
-  String message = 'Something went wrong';
-  try {
-    await firebaseFirestore.collection('stores').doc(name).delete();
-    message = 'Store deleted';
-  } catch (e) {
-    return e.toString();
+
+  Future deleteStore(String name) async {
+    String message = 'Something went wrong';
+    try {
+      await firebaseFirestore.collection('stores').doc(name).delete();
+      message = 'Store deleted';
+    } catch (e) {
+      return e.toString();
+    }
+    return message;
   }
-  return message;
-}
+
   Future addSupplier(
       {required String name,
       required String company,
@@ -168,29 +173,29 @@ Future deleteStore(String name) async {
           .toList();
     });
   }
+
   Future deleteSupplier(String name) async {
-  String message = 'Something went wrong';
-  try {
-    await firebaseFirestore.collection('suppliers').doc(name).delete();
-    message = 'Supplier deleted';
-  } catch (e) {
-    return e.toString();
+    String message = 'Something went wrong';
+    try {
+      await firebaseFirestore.collection('suppliers').doc(name).delete();
+      message = 'Supplier deleted';
+    } catch (e) {
+      return e.toString();
+    }
+    return message;
   }
-  return message;
-}
 
-
-  Future addProduct({
-    required String category,
-    required String paymentMethod,
-    required String status,
-    required String productName,
-    required String stockQty,
-    required String unitPrice,
-    required String quantity,
-    required String seller,
-    required String costPrice
-  }) async {
+  Future addProduct(
+      {required String category,
+      required String paymentMethod,
+      required String status,
+      required String productName,
+      required String stockQty,
+      required String unitPrice,
+      required String quantity,
+      required String seller,
+      required String costPrice}) async {
+    DateTime dateAdded = DateTime.now();
     ProductModel productmodel = ProductModel(
         category: category,
         paymentMethod: paymentMethod,
@@ -200,7 +205,8 @@ Future deleteStore(String name) async {
         unitPrice: unitPrice,
         quantity: quantity,
         seller: seller,
-        costPrice: costPrice
+        costPrice: costPrice,
+        dateAdded: dateAdded
         );
     String message = 'Something went wrong';
     try {
@@ -215,7 +221,7 @@ Future deleteStore(String name) async {
     return message;
   }
 
-   Stream<List<ProductModel>> getProducts() {
+  Stream<List<ProductModel>> getProducts() {
     return firebaseFirestore
         .collection('products')
         .snapshots()
@@ -225,14 +231,15 @@ Future deleteStore(String name) async {
           .toList();
     });
   }
+
   Future deleteproducts(String name) async {
-  String message = 'Something went wrong';
-  try {
-    await firebaseFirestore.collection('products').doc(name).delete();
-    message = 'Product deleted';
-  } catch (e) {
-    return e.toString();
+    String message = 'Something went wrong';
+    try {
+      await firebaseFirestore.collection('products').doc(name).delete();
+      message = 'Product deleted';
+    } catch (e) {
+      return e.toString();
+    }
+    return message;
   }
-  return message;
-}
 }
