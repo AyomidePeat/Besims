@@ -29,14 +29,14 @@ class Dashboard extends ConsumerWidget {
     const FlSpot(3, 5),
   ];
   List<DailySalesData> weeklySalesData = [
-  DailySalesData('Mon', 150.0),
-  DailySalesData('Tue', 200.0),
-  DailySalesData('Wed', 180.0),
-  DailySalesData('Thu', 220.0),
-  DailySalesData('Fri', 250.0),
-  DailySalesData('Sat', 300.0),
-  DailySalesData('Sun', 280.0),
-];
+    DailySalesData('Mon', 150.0),
+    DailySalesData('Tue', 200.0),
+    DailySalesData('Wed', 180.0),
+    DailySalesData('Thu', 220.0),
+    DailySalesData('Fri', 250.0),
+    DailySalesData('Sat', 300.0),
+    DailySalesData('Sun', 280.0),
+  ];
   String currentDate = DateFormat('dd MMMM, yyyy').format(DateTime.now());
   final now = DateTime.now();
   Stream<DateTime> currentTimeStream() {
@@ -59,12 +59,13 @@ class Dashboard extends ConsumerWidget {
             int totalSales = 0;
             int costPrice = 0;
             int profits = 0;
-
+            String dateAdded = '';
             for (int index = 0; index < stocks.length; index++) {
               totalSales += int.parse(stocks[index].unitPrice);
               costPrice += int.parse(stocks[index].costPrice);
+               dateAdded = stocks[index].dateAdded.toString();
             }
-
+String currentDates = DateFormat('EEEE').format(now);
             profits = totalSales - costPrice;
 
             int returnedCount = 0;
@@ -95,6 +96,7 @@ class Dashboard extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(currentDates),
                       Text(
                         'Total Estimate',
                         style: bodyText(black, 15),
@@ -161,138 +163,142 @@ class Dashboard extends ConsumerWidget {
                 StreamBuilder(
                     stream: cloudstoreRef.getStocks(),
                     builder: (context, snapshot) {
-                       if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(color: purple);
-                  }  else {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(color: purple);
+                      } else {
                         final stocks = snapshot.data!;
-                      final totalStocks = stocks.length;
-                         return Container(
-                          padding: const EdgeInsets.all(20),
-                          height: 135,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: white,
-                            border: Border.all(width: 0.5, color: Colors.grey),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Total Products',
-                                style: bodyText(black, 15),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(totalStocks.toString(), style: headline(black, 23)),
-                                  Container(
-                                    height: 20,
-                                    width: 35,
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.green[50]),
-                                    child: Text(
-                                      '+13%',
-                                      style: headline(green, 10),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ));
-                       }
-                    }),
-                SizedBox(width: 30),
-                StreamBuilder(
-                  stream: cloudstoreRef.getStores(),
-                    builder: (context, snapshot) {
-                       if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(color: purple);
-                  }  
-                  else {
-                    final stores = snapshot.data!;
-                      final totalStores = stores.length;
-                         return Container(
-                        padding: const EdgeInsets.all(20),
-                        height: 135,
-                        width: 400,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: white,
-                          border: Border.all(width: 0.5, color: Colors.grey),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
+                        final totalStocks = stocks.length;
+
+                        return Container(
+                            padding: const EdgeInsets.all(20),
+                            height: 135,
+                            width: 400,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: white,
+                              border:
+                                  Border.all(width: 0.5, color: Colors.grey),
+                            ),
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Total Stores',
+                                  'Total Products',
                                   style: bodyText(black, 15),
                                 ),
                                 const SizedBox(height: 10),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(totalStores.toString(), style: headline(black, 23)),
+                                    Text(totalStocks.toString(),
+                                        style: headline(black, 23)),
+                                    Container(
+                                      height: 20,
+                                      width: 35,
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.green[50]),
+                                      child: Text(
+                                        '+13%',
+                                        style: headline(green, 10),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ],
+                            ));
+                      }
+                    }),
+                SizedBox(width: 30),
+                StreamBuilder(
+                    stream: cloudstoreRef.getStores(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(color: purple);
+                      } else {
+                        final stores = snapshot.data!;
+                        final totalStores = stores.length;
+                        return Container(
+                            padding: const EdgeInsets.all(20),
+                            height: 135,
+                            width: 400,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: white,
+                              border:
+                                  Border.all(width: 0.5, color: Colors.grey),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  'Total Staff',
-                                  style: bodyText(black, 15),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Total Stores',
+                                      style: bodyText(black, 15),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Text(totalStores.toString(),
+                                            style: headline(black, 23)),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 10),
-                                Text('100', style: headline(black, 23)),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Total Staff',
+                                      style: bodyText(black, 15),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text('100', style: headline(black, 23)),
+                                  ],
+                                )
                               ],
-                            )
-                          ],
-                        ));
-                       }
-                  }
-                ),
+                            ));
+                      }
+                    }),
               ]),
               const SizedBox(height: 20),
               SizedBox(
-                height: 500,
-                width: 500,
-                child: LineChart(
-  LineChartData(
-    gridData: FlGridData(show: false),
-    titlesData: FlTitlesData(show: false),
-    borderData: FlBorderData(
-      show: true,
-      border: Border.all(color: const Color(0xff37434d), width: 1),
-    ),
-    minX: 0,
-    maxX: weeklySalesData.length.toDouble() - 1,
-    minY: 0,
-    maxY: 350,
-    lineBarsData: [
-      LineChartBarData(
-        spots: weeklySalesData
-            .asMap()
-            .entries
-            .map((entry) => FlSpot(entry.key.toDouble(), entry.value.sales))
-            .toList(),
-        isCurved: true,
-        color: Colors.blue,
-        dotData: FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-      ),
-    ],
-  ),
-)
-
-              )
+                  height: 500,
+                  width: 500,
+                  child: LineChart(
+                    LineChartData(
+                      gridData: FlGridData(show: false),
+                      titlesData: FlTitlesData(show: false),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border.all(
+                            color: const Color(0xff37434d), width: 1),
+                      ),
+                      minX: 0,
+                      maxX: weeklySalesData.length.toDouble() - 1,
+                      minY: 0,
+                      maxY: 350,
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: weeklySalesData
+                              .asMap()
+                              .entries
+                              .map((entry) => FlSpot(
+                                  entry.key.toDouble(), entry.value.sales))
+                              .toList(),
+                          isCurved: true,
+                          color: Colors.blue,
+                          dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(show: false),
+                        ),
+                      ],
+                    ),
+                  ))
             ]);
           }
         });

@@ -194,7 +194,9 @@ class FirestoreClass {
       required String unitPrice,
       required String quantity,
       required String seller,
-      required String costPrice}) async {
+      required String costPrice,
+    
+      }) async {
     DateTime dateAdded = DateTime.now();
     ProductModel productmodel = ProductModel(
         category: category,
