@@ -743,7 +743,70 @@ class _OrdersState extends ConsumerState<Orders> {
         });
   }
 
-  Widget productList(
+  
+}
+
+class Boxes extends StatelessWidget {
+  const Boxes({
+    super.key,
+    required this.title,
+    required this.total,
+    required this.iconColor,
+    required this.circleColor,
+    required this.icon,
+  });
+  final String title;
+  final String total;
+  final Color iconColor;
+  final Color circleColor;
+  final IconData icon;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 100,
+      width: 300,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: white,
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromARGB(253, 206, 200, 200),
+            offset: Offset(0, 3),
+            blurRadius: 3.0,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: bodyText(black, 13),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(total, style: headline(black, 20)),
+              CircleAvatar(
+                  radius: 20,
+                  backgroundColor: circleColor,
+                  child: Icon(icon, color: iconColor))
+            ],
+          ),
+          Text(
+            'Last 7 days',
+            style: headline(iconColor, 13),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+Widget productList(
     screenWidth, {
     sn,
     productName,
@@ -834,64 +897,3 @@ class _OrdersState extends ConsumerState<Orders> {
       ],
     );
   }
-}
-
-class Boxes extends StatelessWidget {
-  const Boxes({
-    super.key,
-    required this.title,
-    required this.total,
-    required this.iconColor,
-    required this.circleColor,
-    required this.icon,
-  });
-  final String title;
-  final String total;
-  final Color iconColor;
-  final Color circleColor;
-  final IconData icon;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      height: 100,
-      width: 300,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: white,
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromARGB(253, 206, 200, 200),
-            offset: Offset(0, 3),
-            blurRadius: 3.0,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: bodyText(black, 13),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(total, style: headline(black, 20)),
-              CircleAvatar(
-                  radius: 20,
-                  backgroundColor: circleColor,
-                  child: Icon(icon, color: iconColor))
-            ],
-          ),
-          Text(
-            'Last 7 days',
-            style: headline(iconColor, 13),
-          )
-        ],
-      ),
-    );
-  }
-}

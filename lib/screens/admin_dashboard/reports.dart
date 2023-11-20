@@ -1,5 +1,8 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/models/product_model.dart';
+import 'package:bsims/screens/admin_dashboard/filter_sales.dart';
+import 'package:bsims/screens/admin_dashboard/orders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -34,15 +37,32 @@ class _SalesState extends ConsumerState<Sales> {
     super.dispose();
   }
 
-  List iconColors = [green, Colors.blue,Colors.orange,red,];
+  List iconColors = [
+    green,
+    Colors.blue,
+    Colors.orange,
+    red,
+  ];
 
-  List bgColors = [Colors.green, Colors.blue, Colors.orange, Colors.red,];
+  List bgColors = [
+    Colors.green,
+    Colors.blue,
+    Colors.orange,
+    Colors.red,
+  ];
 
   String currentDate = DateFormat('MMMM, yyyy').format(DateTime.now());
   List salesOption = ['All Payments', 'Transfer', 'POS', 'Cheque'];
-
+  DateTime? fromDate =
+      DateTime(2023, 11, 1); // Replace with your initial from date
+  DateTime? toDate = DateTime.now();
+  Future<List<ProductModel>> getSales() async {
+    return getSalesByDate(fromDate!, toDate!);
+  }
+ 
   @override
   Widget build(BuildContext context) {
+    final widgetSize = (widget.screenWidth - 293) / 12;
     final cloudstoreRef = ref.watch(cloudStoreProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,8 +90,8 @@ class _SalesState extends ConsumerState<Sales> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    //crossAxisAlignment: CrossAxisAlignment.center,
                     children: [CircularProgressIndicator(color: purple)]);
               } else {
                 final stocks = snapshot.data!;
@@ -109,9 +129,14 @@ class _SalesState extends ConsumerState<Sales> {
                     NumberFormat('#,###').format(chequePrice);
                 String formattedPosPrice =
                     NumberFormat('#,###').format(posPrice);
-                List <String> quantity = [formattedCashPrice,formattedTransferPrice,formattedChequePrice,formattedPosPrice];
+                List<String> quantity = [
+                  formattedCashPrice,
+                  formattedTransferPrice,
+                  formattedChequePrice,
+                  formattedPosPrice
+                ];
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                 // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
                     ConstrainedBox(
@@ -143,7 +168,7 @@ class _SalesState extends ConsumerState<Sales> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5), color: white),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                       crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
                             'You can filter sales record by date range',
@@ -194,22 +219,20 @@ class _SalesState extends ConsumerState<Sales> {
                                     ),
                                     controller: fromController,
                                     onTap: () async {
-                                      DateTime? pickeddate =
-                                          await showDatePicker(
+                                      fromDate = await showDatePicker(
                                         context: context,
                                         initialDate: DateTime
-                                            .now(), // Initial date when the picker opens
-                                        firstDate: DateTime(2000),
-                                        // Minimum selectable date
-                                        lastDate: DateTime(
-                                            2100), // Maximum selectable date
+                                            .now(), 
+                                        firstDate: DateTime(2020),
+                                       
+                                        lastDate: DateTime.now(), 
                                       );
 
-                                      if (pickeddate != null) {
+                                      if (fromDate != null) {
                                         setState(() {
                                           fromController.text =
                                               DateFormat('dd/MM/yyyy')
-                                                  .format(pickeddate);
+                                                  .format(fromDate!);
                                         });
                                       }
                                     },
@@ -255,26 +278,26 @@ class _SalesState extends ConsumerState<Sales> {
                                           ? Colors.white
                                           : Colors.black,
                                     ),
-                                    controller: fromController,
+                                    controller: toController,
                                     onTap: () async {
-                                      DateTime? pickeddate =
-                                          await showDatePicker(
+                                      toDate = await showDatePicker(
                                         context: context,
                                         initialDate: DateTime
                                             .now(), // Initial date when the picker opens
-                                        firstDate: DateTime(2000),
+                                        firstDate: DateTime(2020),
                                         // Minimum selectable date
-                                        lastDate: DateTime(
-                                            2100), // Maximum selectable date
+                                        lastDate: DateTime.now()
+                                           , // Maximum selectable date
                                       );
 
-                                      if (pickeddate != null) {
+                                      if (toDate != null) {
                                         setState(() {
-                                          fromController.text =
+                                          toController.text =
                                               DateFormat('dd/MM/yyyy')
-                                                  .format(pickeddate);
+                                                  .format(toDate!);
                                         });
                                       }
+                                      getSales();
                                     },
                                   ),
                                 ),
@@ -309,8 +332,7 @@ class _SalesState extends ConsumerState<Sales> {
                                                   child: Text(e.toString()),
                                                 ))
                                             .toList(),
-                                        // ignore: prefer_const_constructors
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           border: InputBorder.none,
                                         ),
                                       ),
@@ -354,132 +376,152 @@ class _SalesState extends ConsumerState<Sales> {
                     const SizedBox(
                       height: 40,
                     ),
-                    Container(
-                      width: widget.size.width - 293,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5), color: white),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Text('Show'),
-                              Container(
-                                height: 55,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Center(
-                                    child: DropdownButtonFormField(
-                                      hint: const Text('10'),
-                                      value: entriesNo,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          entriesNo = value as String;
-                                        });
-                                      },
-                                      items: entries
-                                          .map((e) => DropdownMenuItem(
-                                                value: e,
-                                                child: Text(e.toString()),
-                                              ))
-                                          .toList(),
-                                      // ignore: prefer_const_constructors
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              const Text('entries'),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'ORDER ID',
-                                style: headline(black, 10),
-                              ),
-                              Text(
-                                'CUSTOMER',
-                                style: headline(black, 10),
-                              ),
-                              Text(
-                                'SOLD BY',
-                                style: headline(black, 10),
-                              ),
-                              Text(
-                                'AMOUNT',
-                                style: headline(black, 10),
-                              ),
-                              Text(
-                                'TYPE',
-                                style: headline(black, 10),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'INV-0000001',
-                                style: headline(black, 10),
-                              ),
-                              Text(
-                                'Guest',
-                                style: bodyText(black, 10),
-                              ),
-                              Text(
-                                'Uncle Peace',
-                                style: bodyText(black, 10),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'N1,300.00',
-                                    style: bodyText(black, 10),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: green),
-                                  child: Text(
-                                    'Transfer',
-                                    style: headline(white, 10),
-                                  )),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Text(
-                            'Showing 1 of 1 entries',
-                            style: bodyText(black, 10),
-                          )
-                        ],
-                      ),
-                    )
+                    SaleHeadings(widgetSize: widgetSize),
+                      SizedBox(
+                        height: 300,
+                        width: widget.screenWidth - 290,
+                        child: FutureBuilder<List<ProductModel>>(
+                          future: getSales(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text(
+                                    'Error fetching sales: ${snapshot.error}'),
+                              );
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return const Center(
+                                child: Text(
+                                    'No sales found for the selected date range.'),
+                              );
+                            } else {
+                              return ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                 final stocks = snapshot.data![index];
+                                String productName =
+                                          stocks.productName;
+                                      String category = stocks.category;
+                                      String sellingPrice =
+                                          stocks.unitPrice;
+                                      String quantity = stocks.quantity;
+                                      String seller = stocks.seller;
+                                      String stockQty = stocks.stockQty;
+                                      String status = stocks.status;
+                                      String paymentMethod =
+                                          stocks.paymentMethod;
+
+                                      return ListTile(
+                                        contentPadding: const EdgeInsets.all(0),
+                                        title: productList(widget.screenWidth,
+                                            sn: index + 1,
+                                            category: category,
+                                            seller: seller,
+                                            price: sellingPrice,
+                                            productName: productName,
+                                            quantity: quantity,
+                                            status: status,
+                                            stockQty: stockQty,
+                                            paymentMethod: paymentMethod),
+                                      );
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      )
                   ],
                 );
               }
             }),
       ],
     );
+  }
+}
+
+class SaleHeadings extends StatelessWidget {
+  const SaleHeadings({
+    super.key,
+    required this.widgetSize,
+  });
+
+  final double widgetSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'S/N',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'PRODUCTS',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'CATEGORY',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'PRICE',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'STOCK QUANTITY',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'QUANTITY',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'SELLER',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'PAYMENT METHOD',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'STATUS',
+                    style: headline(black, 10),
+                  ),
+                ),
+              ],
+            );
   }
 }

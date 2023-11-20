@@ -198,6 +198,7 @@ class FirestoreClass {
     
       }) async {
     DateTime dateAdded = DateTime.now();
+     Timestamp timestamp = Timestamp.fromDate(dateAdded);
     ProductModel productmodel = ProductModel(
         category: category,
         paymentMethod: paymentMethod,
@@ -208,7 +209,8 @@ class FirestoreClass {
         quantity: quantity,
         seller: seller,
         costPrice: costPrice,
-        dateAdded: dateAdded
+       dateAdded: dateAdded,
+         timestamp: timestamp,
         );
     String message = 'Something went wrong';
     try {

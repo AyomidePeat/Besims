@@ -7,8 +7,8 @@ import 'package:bsims/screens/admin_dashboard/stock_inventory.dart';
 import 'package:bsims/screens/admin_dashboard/store.dart';
 import 'package:bsims/screens/admin_dashboard/supplier.dart';
 import 'package:bsims/screens/admin_dashboard/users.dart';
-import 'package:bsims/screens/admin_dashboard/widgets/drawer_pane.dart';
-import 'package:bsims/screens/admin_dashboard/widgets/menu_container.dart';
+import 'package:bsims/widgets/drawer_pane.dart';
+import 'package:bsims/widgets/menu_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

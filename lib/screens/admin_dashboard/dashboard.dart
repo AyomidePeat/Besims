@@ -96,7 +96,6 @@ String currentDates = DateFormat('EEEE').format(now);
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(currentDates),
                       Text(
                         'Total Estimate',
                         style: bodyText(black, 15),

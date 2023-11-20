@@ -1,7 +1,7 @@
 import 'package:bsims/const/colors.dart';
 import 'package:bsims/const/textstyle.dart';
 
-import 'package:bsims/screens/admin_dashboard/widgets/drawer_pane.dart';
+import 'package:bsims/widgets/drawer_pane.dart';
 
 import 'package:flutter/material.dart';
 

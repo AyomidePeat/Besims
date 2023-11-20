@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ProductModel {
   final String category;
   final String paymentMethod;
@@ -9,18 +11,21 @@ class ProductModel {
   final String quantity;
   final String seller;
   final  dateAdded;
+   final Timestamp timestamp;
 
-  ProductModel(
-      {required this.category,
-      required this.paymentMethod,
-      required this.status,
-      required this.productName,
-      required this.stockQty,
-      required this.unitPrice,
-      required this.quantity,
-      required this.seller,
-      required this.costPrice,
-     required  this.dateAdded, });
+  ProductModel({
+    required this.category,
+    required this.paymentMethod,
+    required this.status,
+    required this.productName,
+    required this.stockQty,
+    required this.unitPrice,
+    required this.quantity,
+    required this.seller,
+    required this.costPrice,
+    required this.dateAdded,
+     required this.timestamp,
+  });
 
   Map<String, dynamic> toJson() => {
         'category': category,
@@ -32,7 +37,8 @@ class ProductModel {
         'quantity': quantity,
         'seller': seller,
         'costPrice': costPrice,
-        'dateAdded':dateAdded
+        'dateAdded': dateAdded,
+         'timestamp': timestamp
       };
 
   factory ProductModel.getModelFromJson(Map<String, dynamic> json) {
@@ -46,7 +52,8 @@ class ProductModel {
         unitPrice: json['unitPrice'],
         quantity: json['quantity'],
         costPrice: json['costPrice'],
-        dateAdded: json['dateAdded']
-        );
+       dateAdded: json['dateAdded'],
+        
+    timestamp: json['timestamp']);
   }
 }
