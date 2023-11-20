@@ -530,7 +530,7 @@ class _OrdersState extends ConsumerState<Orders> {
     var isLoading = false;
     String? paymentMethod;
     final paymentMethods = [
-      'Cash ',
+      'Cash',
       'Transfer',
       'POS',
       'Cheque',

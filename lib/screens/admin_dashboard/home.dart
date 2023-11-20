@@ -2,7 +2,7 @@ import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/admin_dashboard/category.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
 import 'package:bsims/screens/admin_dashboard/orders.dart';
-import 'package:bsims/screens/admin_dashboard/sales.dart';
+import 'package:bsims/screens/admin_dashboard/reports.dart';
 import 'package:bsims/screens/admin_dashboard/stock_inventory.dart';
 import 'package:bsims/screens/admin_dashboard/store.dart';
 import 'package:bsims/screens/admin_dashboard/supplier.dart';
