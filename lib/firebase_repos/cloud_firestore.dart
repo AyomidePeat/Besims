@@ -13,7 +13,9 @@ class FirestoreClass {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
   Future addCategory(
-      {required String categoryName, required String date}) async {
+      {required String categoryName, }) async {
+            DateTime date= DateTime.now();
+
     CategoryModel category =
         CategoryModel(categoryName: categoryName, dateCreated: date);
 
@@ -21,7 +23,7 @@ class FirestoreClass {
     try {
       await firebaseFirestore
           .collection('product-categories')
-          .doc('categoryName')
+          .doc(categoryName)
           .set(category.toJson());
       message = 'Added';
     } catch (e) {
@@ -30,6 +32,27 @@ class FirestoreClass {
     return message;
   }
 
+Stream<List<CategoryModel>> getCategories() {
+    return firebaseFirestore
+        .collection('product-categories')
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => CategoryModel.getModelFromJson(doc.data()))
+          .toList();
+    });
+  }
+
+  Future deleteCategory(String name) async {
+    String message = 'Something went wrong';
+    try {
+      await firebaseFirestore.collection('product-categories').doc(name).delete();
+      message = 'Category deleted';
+    } catch (e) {
+      return e.toString();
+    }
+    return message;
+  }
   Future addStockInventory(
       {required String name,
       required String expiryDate,
@@ -246,4 +269,10 @@ class FirestoreClass {
     }
     return message;
   }
+
+  
 }
+
+
+
+  

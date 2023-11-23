@@ -149,3 +149,44 @@ Future<void> exportSupplierExcelFile() async {
 
   html.Url.revokeObjectUrl(url);
 }
+
+
+
+Future<void> exportReportsExcelFile() async {
+  final querySnapshot = await firestore.collection('products').get();
+
+  final excel = Excel.createExcel();
+  final sheet = excel['Sheet1'];
+  sheet.appendRow([
+    'Products',
+    'Category',
+    'Price',
+    'Stock Quantity',
+    'Quantity',
+    'Seller',
+    'Payment Method',
+    'Status',
+  ]);
+  for (final doc in querySnapshot.docs) {
+    final data = doc.data();
+
+    final List<dynamic> rowData = [
+      data['productName'],
+      data['category'],
+      data['unitPrice'],
+      data['stockQty'],
+      data['quantity'],
+      data['Seller'],
+      data['paymentMethod'],
+      data['status'],
+    ];
+
+    sheet.appendRow(rowData);
+  }
+
+  var fileBytes = excel.save(fileName: 'Reports file.xlsx');
+  final blob = html.Blob([Uint8List.fromList(fileBytes!)]);
+  final url = html.Url.createObjectUrlFromBlob(blob);
+
+  html.Url.revokeObjectUrl(url);
+}
