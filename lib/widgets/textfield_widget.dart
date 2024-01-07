@@ -16,7 +16,7 @@ class TextFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(width: width,
+    return SizedBox(width:400,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,9 +35,9 @@ class TextFieldWidget extends StatelessWidget {
               filled: false,
               hintText: 'Enter $label',
               hintStyle: bodyText(Colors.grey, 14),
-              enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                      width: 0.5, color: Color.fromARGB(255, 224, 215, 215))),
+              enabledBorder:  OutlineInputBorder(borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                      width: 1, color: Color.fromARGB(255, 224, 215, 215))),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(width: 1, color: purple!)),
             ),

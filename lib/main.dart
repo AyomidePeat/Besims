@@ -1,4 +1,4 @@
-import 'package:bsims/screens/admin_dashboard/authentication/login.dart';
+import 'package:bsims/screens/authentication/login.dart';
 import 'package:bsims/screens/admin_dashboard/home.dart';
 import 'package:bsims/screens/admin_dashboard/predictor.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
        fontFamily: 'Poppins'
       ),      
      
-      home:  Home(),
+      home:  LoginPage(),
     );
   }
 }

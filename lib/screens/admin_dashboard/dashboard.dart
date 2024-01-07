@@ -1,6 +1,7 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
-import 'package:bsims/screens/admin_dashboard/daily_class.dart';
+import 'package:bsims/models/product_model.dart';
+import 'package:bsims/models/product_sale.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,21 +29,36 @@ class Dashboard extends ConsumerWidget {
     const FlSpot(2, 2),
     const FlSpot(3, 5),
   ];
-  List<DailySalesData> weeklySalesData = [
-    DailySalesData('Mon', 150.0),
-    DailySalesData('Tue', 200.0),
-    DailySalesData('Wed', 180.0),
-    DailySalesData('Thu', 220.0),
-    DailySalesData('Fri', 250.0),
-    DailySalesData('Sat', 300.0),
-    DailySalesData('Sun', 280.0),
-  ];
+
   String currentDate = DateFormat('dd MMMM, yyyy').format(DateTime.now());
   final now = DateTime.now();
   Stream<DateTime> currentTimeStream() {
     return Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now());
   }
+  List<ProductSale> weeklySalesData = [
+  ProductSale('Product A', 100.0, 'best'),
+  ProductSale('Product B', 150.0, 'best'),
+  ProductSale('Product C', 80.0, 'worst'),
+  ProductSale('Product D', 200.0, 'best'),
+  // Add more products and their sales data with categories
+];
 
+ List<ProductModel> getBestPerformers(List<ProductModel> allProducts) {
+    // Count occurrences of each product
+    Map<String, int> productOccurrences = {};
+
+    for (var product in allProducts) {
+      productOccurrences[product.productName] =
+          (productOccurrences[product.productName] ?? 0) + 1;
+    }
+
+    // Sort products by occurrences in descending order
+    allProducts.sort((a, b) =>
+        productOccurrences[b.productName]!.compareTo(productOccurrences[a.productName]!));
+
+    
+    return allProducts.take(3).toList();
+  }
   @override
   Widget build(BuildContext context, ref) {
     final cloudstoreRef = ref.watch(cloudStoreProvider);
@@ -64,6 +80,7 @@ class Dashboard extends ConsumerWidget {
               totalSales += int.parse(stocks[index].unitPrice);
               costPrice += int.parse(stocks[index].costPrice);
                dateAdded = stocks[index].dateAdded.toString();
+
             }
 String currentDates = DateFormat('EEEE').format(now);
             profits = totalSales - costPrice;
@@ -82,11 +99,13 @@ String currentDates = DateFormat('EEEE').format(now);
             String formattedProfits = NumberFormat('#,###').format(profits);
             String formattedReturnedPrice =
                 NumberFormat('#,###').format(returnedprice);
+                              List<ProductModel> bestPerformers = getBestPerformers(stocks);
+
             return Column(children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Container(
                   padding: const EdgeInsets.all(20),
-                  height: 135,
+                  height: 400,
                   width: 700,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -155,6 +174,7 @@ String currentDates = DateFormat('EEEE').format(now);
                           )
                         ],
                       ),
+                      _buildPerformanceList('Best Performers', bestPerformers)
                     ],
                   ),
                 ),
@@ -267,37 +287,58 @@ String currentDates = DateFormat('EEEE').format(now);
               ]),
               const SizedBox(height: 20),
               SizedBox(
-                  height: 500,
-                  width: 500,
-                  child: LineChart(
-                    LineChartData(
-                      gridData: FlGridData(show: false),
-                      titlesData: FlTitlesData(show: false),
-                      borderData: FlBorderData(
-                        show: true,
-                        border: Border.all(
-                            color: const Color(0xff37434d), width: 1),
-                      ),
-                      minX: 0,
-                      maxX: weeklySalesData.length.toDouble() - 1,
-                      minY: 0,
-                      maxY: 350,
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: weeklySalesData
-                              .asMap()
-                              .entries
-                              .map((entry) => FlSpot(
-                                  entry.key.toDouble(), entry.value.sales))
-                              .toList(),
-                          isCurved: true,
-                          color: Colors.blue,
-                          dotData: FlDotData(show: false),
-                          belowBarData: BarAreaData(show: false),
-                        ),
-                      ],
-                    ),
-                  ))
+  height: 500,
+  width: 500,
+  child: LineChart(
+    LineChartData(
+      gridData: FlGridData(show: false),
+      titlesData: FlTitlesData(
+       
+        leftTitles: AxisTitles(sideTitles:SideTitles(showTitles: true)),
+        bottomTitles: AxisTitles(sideTitles:SideTitles(
+          showTitles: true,
+          getTitlesWidget: (value, TitleMeta) {
+            // You can customize this method to show dates or months
+            return Text(value.toString());
+          },
+        )),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border.all(color: const Color(0xff37434d), width: 1),
+      ),
+      minX: 0,
+      maxX: weeklySalesData.length.toDouble() - 1,
+      minY: 0,
+      maxY: 350,
+      lineBarsData: [
+        LineChartBarData(
+          spots: weeklySalesData
+              .where((sale) => sale.category == 'best')
+              .map((entry) =>
+                  FlSpot(weeklySalesData.indexOf(entry).toDouble(), entry.sales))
+              .toList(),
+          isCurved: true,
+          color: Colors.blue,
+          dotData: FlDotData(show: false),
+          belowBarData: BarAreaData(show: false),
+        ),
+        LineChartBarData(
+          spots: weeklySalesData
+              .where((sale) => sale.category == 'worst')
+              .map((entry) =>
+                  FlSpot(weeklySalesData.indexOf(entry).toDouble(), entry.sales))
+              .toList(),
+          isCurved: true,
+          color: Colors.red,
+          dotData: FlDotData(show: false),
+          belowBarData: BarAreaData(show: false),
+        ),
+      ],
+    ),
+  ),
+)
+
             ]);
           }
         });
@@ -305,6 +346,19 @@ String currentDates = DateFormat('EEEE').format(now);
 
   Widget verticalLine() {
     return Container(height: 40, width: 2, color: grey);
+  }
+  Widget _buildPerformanceList(String title, List<ProductModel> products) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title),
+        for (var product in products)
+          ListTile(
+            title: Text(product.productName),
+            subtitle: Text('Sales: ${product.unitPrice}'),
+          ),
+      ],
+    );
   }
 }
 
@@ -331,4 +385,6 @@ class EstimateTexts extends StatelessWidget {
       ],
     );
   }
+
+  
 }

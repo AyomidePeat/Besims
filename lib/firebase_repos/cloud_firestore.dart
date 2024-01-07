@@ -12,9 +12,10 @@ final cloudStoreProvider = Provider<FirestoreClass>((ref) => FirestoreClass());
 class FirestoreClass {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
-  Future addCategory(
-      {required String categoryName, }) async {
-            DateTime date= DateTime.now();
+  Future addCategory({
+    required String categoryName,
+  }) async {
+    DateTime date = DateTime.now();
 
     CategoryModel category =
         CategoryModel(categoryName: categoryName, dateCreated: date);
@@ -32,7 +33,7 @@ class FirestoreClass {
     return message;
   }
 
-Stream<List<CategoryModel>> getCategories() {
+  Stream<List<CategoryModel>> getCategories() {
     return firebaseFirestore
         .collection('product-categories')
         .snapshots()
@@ -46,13 +47,17 @@ Stream<List<CategoryModel>> getCategories() {
   Future deleteCategory(String name) async {
     String message = 'Something went wrong';
     try {
-      await firebaseFirestore.collection('product-categories').doc(name).delete();
+      await firebaseFirestore
+          .collection('product-categories')
+          .doc(name)
+          .delete();
       message = 'Category deleted';
     } catch (e) {
       return e.toString();
     }
     return message;
   }
+
   Future addStockInventory(
       {required String name,
       required String expiryDate,
@@ -177,8 +182,8 @@ Stream<List<CategoryModel>> getCategories() {
     try {
       await firebaseFirestore
           .collection('suppliers')
-          .doc(name)
-          .set(supplierModel.toJson());
+         
+          .add(supplierModel.toJson());
       message = 'Added';
     } catch (e) {
       return e.toString();
@@ -208,39 +213,36 @@ Stream<List<CategoryModel>> getCategories() {
     return message;
   }
 
-  Future addProduct(
-      {required String category,
-      required String paymentMethod,
-      required String status,
-      required String productName,
-      required String stockQty,
-      required String unitPrice,
-      required String quantity,
-      required String seller,
-      required String costPrice,
-    
-      }) async {
+  Future addProduct({
+    required String category,
+    required String paymentMethod,
+    required String status,
+    required String productName,
+    required String stockQty,
+    required String unitPrice,
+    required String quantity,
+    required String seller,
+    required String costPrice,
+  }) async {
     DateTime dateAdded = DateTime.now();
-     Timestamp timestamp = Timestamp.fromDate(dateAdded);
+    Timestamp timestamp = Timestamp.fromDate(dateAdded);
     ProductModel productmodel = ProductModel(
-        category: category,
-        paymentMethod: paymentMethod,
-        status: status,
-        productName: productName,
-        stockQty: stockQty,
-        unitPrice: unitPrice,
-        quantity: quantity,
-        seller: seller,
-        costPrice: costPrice,
-       dateAdded: dateAdded,
-         timestamp: timestamp,
-        );
+      category: category,
+      paymentMethod: paymentMethod,
+      status: status,
+      productName: productName,
+      stockQty: stockQty,
+      unitPrice: unitPrice,
+      quantity: quantity,
+      seller: seller,
+      costPrice: costPrice,
+      dateAdded: dateAdded,
+      timestamp: timestamp,
+    );
     String message = 'Something went wrong';
     try {
-      await firebaseFirestore
-          .collection('products')
-          .doc(productName)
-          .set(productmodel.toJson());
+      await firebaseFirestore.collection('products').add(productmodel.toJson());
+
       message = 'Added';
     } catch (e) {
       return e.toString();
@@ -269,10 +271,4 @@ Stream<List<CategoryModel>> getCategories() {
     }
     return message;
   }
-
-  
 }
-
-
-
-  

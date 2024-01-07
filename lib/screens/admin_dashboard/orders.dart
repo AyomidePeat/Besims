@@ -511,8 +511,8 @@ class _OrdersState extends ConsumerState<Orders> {
     ]);
   }
 
-  excelPicker() {
-    importOrderFile(pickExcelFile());
+  excelPicker() async{
+  await  importOrderFile(pickExcelFile());
   }
 
   excelDownloader() {
@@ -577,6 +577,9 @@ class _OrdersState extends ConsumerState<Orders> {
                     TextFieldWidget(
                         controller: sellingPriceController,
                         label: 'Selling price'),
+                        const SizedBox(
+                      height: 10,
+                    ),
                     TextFieldWidget(
                         controller: costPriceController, label: 'Cost price'),
                     const SizedBox(

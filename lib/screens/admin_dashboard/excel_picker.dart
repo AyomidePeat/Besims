@@ -153,17 +153,18 @@ Future<void> importStoreFile(pickExcelFile) async {
       var dataRows = excel.tables[table]!.rows.skip(1);
 
       for (var row in dataRows) {
+        print(row);
         final name = (row[0]!.value is SharedString)
             ? (row[0]!.value as SharedString).toString()
             : (row[0]!.value is int)
                 ? (row[0]!.value as int).toString()
                 : row[0]!.value ?? '';
-        final manager = (row[1]!.value is SharedString)
+        final location = (row[1]!.value is SharedString)
             ? (row[1]!.value as SharedString).toString()
             : (row[1]!.value is int)
                 ? (row[1]!.value as int).toString()
                 : row[1]!.value ?? '';
-        final location = (row[2]!.value is SharedString)
+        final manager = (row[2]!.value is SharedString)
             ? (row[2]!.value as SharedString).toString()
             : (row[2]!.value is int)
                 ? (row[2]!.value as int).toString()
@@ -200,6 +201,7 @@ Future<void> importOrderFile(pickExcelFile) async {
       var dataRows = excel.tables[table]!.rows.skip(1);
 
       for (var row in dataRows) {
+        print(row);
         final productName = (row[0]!.value is SharedString)
             ? (row[0]!.value as SharedString).toString()
             : (row[0]!.value is int)
@@ -210,7 +212,7 @@ Future<void> importOrderFile(pickExcelFile) async {
             : (row[1]!.value is int)
                 ? (row[1]!.value as int).toString()
                 : row[1]!.value ?? '';
-        final paymentMethod = (row[2]!.value is SharedString)
+        final unitPrice = (row[2]!.value is SharedString)
             ? (row[2]!.value as SharedString).toString()
             : (row[2]!.value is int)
                 ? (row[2]!.value as int).toString()
@@ -220,31 +222,32 @@ Future<void> importOrderFile(pickExcelFile) async {
             : (row[3]!.value is int)
                 ? (row[3]!.value as int).toString()
                 : row[3]!.value ?? '';
-        final unitPrice = (row[4]!.value is SharedString)
+        final quantity = (row[4]!.value is SharedString)
             ? (row[4]!.value as SharedString).toString()
             : (row[4]!.value is int)
                 ? (row[4]!.value as int).toString()
                 : row[4]!.value ?? '';
-        final costPrice = (row[5]!.value is SharedString)
+        final seller = (row[5]!.value is SharedString)
             ? (row[5]!.value as SharedString).toString()
             : (row[5]!.value is int)
                 ? (row[5]!.value as int).toString()
                 : row[5]!.value ?? '';
-        final quantity = (row[5]!.value is SharedString)
-            ? (row[5]!.value as SharedString).toString()
-            : (row[5]!.value is int)
-                ? (row[5]!.value as int).toString()
-                : row[5]!.value ?? '';
-        final status = (row[6]!.value is SharedString)
+        final paymentMethod = (row[6]!.value is SharedString)
             ? (row[6]!.value as SharedString).toString()
             : (row[6]!.value is int)
                 ? (row[6]!.value as int).toString()
                 : row[6]!.value ?? '';
-        final seller = (row[7]!.value is SharedString)
+
+        final status = (row[7]!.value is SharedString)
             ? (row[7]!.value as SharedString).toString()
             : (row[7]!.value is int)
                 ? (row[7]!.value as int).toString()
                 : row[7]!.value ?? '';
+        final costPrice = (row[8]!.value is SharedString)
+            ? (row[8]!.value as SharedString).toString()
+            : (row[8]!.value is int)
+                ? (row[8]!.value as int).toString()
+                : row[8]!.value ?? '';
 
         firestoreClass.addProduct(
             category: category,
