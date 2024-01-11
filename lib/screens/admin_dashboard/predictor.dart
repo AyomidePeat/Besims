@@ -1,82 +1,71 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+class PricePredictionScreen extends StatefulWidget {
+  const PricePredictionScreen({super.key});
 
-
-class LinearRegressionModel {
-  double slope;
-  double intercept;
-
-  LinearRegressionModel({required this.slope, required this.intercept});
-
-  double predict(double quantitySold) {
-    return slope * quantitySold + intercept;
-  }
-}
-
-
-class PricePredictionApp extends StatefulWidget {
   @override
-  _PricePredictionAppState createState() => _PricePredictionAppState();
+  _PricePredictionScreenState createState() => _PricePredictionScreenState();
 }
 
-class _PricePredictionAppState extends State<PricePredictionApp> {
-  TextEditingController quantityController = TextEditingController();
-  double? predictedPrice;
+class _PricePredictionScreenState extends State<PricePredictionScreen> {
+  final TextEditingController _productNameController = TextEditingController();
+  double? _predictedPrice;
 
-  LinearRegressionModel model = LinearRegressionModel(
-    slope: 10,  // Replace with your model's actual values
-    intercept: 5,  // Replace with your model's actual values
-  );
+  Future<void> _predictPrice(String productName) async {
+    // Replace these values with your actual Firebase configuration
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final CollectionReference _productsCollection =
+        _firestore.collection('products');
 
-  void predictPrice() {
-  try {
-    double quantity = double.parse(quantityController.text);
-    double predictedPrice = model.predict(quantity);
-    setState(() {
-      this.predictedPrice = predictedPrice;
-    });
-  } catch (e) {
-    setState(() {
-      predictedPrice = null;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Invalid input. Please enter a valid number.'),
-      ),
-    );
+    try {
+      DocumentSnapshot productSnapshot =
+          await _productsCollection.doc(productName).get();
+
+      if (productSnapshot.exists) {
+        // Fetch data and perform prediction (replace this with your actual prediction logic)
+        String price = productSnapshot['costPrice'].trim();
+        double historicalPrice = double.parse(price);
+        _predictedPrice = historicalPrice * 1.1; // Simple example: 10% markup
+      } else {
+        // Handle case where the product is not found
+        print('Product not found');
+        _predictedPrice = null;
+      }
+    } catch (e) {
+      print('Error predicting price: $e');
+      _predictedPrice = null;
+    }
+
+    setState(
+        () {}); // Update the UI with the predicted price or an error message
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Price Prediction'),
+        title: Text('Price Prediction'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             TextField(
-              controller: quantityController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Quantity Sold'),
+              controller: _productNameController,
+              decoration: InputDecoration(labelText: 'Product Name'),
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: predictPrice,
-              child: const Text('Predict Price'),
+              onPressed: () => _predictPrice(_productNameController.text),
+              child: Text('Predict Price'),
             ),
-            const SizedBox(height: 16.0),
-            Text(
-              predictedPrice != null
-                  ? 'Predicted Price: \$${predictedPrice!.toStringAsFixed(2)}'
-                  : '',
-              style: const TextStyle(fontSize: 18),
-            ),
+            SizedBox(height: 16.0),
+            _predictedPrice != null
+                ? Text(
+                    'Predicted Price: \$${_predictedPrice!.toStringAsFixed(2)}')
+                : Container(),
           ],
         ),
       ),
