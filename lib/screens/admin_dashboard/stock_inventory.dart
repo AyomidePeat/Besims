@@ -35,7 +35,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                 children: [CircularProgressIndicator(color: purple)]);
           } else {
             final List<StockInventoryModel> stocks = snapshot.data!;
-            final totalProducts  = stocks.length;
+            final totalProducts = stocks.length;
             if (stocks.isNotEmpty) {
               return Column(children: [
                 Container(
@@ -488,14 +488,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
     String? supplier;
 
     String? category;
-    final categoryOptions = [
-      'Drug',
-      'Foodstuff',
-      'Cosmetic',
-      'Brevaerage',
-      'Skin Care',
-      'Baby Products'
-    ];
+    
     final statusOptions = ['Available', 'Unavailable'];
     String? status;
     showDialog(
@@ -556,24 +549,49 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                   const SizedBox(
                     height: 20,
                   ),
-                  DropdownButtonFormField(
-                    hint: const Text('Category'),
-                    value: category,
-                    onChanged: (value) {
-                      setState(() {
-                        category = value as String;
-                      });
+                   StreamBuilder(
+                    stream: firestore.getCategories(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator(
+                            color: Colors.purple);
+                      } else {
+                        if (snapshot.hasData) {
+                          final categories = snapshot.data;
+                          if (categories!.isEmpty) {
+                            return const Center(
+                              child: Text('You have not added any category yet!',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.black)),
+                            );
+                          }
+                   
+                          return ListTile(
+                            title: DropdownButtonFormField<String>(
+                              hint: const Text('Category'),
+                              value: supplier,
+                              onChanged: (value) {
+                                setState(() {
+                                  supplier = value!;
+                                });
+                              },
+                              items: categories
+                                  .map((e) => DropdownMenuItem<String>(
+                                        value: e.categoryName,
+                                        child: Text(e.categoryName),
+                                      ))
+                                  .toList(),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                      return const CircularProgressIndicator(
+                          color: Colors.purple);
                     },
-                    items: categoryOptions
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e.toString()),
-                            ))
-                        .toList(),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
+                                     ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -594,33 +612,24 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                             );
                           }
 
-                          return SizedBox(
-                            width: widget.screenWidth - 280,
-                            height: 446,
-                            child: ListView.builder(
-                              itemCount: supplierss.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: DropdownButtonFormField<String>(
-                                    hint: const Text('Supplier'),
-                                    value: supplier,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        supplier = value!;
-                                      });
-                                    },
-                                    items: supplierss
-                                        .map((e) => DropdownMenuItem<String>(
-                                              value: e.name,
-                                              child: Text(e.name),
-                                            ))
-                                        .toList(),
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                    ),
-                                  ),
-                                );
+                          return ListTile(
+                            title: DropdownButtonFormField<String>(
+                              hint: const Text('Supplier'),
+                              value: supplier,
+                              onChanged: (value) {
+                                setState(() {
+                                  supplier = value!;
+                                });
                               },
+                              items: supplierss
+                                  .map((e) => DropdownMenuItem<String>(
+                                        value: e.name,
+                                        child: Text(e.name),
+                                      ))
+                                  .toList(),
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
                             ),
                           );
                         }
@@ -811,7 +820,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
           SizedBox(
             width: widgetSize,
             child: Text(
-              quantity,
+              '$quantity packets',
               style: bodyText(black, 13),
             ),
           ),
@@ -917,4 +926,6 @@ class Boxes extends StatelessWidget {
       ),
     );
   }
+
+
 }

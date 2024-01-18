@@ -1,5 +1,5 @@
 import 'package:bsims/const/textstyle.dart';
-import 'package:bsims/screens/authentication/signup.dart';
+import 'package:bsims/screens/authentication/login.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -7,14 +7,14 @@ import '../../const/colors.dart';
 import '../admin_dashboard/home.dart';
 import '../../widgets/main_button.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final emailAddressController = TextEditingController();
   final passwordController = TextEditingController();
   @override
@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 50.0, left: 50,),
+                padding: const EdgeInsets.only(top: 50.0, left: 50, right:30),
                 child:
                     Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   SizedBox(height: 50),
@@ -49,6 +49,17 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(
                     height: 40,
+                  ),
+
+                  TextFieldWidget(
+                      controller: emailAddressController, label: 'Name'),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFieldWidget(
+                      controller: emailAddressController, label: 'Business Name'),
+                  const SizedBox(
+                    height: 20,
                   ),
                   TextFieldWidget(
                       controller: emailAddressController, label: 'Email Address'),
@@ -81,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       color: purple!,
                       child: Text(
-                        'Login',
+                        'Sign Up',
                         style: headline(white, 10),
                       )),
                                    const SizedBox(height: 30),
@@ -89,15 +100,13 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     children: [
                       const SizedBox(width: 64),
-                      Text('Don\'t have an account?',
+                      Text('Already have an account?',
                           style: bodyText(Colors.grey, 12)),
                       TextButton(
-                          onPressed: () {
-                             Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const SignUpPage()));
-                          },
+                          onPressed: () { Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => const LoginPage()));},
                           child: const Text(
-                            'Sign Up',
+                            'Login',
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontSize: 12,
@@ -108,23 +117,30 @@ class _LoginPageState extends State<LoginPage> {
                 ]),
               ),
         
-              Container(width:(size.width*0.7)/2,height:size.height*0.8,padding: EdgeInsets.only(left:20),
+              Container(width:(size.width*0.7)/2,height:size.height*0.8,
                 decoration: const BoxDecoration(color:Color.fromARGB(255, 80, 72, 107),
-                
+                //     image: DecorationImage(
+                //   image: AssetImage('assets/bgg.jpg'),
+                //   fit: BoxFit.contain,
+                // )
                 ),child: Column(
                   children: [
                      const SizedBox(
-                    height: 50,
+                    height: 50 ,
                   ),
-                           Text(
-                                               'Welcome back to BeSeamless!',
-                                               style: TextStyle(color:white,
-                                                   fontSize: 30,
-                                                   letterSpacing: 1,
-                                                   fontWeight: FontWeight.bold
-                                                   ),
-                                             ),
-                                const SizedBox(
+                           Row(mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               Text(
+                                                   'Welcome back to BeSeamless!',
+                                                   style: TextStyle(color:white,
+                                                       fontSize: 30,
+                                                       letterSpacing: 1,
+                                                       fontWeight: FontWeight.bold
+                                                       ),
+                                                 ),
+                                  Icon(Icons.show_chart_sharp, color: Colors.purple[900],),
+         ],
+                           ),   const SizedBox(
                     height: 35,
                   ),          
                    Text(

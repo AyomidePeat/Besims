@@ -4,7 +4,6 @@ import 'package:bsims/models/product_model.dart';
 import 'package:bsims/screens/admin_dashboard/excel_downloader.dart';
 import 'package:bsims/screens/admin_dashboard/filter_sales.dart';
 import 'package:bsims/screens/admin_dashboard/orders.dart';
-import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +29,7 @@ class _SalesState extends ConsumerState<Sales> {
   List labels = ['Cash ', 'Transfer', 'POS', 'Cheque'];
   List entries = ['10', '15', '20', '25', '30'];
   final fromController = TextEditingController();
-   final TextEditingController _productNameController = TextEditingController();
+  final TextEditingController _productNameController = TextEditingController();
   double? _predictedPrice;
   String? sales;
   String? entriesNo;
@@ -65,7 +64,8 @@ class _SalesState extends ConsumerState<Sales> {
   Future<List<ProductModel>> getSales() async {
     return getSalesByDate(fromDate!, toDate!);
   }
-Future<void> _predictPrice(String productName) async {
+
+  Future<void> _predictPrice(String productName) async {
     // Replace these values with your actual Firebase configuration
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     final CollectionReference _productsCollection =
@@ -74,7 +74,7 @@ Future<void> _predictPrice(String productName) async {
       QuerySnapshot productsSnapshot = await _productsCollection.get();
       String lowerCaseProductName = productName.toLowerCase();
 
- DocumentSnapshot productSnapshot = productsSnapshot.docs.firstWhere(
+      DocumentSnapshot productSnapshot = productsSnapshot.docs.firstWhere(
         (doc) => doc.id.toLowerCase() == lowerCaseProductName,
         orElse: () => throw Exception('Product not found'),
       );
@@ -91,22 +91,21 @@ Future<void> _predictPrice(String productName) async {
       _predictedPrice = null;
     }
 
-    setState(
-        () {}); 
+    setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     final widgetSize = (widget.screenWidth - 293) / 12;
     final cloudstoreRef = ref.watch(cloudStoreProvider);
     return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          
           Row(
             children: [
               Icon(
-            
                 Icons.bar_chart,
                 color: purple,
                 size: widget.screenWidth * 0.03,
@@ -203,7 +202,8 @@ Future<void> _predictPrice(String productName) async {
                         width: widget.size.width - 293,
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5), color: white),
+                            borderRadius: BorderRadius.circular(5),
+                            color: white),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -222,7 +222,8 @@ Future<void> _predictPrice(String productName) async {
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     padding: const EdgeInsets.all(10),
@@ -263,7 +264,7 @@ Future<void> _predictPrice(String productName) async {
                                           firstDate: DateTime(2020),
                                           lastDate: DateTime.now(),
                                         );
-      
+
                                         if (fromDate != null) {
                                           setState(() {
                                             fromController.text =
@@ -325,7 +326,7 @@ Future<void> _predictPrice(String productName) async {
                                           lastDate: DateTime
                                               .now(), // Maximum selectable date
                                         );
-      
+
                                         if (toDate != null) {
                                           setState(() {
                                             toController.text =
@@ -463,7 +464,7 @@ Future<void> _predictPrice(String productName) async {
                                   String stockQty = stocks.stockQty;
                                   String status = stocks.status;
                                   String paymentMethod = stocks.paymentMethod;
-      
+
                                   return ListTile(
                                     contentPadding: const EdgeInsets.all(0),
                                     title: productList(widget.screenWidth,
@@ -483,30 +484,29 @@ Future<void> _predictPrice(String productName) async {
                           },
                         ),
                       ),
-                      
-                      SizedBox(width: widget.screenWidth - 290,
+                      SizedBox(
+                        width: widget.screenWidth - 290,
                         child: TextField(
-                                      controller: _productNameController,
-                                      decoration: InputDecoration(labelText: 'Product Name'),
-                                    ),
+                          controller: _productNameController,
+                          decoration:
+                              const InputDecoration(labelText: 'Product Name'),
+                        ),
                       ),
-                      
-                      
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () => _predictPrice(_productNameController.text),
-                child: const Text('Predict Price'),
-              ),
-              const SizedBox(height: 16.0),
-              _predictedPrice != null
-                  ? Text(
-                      'Predicted Price: \$${_predictedPrice!.toStringAsFixed(2)}')
-                  : Container(),
+                      //const SizedBox(height: 16.0),
+                      ElevatedButton(
+                        onPressed: () =>
+                            _predictPrice(_productNameController.text),
+                        child: const Text('Predict Price'),
+                      ),
+                      const SizedBox(height: 14.0),
+                      _predictedPrice != null
+                          ? Text(
+                              'Predicted Price: \$${_predictedPrice!.toStringAsFixed(2)}')
+                          : Container(),
                     ],
                   );
                 }
               }),
-              
         ],
       ),
     );

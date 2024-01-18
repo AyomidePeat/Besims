@@ -20,7 +20,7 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
   @override
   Widget build(BuildContext context) {
     const double space = 30;
-    final cloudStoreRef = ref.watch(cloudStoreProvider);
+   final  cloudStoreRef = ref.watch(cloudStoreProvider);
     final widgetSize = (widget.screenWidth - 293) / 10;
     final size = MediaQuery.of(context).size;
     return Column(

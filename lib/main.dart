@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Inventory app',
+      title: 'BeSeamless',
       theme: FlexThemeData.light(
         scheme: FlexScheme.deepPurple,
-       fontFamily: 'Poppins'
+       fontFamily: 'Kanit'
       ),      
      
       home:  LoginPage(),

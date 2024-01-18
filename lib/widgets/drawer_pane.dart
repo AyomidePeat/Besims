@@ -66,35 +66,40 @@ class NavigationPane extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-         
-
           ...MenuItems.all.map(buildMenuItem).toList(),
-
-         
-            const Spacer(flex:2),
-        TextButton(onPressed:(){}, 
-          child: const Row(
-            children: [Icon(Icons.logout_rounded, color:Colors.grey),
-              Text('Log Out',),
-            ],
-          ),
-        )
-            
+          const Spacer(flex: 2),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Row(
+              children: [
+                Icon(Icons.logout_rounded, color: Colors.grey),
+                Text(
+                  'Log Out',
+                ),
+              ],
+            ),
+          )
         ],
       );
   Widget buildMenuItem(MenuStuff item) => Padding(
-    padding: const EdgeInsets.only(bottom:10.0),
-    child: ListTile(
-     selectedColor: purple, contentPadding: const EdgeInsets.all(0),
-      selected: currentItem == item,
-      minLeadingWidth: 20, hoverColor: Colors.red[600],
-      leading: Icon(item.icon,),
-      title: Text(
-        item.title, 
-      ),
-      onTap: () {
-        onSelectedItem(item);
-      },
-    ),
-  );
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: ListTile(
+          selectedColor: purple,
+          contentPadding: const EdgeInsets.all(0),
+          selected: currentItem == item,
+          minLeadingWidth: 20,
+          hoverColor: Colors.red[600],
+          leading: Icon(
+            item.icon,
+          ),
+          title: Text(
+            item.title,
+          ),
+          onTap: () {
+            onSelectedItem(item);
+          },
+        ),
+      );
 }

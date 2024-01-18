@@ -3,6 +3,7 @@ import 'package:bsims/models/product_model.dart';
 import 'package:bsims/models/stock_inventory_model.dart';
 import 'package:bsims/models/store_model.dart';
 import 'package:bsims/models/supplier_model.dart';
+import 'package:bsims/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,24 @@ final cloudStoreProvider = Provider<FirestoreClass>((ref) => FirestoreClass());
 class FirestoreClass {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
+
+   Future addUser({UserModel? user}) async {
+    await firebaseFirestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .set(user!.toJson());
+  }
+
+  Stream<List<UserModel>> getUser()  {
+   return firebaseFirestore
+        .collection('users')
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => UserModel.getModelFromJson(json: doc.data()))
+          .toList();
+    });
+  }
   Future addCategory({
     required String categoryName,
   }) async {
@@ -32,6 +51,8 @@ class FirestoreClass {
     }
     return message;
   }
+
+
 
   Stream<List<CategoryModel>> getCategories() {
     return firebaseFirestore
