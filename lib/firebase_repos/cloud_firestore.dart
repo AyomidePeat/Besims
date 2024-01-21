@@ -14,15 +14,30 @@ class FirestoreClass {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
-   Future addUser({UserModel? user}) async {
+  Future addUser(
+      {required String name,
+      required String username,
+      required String email,
+      required String role,
+      required String image,
+      required String phoneNumber,
+      required String gender}) async {
+    UserModel user = UserModel(
+        name: name,
+        username: username,
+        email: email,
+        role: role,
+        image: image,
+        phoneNumber: phoneNumber,
+        gender: gender);
     await firebaseFirestore
         .collection('users')
         .doc(auth.currentUser!.uid)
-        .set(user!.toJson());
+        .set(user.toJson());
   }
 
-  Stream<List<UserModel>> getUser()  {
-   return firebaseFirestore
+  Stream<List<UserModel>> getUser() {
+    return firebaseFirestore
         .collection('users')
         .snapshots()
         .map((querySnapshot) {
@@ -31,6 +46,7 @@ class FirestoreClass {
           .toList();
     });
   }
+
   Future addCategory({
     required String categoryName,
   }) async {
@@ -51,8 +67,6 @@ class FirestoreClass {
     }
     return message;
   }
-
-
 
   Stream<List<CategoryModel>> getCategories() {
     return firebaseFirestore
@@ -203,7 +217,6 @@ class FirestoreClass {
     try {
       await firebaseFirestore
           .collection('suppliers')
-         
           .add(supplierModel.toJson());
       message = 'Added';
     } catch (e) {

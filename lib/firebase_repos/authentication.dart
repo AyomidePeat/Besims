@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:bsims/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +16,7 @@ class AuthenticationMethod {
       required String gender,
       required String username,
       required String role,
-      required File pickedImage,
+      required Uint8List pickedImage,
       required String phoneNumber,
       required String name}) async {
     String message = 'Something went wrong';
@@ -25,21 +26,21 @@ class AuthenticationMethod {
       try {
         final userCredential = await auth.createUserWithEmailAndPassword(
             email: email, password: password);
- final fileName = path.basename(pickedImage.path);
-      final firebaseStorageRef =
-          firebase_storage.FirebaseStorage.instance.ref().child(fileName);
-      await firebaseStorageRef.putFile(pickedImage);
+        final fileName = 'name';
+        final firebaseStorageRef =
+            firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+ await firebaseStorageRef.putData(pickedImage);
 
-      final image = await firebaseStorageRef.getDownloadURL();
-        UserModel user = UserModel(
+        final image = await firebaseStorageRef.getDownloadURL();
+       
+        await firestoreClass.addUser(
             name: name,
             username: username,
             email: email,
             role: role,
             image: image,
-            gender: gender,
-            phoneNumber: phoneNumber);
-        await firestoreClass.addUser(user: user);
+            phoneNumber: phoneNumber,
+            gender: gender);
         message = "Success";
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {

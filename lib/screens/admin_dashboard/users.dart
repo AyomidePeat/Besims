@@ -1,12 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
-
+import 'dart:html' as html;
+import 'dart:io' show File;
+import 'package:http/http.dart' as http;
 import 'package:bsims/const/textstyle.dart';
+import 'package:bsims/firebase_repos/authentication.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../const/colors.dart';
 
@@ -186,10 +192,15 @@ class _UsersState extends ConsumerState<Users> {
     final usernameController = TextEditingController();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
+    final phoneNumberController = TextEditingController();
     final roleOptions = ['Admin', 'Cashier'];
+    final genderOptions = ['Male', 'Female'];
+    String? gender;
     String? role;
-    Uint8List? _imageBytes;
-
+    AuthenticationMethod auth = AuthenticationMethod();
+    Uint8List? imageBytes;
+    File? _imageFile;
+    String fileName = '';
     Future<void> _pickImage() async {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.image,
@@ -197,222 +208,366 @@ class _UsersState extends ConsumerState<Users> {
 
       if (result != null && result.files.isNotEmpty) {
         setState(() {
-          _imageBytes = result.files[0].bytes!;
+          imageBytes = result.files.first.bytes!;
+          fileName = result.files.first.name;
         });
+        print('Selected file name: $fileName');
+
+        print('Image uploaded');
       }
-      print('image uploaded');
     }
 
     showDialog(
         context: context,
         builder: (context) {
-          return SimpleDialog(children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Create User Account', style: headline(black, 20)),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.cancel_outlined))
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () async{
-                   await   _pickImage();
- 
-    if (_imageBytes != null) {
-      setState(() {
-         print("Image Bytes Length: ${_imageBytes!.length}");
-      });
-     
-    }                    },
-                    child: Center(
-                      child: CircleAvatar(
-                        radius: 80,
-                        // backgroundColor: const Color.fromRGBO(224, 224, 224, 1),
-                        backgroundImage: _imageBytes != null
-                            ? MemoryImage(_imageBytes!)
-                            : null,
+          return StatefulBuilder(builder: (context, setState) {
+            return SimpleDialog(children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Create User Account', style: headline(black, 20)),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.cancel_outlined))
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await _pickImage();
+
+                        // Update the UI when the image is picked
+                        if (imageBytes != null) {
+                          print('Setting state to update UI');
+                          setState(() {
+                            // No need to create a temporary file, directly use imageBytes
+                          });
+                        }
+                      },
+                      child: Center(
+                        child: KeyedImage(
+                          filename: fileName,
+                          key: ValueKey<int>(imageBytes?.length ?? 0),
+                          imageBytes: imageBytes,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFieldWidget(
-                      controller: fullNameController, label: 'Full Name'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFieldWidget(
-                      controller: usernameController, label: 'Username'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFieldWidget(controller: emailController, label: 'E-mail'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFieldWidget(
-                      controller: passwordController, label: 'Password'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 40,
-                    width: 700,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                    const SizedBox(
+                      height: 10,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Center(
-                        child: DropdownButtonFormField(
-                          hint: const Text('Choose User Role'),
-                          value: role,
-                          onChanged: (value) {
-                            setState(() {
-                              role = value as String;
-                            });
-                          },
-                          items: roleOptions
-                              .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e.toString()),
-                                  ))
-                              .toList(),
-                          // ignore: prefer_const_constructors
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
+                    TextFieldWidget(
+                        controller: fullNameController, label: 'Full Name'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: emailController, label: 'E-mail'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: phoneNumberController,
+                        label: 'Phone Number'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: usernameController, label: 'Username'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        isObscure: true,
+                        controller: passwordController,
+                        label: 'Password'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          height: 40,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Center(
+                              child: DropdownButtonFormField(
+                                hint: const Text('Choose User Role'),
+                                value: role,
+                                onChanged: (value) {
+                                  setState(() {
+                                    role = value as String;
+                                  });
+                                },
+                                items: roleOptions
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.toString()),
+                                        ))
+                                    .toList(),
+                                // ignore: prefer_const_constructors
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        Container(
+                          height: 40,
+                          width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Center(
+                              child: DropdownButtonFormField(
+                                hint: const Text('Gender'),
+                                value: gender,
+                                onChanged: (value) {
+                                  setState(() {
+                                    gender = value as String;
+                                  });
+                                },
+                                items: genderOptions
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.toString()),
+                                        ))
+                                    .toList(),
+                                // ignore: prefer_const_constructors
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 103,
-                          height: 40,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: green),
-                          child: Center(
-                              child: Text(
-                            'Create',
-                            style: headline(white, 15),
-                          )),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey)),
+                            child: Center(
+                                child: Text(
+                              'Discard',
+                              style: bodyText(Colors.black, 10),
+                            )),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 30),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: 103,
-                          height: 40,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: red),
-                          child: Center(
-                              child: Text(
-                            'Cancel',
-                            style: headline(white, 15),
-                          )),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: () async {
+                            final uploadSuccess = await auth.signUp(
+                                email: emailController.text,
+                                password: passwordController.text,
+                                gender: gender!,
+                                username: usernameController.text,
+                                role: role!,
+                                pickedImage: imageBytes!,
+                                phoneNumber: phoneNumberController.text,
+                                name: fullNameController.text);
+                            if (uploadSuccess == 'Success') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: purple,
+                                      content: Text(
+                                          uploadSuccess,
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 16))));
+                              Navigator.pop(context);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: purple,
+                                      content: Text(uploadSuccess,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 16))));
+                            }
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: purple),
+                            child: Center(
+                                child: Text(
+                              'Add User',
+                              style: bodyText(white, 10),
+                            )),
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ]);
+            ]);
+          });
         });
   }
 
   Widget userList(screenWidth,
       {image, name, username, email, role, phoneNumber}) {
+    Uint8List? _downloadedUint8List;
+
+    Future<Uint8List?> fetchImageFromUrl(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final List<int> byteList = utf8.encode(response.body);
+        return Uint8List.fromList(byteList);
+      } else {
+        // Handle error, e.g., show an error message
+        print('Failed to fetch image. Status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (error) {
+      // Handle other errors
+      print('Error fetching image: $error');
+      return null;
+    }
+  }
+
     final widgetSize = (screenWidth - 293) / 10;
     final firestore = FirestoreClass();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SizedBox(
-            width: widgetSize,
-            child: CircleAvatar(child: image),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              name,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              username,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              email,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              phoneNumber,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              role,
-              style: bodyText(role == 'Admin' ? purple! : blue, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Row(
-              children: [
-                InkWell(
-                    onTap: () {},
-                    child: Icon(Icons.edit, size: 15, color: purple)),
-                const SizedBox(
-                  width: 8,
+     fetchImageFromUrl(image);
+    print('Image is $image');
+    return FutureBuilder<Uint8List?>(
+      future: fetchImageFromUrl(image),
+      builder: (context, snapshot) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              SizedBox(
+                width: widgetSize,
+                child: Container(
+                    child: Image.memory(
+                  _downloadedUint8List!,
+                  height: 20,
+                )),
+              ),
+              SizedBox(
+                width: widgetSize,
+                child: Text(
+                  name,
+                  style: bodyText(black, 13),
                 ),
-                InkWell(
-                    onTap: () async {
-                      await firestore.deleteCategory(name);
-                    },
-                    child: Icon(Icons.delete_outlined, size: 15, color: red)),
-              ],
-            ),
+              ),
+              SizedBox(
+                width: widgetSize,
+                child: Text(
+                  username,
+                  style: bodyText(black, 13),
+                ),
+              ),
+              SizedBox(
+                width: widgetSize,
+                child: Text(
+                  email,
+                  style: bodyText(black, 13),
+                ),
+              ),
+              SizedBox(
+                width: widgetSize,
+                child: Text(
+                  phoneNumber,
+                  style: bodyText(black, 13),
+                ),
+              ),
+              SizedBox(
+                width: widgetSize,
+                child: Text(
+                  role,
+                  style: bodyText(role == 'Admin' ? purple! : blue, 13),
+                ),
+              ),
+              SizedBox(
+                width: widgetSize,
+                child: Row(
+                  children: [
+                    InkWell(
+                        onTap: () {},
+                        child: Icon(Icons.edit, size: 15, color: purple)),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    InkWell(
+                        onTap: () async {
+                          await firestore.deleteCategory(name);
+                        },
+                        child: Icon(Icons.delete_outlined, size: 15, color: red)),
+                  ],
+                ),
+              ),
+            ]),
+            const Divider()
+          ],
+        );
+      }
+    );
+  }
+}
+
+class KeyedImage extends StatelessWidget {
+  final Uint8List? imageBytes;
+  final filename;
+  const KeyedImage({Key? key, required this.imageBytes, required this.filename})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 160,
+          height: 160,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color.fromRGBO(224, 224, 224, 1),
           ),
-        ]),
-        const Divider()
+          child: imageBytes != null
+              ? ClipOval(
+                  child: Image.memory(
+                    imageBytes!,
+                    fit: BoxFit.cover,
+                    width: 160,
+                    height: 160,
+                  ),
+                )
+              : const Icon(Icons.add_a_photo, size: 40),
+        ),
+        Text(filename)
       ],
     );
   }
