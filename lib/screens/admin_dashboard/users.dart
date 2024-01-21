@@ -81,9 +81,7 @@ class _UsersState extends ConsumerState<Users> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),
           child:
-              Column(
-               crossAxisAlignment: CrossAxisAlignment.stretch,
-                 children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -197,9 +195,8 @@ class _UsersState extends ConsumerState<Users> {
     String? role;
     AuthenticationMethod auth = AuthenticationMethod();
     Uint8List? imageBytes;
-    File? _imageFile;
     String fileName = '';
-    Future<void> _pickImage() async {
+    Future<void> pickImage() async {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.image,
       );
@@ -209,9 +206,7 @@ class _UsersState extends ConsumerState<Users> {
           imageBytes = result.files.first.bytes!;
           fileName = result.files.first.name;
         });
-        print('Selected file name: $fileName');
-
-        print('Image uploaded');
+       
       }
     }
 
@@ -239,11 +234,10 @@ class _UsersState extends ConsumerState<Users> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        await _pickImage();
+                        await pickImage();
 
                         // Update the UI when the image is picked
                         if (imageBytes != null) {
-                          print('Setting state to update UI');
                           setState(() {
                             // No need to create a temporary file, directly use imageBytes
                           });
@@ -378,7 +372,7 @@ class _UsersState extends ConsumerState<Users> {
                             )),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         InkWell(
                           onTap: () async {
                             final uploadSuccess = await auth.signUp(
@@ -406,7 +400,7 @@ class _UsersState extends ConsumerState<Users> {
                                       backgroundColor: purple,
                                       content: Text(uploadSuccess,
                                           textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: 16))));
+                                          style: const TextStyle(fontSize: 16))));
                             }
                           },
                           child: Container(
@@ -435,7 +429,7 @@ class _UsersState extends ConsumerState<Users> {
 
   Widget userList(screenWidth,
       {image, name, username, email, role, phoneNumber}) {
-    Uint8List? _downloadedUint8List;
+    Uint8List? downloadedUint8List;
 
     Future<Uint8List?> fetchImageFromUrl(String url) async {
       try {
@@ -444,11 +438,9 @@ class _UsersState extends ConsumerState<Users> {
         if (response.statusCode == 200) {
           return response.bodyBytes;
         } else {
-          print('Failed to fetch image. Status code: ${response.statusCode}');
           return null;
         }
       } catch (error) {
-        print('Error fetching image: $error');
         return null;
       }
     }
@@ -460,15 +452,11 @@ class _UsersState extends ConsumerState<Users> {
         future: fetchImageFromUrl(image),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const SizedBox();
           } else if (snapshot.hasError || snapshot.data == null) {
-            print('Failed to load image');
-            return Text('Failed to load image');
+            return const Text('Failed to load image');
           } else {
-            _downloadedUint8List = snapshot.data;
-
-            print(
-                'Downloaded Uint8List length: ${_downloadedUint8List!.length}');
+            downloadedUint8List = snapshot.data;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -478,13 +466,13 @@ class _UsersState extends ConsumerState<Users> {
                     children: [
                       SizedBox(
                         width: widgetSize,
-                        child: Container(height: 50,
+                        child: Container(
+                          height: 50,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                             //color: purple,
-                              image: DecorationImage(image: MemoryImage(_downloadedUint8List!),fit: BoxFit.contain)
-                              ),
-                              //child: Image.memory(_downloadedUint8List!),
+                              image: DecorationImage(
+                                  image: MemoryImage(downloadedUint8List!),
+                                  fit: BoxFit.contain)),
                         ),
                       ),
                       SizedBox(
@@ -553,7 +541,7 @@ class _UsersState extends ConsumerState<Users> {
 
 class KeyedImage extends StatelessWidget {
   final Uint8List? imageBytes;
-  final filename;
+  final String filename;
   const KeyedImage({Key? key, required this.imageBytes, required this.filename})
       : super(key: key);
 
@@ -564,9 +552,9 @@ class KeyedImage extends StatelessWidget {
         Container(
           width: 160,
           height: 160,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: const Color.fromRGBO(224, 224, 224, 1),
+            color: Color.fromRGBO(224, 224, 224, 1),
           ),
           child: imageBytes != null
               ? ClipOval(
