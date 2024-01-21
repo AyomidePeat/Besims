@@ -30,7 +30,7 @@ class _UsersState extends ConsumerState<Users> {
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
-    final widgetSize = (widget.screenWidth - 293) / 10;
+    final widgetSize = (widget.screenWidth - 293) / 15;
     final size = MediaQuery.of(context).size;
 
     return Column(
@@ -81,16 +81,14 @@ class _UsersState extends ConsumerState<Users> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              Column(
+               crossAxisAlignment: CrossAxisAlignment.stretch,
+                 children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
                   width: widgetSize,
-                  child: Text(
-                    '',
-                    style: headline(black, 10),
-                  ),
                 ),
                 SizedBox(
                   width: widgetSize,
@@ -440,102 +438,116 @@ class _UsersState extends ConsumerState<Users> {
     Uint8List? _downloadedUint8List;
 
     Future<Uint8List?> fetchImageFromUrl(String url) async {
-    try {
-      final response = await http.get(Uri.parse(url));
+      try {
+        final response = await http.get(Uri.parse(url));
 
-      if (response.statusCode == 200) {
-        final List<int> byteList = utf8.encode(response.body);
-        return Uint8List.fromList(byteList);
-      } else {
-        // Handle error, e.g., show an error message
-        print('Failed to fetch image. Status code: ${response.statusCode}');
+        if (response.statusCode == 200) {
+          return response.bodyBytes;
+        } else {
+          print('Failed to fetch image. Status code: ${response.statusCode}');
+          return null;
+        }
+      } catch (error) {
+        print('Error fetching image: $error');
         return null;
       }
-    } catch (error) {
-      // Handle other errors
-      print('Error fetching image: $error');
-      return null;
     }
-  }
 
-    final widgetSize = (screenWidth - 293) / 10;
+    final widgetSize = (screenWidth - 293) / 12;
     final firestore = FirestoreClass();
-     fetchImageFromUrl(image);
-    print('Image is $image');
+
     return FutureBuilder<Uint8List?>(
-      future: fetchImageFromUrl(image),
-      builder: (context, snapshot) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              SizedBox(
-                width: widgetSize,
-                child: Container(
-                    child: Image.memory(
-                  _downloadedUint8List!,
-                  height: 20,
-                )),
-              ),
-              SizedBox(
-                width: widgetSize,
-                child: Text(
-                  name,
-                  style: bodyText(black, 13),
-                ),
-              ),
-              SizedBox(
-                width: widgetSize,
-                child: Text(
-                  username,
-                  style: bodyText(black, 13),
-                ),
-              ),
-              SizedBox(
-                width: widgetSize,
-                child: Text(
-                  email,
-                  style: bodyText(black, 13),
-                ),
-              ),
-              SizedBox(
-                width: widgetSize,
-                child: Text(
-                  phoneNumber,
-                  style: bodyText(black, 13),
-                ),
-              ),
-              SizedBox(
-                width: widgetSize,
-                child: Text(
-                  role,
-                  style: bodyText(role == 'Admin' ? purple! : blue, 13),
-                ),
-              ),
-              SizedBox(
-                width: widgetSize,
-                child: Row(
-                  children: [
-                    InkWell(
-                        onTap: () {},
-                        child: Icon(Icons.edit, size: 15, color: purple)),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    InkWell(
-                        onTap: () async {
-                          await firestore.deleteCategory(name);
-                        },
-                        child: Icon(Icons.delete_outlined, size: 15, color: red)),
-                  ],
-                ),
-              ),
-            ]),
-            const Divider()
-          ],
-        );
-      }
-    );
+        future: fetchImageFromUrl(image),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError || snapshot.data == null) {
+            print('Failed to load image');
+            return Text('Failed to load image');
+          } else {
+            _downloadedUint8List = snapshot.data;
+
+            print(
+                'Downloaded Uint8List length: ${_downloadedUint8List!.length}');
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: widgetSize,
+                        child: Container(height: 50,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                             //color: purple,
+                              image: DecorationImage(image: MemoryImage(_downloadedUint8List!),fit: BoxFit.contain)
+                              ),
+                              //child: Image.memory(_downloadedUint8List!),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          name,
+                          style: bodyText(black, 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          username,
+                          style: bodyText(black, 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          email,
+                          style: bodyText(black, 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          phoneNumber,
+                          style: bodyText(black, 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Text(
+                          role,
+                          style: bodyText(role == 'Admin' ? purple! : blue, 13),
+                        ),
+                      ),
+                      SizedBox(
+                        width: widgetSize,
+                        child: Row(
+                          children: [
+                            InkWell(
+                                onTap: () {},
+                                child:
+                                    Icon(Icons.edit, size: 15, color: purple)),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            InkWell(
+                                onTap: () async {
+                                  await firestore.deleteCategory(name);
+                                },
+                                child: Icon(Icons.delete_outlined,
+                                    size: 15, color: red)),
+                          ],
+                        ),
+                      ),
+                    ]),
+                const Divider()
+              ],
+            );
+          }
+        });
   }
 }
 

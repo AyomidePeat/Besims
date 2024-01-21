@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 Future pickExcelFile() async {
   try {
+    print('TRYING');
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx', 'xls'],

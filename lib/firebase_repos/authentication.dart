@@ -26,7 +26,7 @@ class AuthenticationMethod {
       try {
         final userCredential = await auth.createUserWithEmailAndPassword(
             email: email, password: password);
-        final fileName = 'name';
+        final fileName = name;
         final firebaseStorageRef =
             firebase_storage.FirebaseStorage.instance.ref().child(fileName);
  await firebaseStorageRef.putData(pickedImage);
