@@ -492,7 +492,7 @@ class _SalesState extends ConsumerState<Sales> {
                               const InputDecoration(labelText: 'Product Name'),
                         ),
                       ),
-                      //const SizedBox(height: 16.0),
+                      const SizedBox(height: 5.0),
                       ElevatedButton(
                         onPressed: () =>
                             _predictPrice(_productNameController.text),

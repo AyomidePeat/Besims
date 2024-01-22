@@ -30,7 +30,7 @@ class _UsersState extends ConsumerState<Users> {
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
-    final widgetSize = (widget.screenWidth - 293) / 15;
+    final widgetSize = (widget.screenWidth - 293) / 10;
     final size = MediaQuery.of(context).size;
 
     return Column(
@@ -106,6 +106,13 @@ class _UsersState extends ConsumerState<Users> {
                   width: widgetSize,
                   child: Text(
                     'EMAIL',
+                    style: headline(black, 10),
+                  ),
+                ),
+                SizedBox(
+                  width: widgetSize,
+                  child: Text(
+                    'PHONE NO.',
                     style: headline(black, 10),
                   ),
                 ),
@@ -445,7 +452,7 @@ class _UsersState extends ConsumerState<Users> {
       }
     }
 
-    final widgetSize = (screenWidth - 293) / 12;
+    final widgetSize = (screenWidth - 293) / 10;
     final firestore = FirestoreClass();
 
     return FutureBuilder<Uint8List?>(
@@ -459,7 +466,7 @@ class _UsersState extends ConsumerState<Users> {
             downloadedUint8List = snapshot.data;
 
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -507,7 +514,7 @@ class _UsersState extends ConsumerState<Users> {
                         width: widgetSize,
                         child: Text(
                           role,
-                          style: bodyText(role == 'Admin' ? purple! : blue, 13),
+                          style: bodyText(role == 'Admin' ? Colors.green : blue, 13),
                         ),
                       ),
                       SizedBox(
