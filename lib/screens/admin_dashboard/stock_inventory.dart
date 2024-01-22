@@ -54,7 +54,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                           Boxes(
                             icon: Icons.category,
                             circleColor: Colors.purple[50]!,
-                            iconColor: const Color.fromARGB(255, 106, 71, 188),
+                            iconColor: const Color.fromARGB(255, 146, 71, 188),
                             title: 'Categories',
                             total: '14',
                           ),
@@ -111,7 +111,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                         borderRadius: BorderRadius.circular(5),
                                         color: purple),
                                     child: Text('Add Product',
-                                        style: bodyText(white, 10)),
+                                        style: bodyText(white, 14)),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -133,7 +133,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                         ),
                                         const SizedBox(width: 5),
                                         Text('Import',
-                                            style: bodyText(black, 10)),
+                                            style: bodyText(black, 14)),
                                       ],
                                     ),
                                   ),
@@ -150,7 +150,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                         border: Border.all(
                                             color: Colors.grey[400]!)),
                                     child: Text('Download all',
-                                        style: bodyText(black, 10)),
+                                        style: bodyText(black, 14)),
                                   ),
                                 ),
                               ],
@@ -169,63 +169,63 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   width: widgetSize,
                                   child: Text(
                                     'S/N',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'PRODUCTS',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'CATEGORY',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'EXPIRY DATE',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'PRICE',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'SUPPLIER',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'QUANTITY',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'STATUS',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'ACTIONS',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                               ],
@@ -285,7 +285,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                         Boxes(
                           icon: Icons.category,
                           circleColor: Colors.purple[50]!,
-                          iconColor: const Color.fromARGB(255, 106, 71, 188),
+                          iconColor: const Color.fromARGB(255, 146, 71, 188),
                           title: 'Categories',
                           total: '14',
                         ),
@@ -337,12 +337,12 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   child: Container(
                                     height: 35,
                                     width: 90,
-                                    padding: const EdgeInsets.all(10),
+                                    padding: const EdgeInsets.symmetric(horizontal:10, vertical: 7),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         color: purple),
                                     child: Text('Add Product',
-                                        style: bodyText(white, 10)),
+                                        style: bodyText(white, 14)),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -351,7 +351,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   child: Container(
                                     height: 35,
                                     width: 90,
-                                    padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
@@ -364,7 +364,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                         ),
                                         const SizedBox(width: 5),
                                         Text('Import',
-                                            style: bodyText(black, 10)),
+                                            style: bodyText(black, 12)),
                                       ],
                                     ),
                                   ),
@@ -375,13 +375,13 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   child: Container(
                                     height: 35,
                                     width: 90,
-                                    padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
                                             color: Colors.grey[400]!)),
                                     child: Text('Download all',
-                                        style: bodyText(black, 10)),
+                                        style: bodyText(black, 13)),
                                   ),
                                 ),
                               ],
@@ -400,63 +400,63 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   width: widgetSize,
                                   child: Text(
                                     'S/N',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'PRODUCTS',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'CATEGORY',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'EXPIRY DATE',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'PRICE',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'SUPPLIER',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'QUANTITY',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'STATUS',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                                 SizedBox(
                                   width: widgetSize,
                                   child: Text(
                                     'ACTIONS',
-                                    style: headline(black, 10),
+                                    style: headline(black, 14),
                                   ),
                                 ),
                               ],
@@ -466,7 +466,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Center(
                                   child: Text('Your stock inventory is empty',
-                                      style: bodyText(black, 15))),
+                                      style: bodyText(black, 16))),
                             ),
                           ],
                         )
@@ -488,7 +488,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
     String? supplier;
 
     String? category;
-    
+
     final statusOptions = ['Available', 'Unavailable'];
     String? status;
     showDialog(
@@ -549,7 +549,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                   const SizedBox(
                     height: 20,
                   ),
-                   StreamBuilder(
+                  StreamBuilder(
                     stream: firestore.getCategories(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -560,12 +560,13 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                           final categories = snapshot.data;
                           if (categories!.isEmpty) {
                             return const Center(
-                              child: Text('You have not added any category yet!',
+                              child: Text(
+                                  'You have not added any category yet!',
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black)),
                             );
                           }
-                   
+
                           return ListTile(
                             title: DropdownButtonFormField<String>(
                               hint: const Text('Category'),
@@ -591,7 +592,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                       return const CircularProgressIndicator(
                           color: Colors.purple);
                     },
-                                     ),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -692,7 +693,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                           child: Center(
                               child: Text(
                             'Discard',
-                            style: bodyText(black, 10),
+                            style: bodyText(black, 14),
                           )),
                         ),
                       ),
@@ -745,7 +746,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   ? const CircularProgressIndicator()
                                   : Text(
                                       'Add Product',
-                                      style: bodyText(white, 10),
+                                      style: bodyText(white, 14),
                                     )),
                         ),
                       ),
@@ -779,49 +780,49 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
             width: widgetSize,
             child: Text(
               sn.toString(),
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               productName,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               category,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               expiryDate,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               price,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               supplier,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               '$quantity packets',
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
@@ -886,7 +887,7 @@ class Boxes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      height: 100,
+      height: 104,
       width: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -906,7 +907,7 @@ class Boxes extends StatelessWidget {
         children: [
           Text(
             title,
-            style: bodyText(black, 13),
+            style: bodyText(black, 14),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -920,12 +921,10 @@ class Boxes extends StatelessWidget {
           ),
           Text(
             'Last 7 days',
-            style: headline(iconColor, 13),
+            style: headline(iconColor, 14),
           )
         ],
       ),
     );
   }
-
-
 }

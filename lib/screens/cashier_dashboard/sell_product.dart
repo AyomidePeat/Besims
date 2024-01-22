@@ -26,7 +26,12 @@ class _SellProductState extends State<SellProduct> {
     'Baby Products'
   ];
 
-  final paymentMethods = ['Cash ', 'Transfer', 'POS', 'Cheque', ];
+  final paymentMethods = [
+    'Cash ',
+    'Transfer',
+    'POS',
+    'Cheque',
+  ];
   final customerNameController = TextEditingController();
   void addToCart() {}
   @override
@@ -47,7 +52,7 @@ class _SellProductState extends State<SellProduct> {
             child: TextFieldWidget(
                 controller: customerNameController, label: 'Customer Name:'),
           ),
-         Container(
+          Container(
             height: 80,
             width: 250,
             decoration: BoxDecoration(
@@ -72,7 +77,7 @@ class _SellProductState extends State<SellProduct> {
                       .toList(),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
-                   ),
+                  ),
                 ),
               ),
             ),
@@ -117,7 +122,7 @@ class _SellProductState extends State<SellProduct> {
                   children: [
                     Text(
                       'PRODUCT NAME',
-                      style: bodyText(black, 10),
+                      style: bodyText(black, 14),
                     ),
                     const SizedBox(
                       height: 10,
@@ -145,7 +150,7 @@ class _SellProductState extends State<SellProduct> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text('STOCK QTY', style: bodyText(black, 10)),
+                    Text('STOCK QTY', style: bodyText(black, 14)),
                     const SizedBox(
                       height: 40,
                     ),
@@ -155,7 +160,7 @@ class _SellProductState extends State<SellProduct> {
                           color: green, borderRadius: BorderRadius.circular(5)),
                       child: Text(
                         '200 in Stock',
-                        style: bodyText(white, 10),
+                        style: bodyText(white, 14),
                       ),
                     ),
                     const SizedBox(
@@ -167,7 +172,7 @@ class _SellProductState extends State<SellProduct> {
                           color: green, borderRadius: BorderRadius.circular(5)),
                       child: Text(
                         '200 in Stock',
-                        style: bodyText(white, 10),
+                        style: bodyText(white, 14),
                       ),
                     ),
                   ],
@@ -179,7 +184,7 @@ class _SellProductState extends State<SellProduct> {
                   children: [
                     Text(
                       'UNIT PRICE',
-                      style: bodyText(black, 10),
+                      style: bodyText(black, 14),
                     ),
                     const SizedBox(
                       height: 10,
@@ -206,7 +211,7 @@ class _SellProductState extends State<SellProduct> {
                   children: [
                     Text(
                       'QTY',
-                      style: bodyText(black, 10),
+                      style: bodyText(black, 14),
                     ),
                     const SizedBox(
                       height: 10,
@@ -233,7 +238,7 @@ class _SellProductState extends State<SellProduct> {
                   children: [
                     Text(
                       'SUBTOTAL',
-                      style: bodyText(black, 10),
+                      style: bodyText(black, 14),
                     ),
                     const SizedBox(
                       height: 10,
@@ -287,40 +292,40 @@ class _SellProductState extends State<SellProduct> {
         SizedBox(
           height: 30,
         ),
-         Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Payment Method'),
             Container(
-            height: 80,
-            width: 250,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Center(
-                child: DropdownButtonFormField(
-                  hint: const Text('Select'),
-                  value: paymentMethod,
-                  onChanged: (value) {
-                    setState(() {
-                      paymentMethod = value as String;
-                    });
-                  },
-                  items: ['Cash ', 'Transfer', 'POS', 'Cheque' ]
-                      .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e.toString()),
-                          ))
-                      .toList(),
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                   ),
+              height: 80,
+              width: 250,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Center(
+                  child: DropdownButtonFormField(
+                    hint: const Text('Select'),
+                    value: paymentMethod,
+                    onChanged: (value) {
+                      setState(() {
+                        paymentMethod = value as String;
+                      });
+                    },
+                    items: ['Cash ', 'Transfer', 'POS', 'Cheque']
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.toString()),
+                            ))
+                        .toList(),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
           ],
         ),
       ],

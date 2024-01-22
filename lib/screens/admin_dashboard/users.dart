@@ -50,7 +50,7 @@ class _UsersState extends ConsumerState<Users> {
                 child: Container(
                   width: 100,
                   height: 35,
-                  padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5), color: purple),
                   child: Row(
@@ -63,7 +63,7 @@ class _UsersState extends ConsumerState<Users> {
                       const SizedBox(width: 5),
                       Text(
                         'Add User',
-                        style: bodyText(white, 10),
+                        style: bodyText(white, 12),
                       )
                     ],
                   ),
@@ -92,42 +92,42 @@ class _UsersState extends ConsumerState<Users> {
                   width: widgetSize,
                   child: Text(
                     'NAME',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'USERNAME',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'EMAIL',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'PHONE NO.',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ROLE',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ACTIONS',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
               ],
@@ -178,7 +178,7 @@ class _UsersState extends ConsumerState<Users> {
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Center(
                         child: Text('You have not added any user yet!',
-                            style: bodyText(black, 15))),
+                            style: bodyText(black, 16))),
                   );
                 }),
             const SizedBox(
@@ -213,7 +213,6 @@ class _UsersState extends ConsumerState<Users> {
           imageBytes = result.files.first.bytes!;
           fileName = result.files.first.name;
         });
-       
       }
     }
 
@@ -375,7 +374,7 @@ class _UsersState extends ConsumerState<Users> {
                             child: Center(
                                 child: Text(
                               'Discard',
-                              style: bodyText(Colors.black, 10),
+                              style: bodyText(Colors.black, 14),
                             )),
                           ),
                         ),
@@ -405,9 +404,11 @@ class _UsersState extends ConsumerState<Users> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       backgroundColor: purple,
-                                      content: Text(uploadSuccess,
+                                      content: Text(
+                                          uploadSuccess,
                                           textAlign: TextAlign.center,
-                                          style: const TextStyle(fontSize: 16))));
+                                          style:
+                                              const TextStyle(fontSize: 16))));
                             }
                           },
                           child: Container(
@@ -420,7 +421,7 @@ class _UsersState extends ConsumerState<Users> {
                             child: Center(
                                 child: Text(
                               'Add User',
-                              style: bodyText(white, 10),
+                              style: bodyText(white, 14),
                             )),
                           ),
                         ),
@@ -486,35 +487,36 @@ class _UsersState extends ConsumerState<Users> {
                         width: widgetSize,
                         child: Text(
                           name,
-                          style: bodyText(black, 13),
+                          style: bodyText(black, 14),
                         ),
                       ),
                       SizedBox(
                         width: widgetSize,
                         child: Text(
                           username,
-                          style: bodyText(black, 13),
+                          style: bodyText(black, 14),
                         ),
                       ),
                       SizedBox(
                         width: widgetSize,
                         child: Text(
                           email,
-                          style: bodyText(black, 13),
+                          style: bodyText(black, 14),
                         ),
                       ),
                       SizedBox(
                         width: widgetSize,
                         child: Text(
                           phoneNumber,
-                          style: bodyText(black, 13),
+                          style: bodyText(black, 14),
                         ),
                       ),
                       SizedBox(
                         width: widgetSize,
                         child: Text(
                           role,
-                          style: bodyText(role == 'Admin' ? Colors.green : blue, 13),
+                          style: bodyText(
+                              role == 'Admin' ? Colors.green : blue, 14),
                         ),
                       ),
                       SizedBox(

@@ -38,12 +38,12 @@ class _SupplierState extends ConsumerState<Supplier> {
                     onTap: addSupplier,
                     child: Container(
                       height: 35,
-                      width: 90,
-                      padding: const EdgeInsets.all(10),
+                      width: 100,
+                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: purple),
-                      child: Text('Add Supplier', style: bodyText(white, 10)),
+                      child: Text('Add Supplier', style: bodyText(white, 12)),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -52,7 +52,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                     child: Container(
                       height: 35,
                       width: 90,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.grey[400]!)),
@@ -63,7 +63,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                             size: 15,
                           ),
                           const SizedBox(width: 5),
-                          Text('Import', style: bodyText(black, 10)),
+                          Text('Import', style: bodyText(black, 12)),
                         ],
                       ),
                     ),
@@ -74,11 +74,11 @@ class _SupplierState extends ConsumerState<Supplier> {
                     child: Container(
                       height: 35,
                       width: 90,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.grey[400]!)),
-                      child: Text('Download all', style: bodyText(black, 10)),
+                      child: Text('Download all', style: bodyText(black, 12)),
                     ),
                   ),
                 ],
@@ -105,49 +105,49 @@ class _SupplierState extends ConsumerState<Supplier> {
                   width: widgetSize,
                   child: Text(
                     'S/N',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'COMPANY',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'REG DATE',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'E-MAIL',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'PHONE',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ADDRESS',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ACTIONS',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
               ],
@@ -195,7 +195,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Center(
                         child: Text('You have not added supplier yet!',
-                            style: bodyText(black, 15))),
+                            style: bodyText(black, 16))),
                   );
                 }),
             const SizedBox(
@@ -278,7 +278,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                             child: Center(
                                 child: Text(
                               'Discard',
-                              style: bodyText(Colors.black, 10),
+                              style: bodyText(Colors.black, 14),
                             )),
                           ),
                         ),
@@ -321,7 +321,7 @@ class _SupplierState extends ConsumerState<Supplier> {
                             child: Center(
                                 child: Text(
                               'Add Supplier',
-                              style: bodyText(white, 10),
+                              style: bodyText(white, 14),
                             )),
                           ),
                         ),
@@ -363,42 +363,42 @@ class _SupplierState extends ConsumerState<Supplier> {
             width: widgetSize,
             child: Text(
               sn.toString(),
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               company,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               regDate,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               email,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               phone,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               address,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(

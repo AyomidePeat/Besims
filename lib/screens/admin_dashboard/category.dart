@@ -19,8 +19,7 @@ class ProductCategoryList extends ConsumerStatefulWidget {
 class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
   @override
   Widget build(BuildContext context) {
-    const double space = 30;
-   final  cloudStoreRef = ref.watch(cloudStoreProvider);
+    final cloudStoreRef = ref.watch(cloudStoreProvider);
     final widgetSize = (widget.screenWidth - 293) / 10;
     final size = MediaQuery.of(context).size;
     return Column(
@@ -42,50 +41,17 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                     child: Container(
                       height: 35,
                       width: 100,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: purple),
                       child: Center(
                           child:
-                              Text('Add Category', style: bodyText(white, 10))),
+                              Text('Add Category', style: bodyText(white, 12))),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  // InkWell(
-                  //   onTap: excelPicker,
-                  //   child: Container(
-                  //     height: 35,
-                  //     width: 90,
-                  //     padding: const EdgeInsets.all(10),
-                  //     decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.circular(5),
-                  //         border: Border.all(color: Colors.grey[400]!)),
-                  //     child: Row(
-                  //       children: [
-                  //         const Icon(
-                  //           Icons.downloading_rounded,
-                  //           size: 15,
-                  //         ),
-                  //         const SizedBox(width: 5),
-                  //         Text('Import', style: bodyText(black, 10)),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(width: 8),
-                  // InkWell(
-                  //   onTap: excelDownloader,
-                  //   child: Container(
-                  //     height: 35,
-                  //     width: 90,
-                  //     padding: const EdgeInsets.all(10),
-                  //     decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.circular(5),
-                  //         border: Border.all(color: Colors.grey[400]!)),
-                  //     child: Text('Download all', style: bodyText(black, 10)),
-                  //   ),
-                  // ),
+       
                 ],
               ),
             ],
@@ -110,28 +76,28 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                   width: widgetSize,
                   child: Text(
                     'S/N',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'CATEGORY NAME',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'CREATED ON',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ACTIONS',
-                    style: headline(black, 10),
+                    style: headline(black, 14),
                   ),
                 ),
               ],
@@ -151,10 +117,9 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                         child: ListView.builder(
                             itemCount: categories.length,
                             itemBuilder: (context, index) {
-                                  final now = DateTime.now();
+                              final now = DateTime.now();
 
                               String name = categories[index].categoryName;
-                              final dateAdded = categories[index].dateCreated;
                               String date =
                                   DateFormat('dd/mm/yyyy').format(now);
 
@@ -173,7 +138,7 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Center(
                         child: Text('You have not added any category yet!',
-                            style: bodyText(black, 15))),
+                            style: bodyText(black, 16))),
                   );
                 }),
             const SizedBox(
@@ -222,13 +187,11 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                       height: space,
                     ),
                     const SizedBox(
-                      height:30,
+                      height: 30,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                       
-                       
                         InkWell(
                           onTap: () {
                             Navigator.pop(context);
@@ -238,16 +201,19 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                             height: 40,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color:  Colors.grey,),
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.black)
+                            ),
                             child: Center(
                                 child: Text(
                               'Discard',
-                              style: bodyText(white, 13),
+                              style: bodyText(black, 14
+                              ),
                             )),
                           ),
-                        ), const SizedBox(width: 8),
-                         InkWell(
+                        ),
+                        const SizedBox(width: 8),
+                        InkWell(
                           onTap: () async {
                             final uploadSuccess = await fireStore.addCategory(
                               categoryName: nameController.text,
@@ -263,13 +229,14 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                                               const TextStyle(fontSize: 16))));
                               Navigator.pop(context);
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
                                       backgroundColor: Colors.purple,
                                       content: Text(
-                                          uploadSuccess,
-                                          textAlign: TextAlign.center,
-                                          style:bodyText(black, 13),)));
+                                        uploadSuccess,
+                                        textAlign: TextAlign.center,
+                                        style: bodyText(black, 14),
+                                      )));
                             }
                           },
                           child: Container(
@@ -282,7 +249,7 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                             child: Center(
                                 child: Text(
                               'Create',
-                              style: headline(white, 15),
+                              style: bodyText(white, 14 ),
                             )),
                           ),
                         ),
@@ -307,21 +274,21 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
             width: widgetSize,
             child: Text(
               sn.toString(),
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               name,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               dateCreated,
-              style: bodyText(black, 13),
+              style: bodyText(black, 14),
             ),
           ),
           SizedBox(

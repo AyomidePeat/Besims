@@ -15,7 +15,6 @@ Future<List<ProductModel>> getSalesByDate(DateTime startDate, DateTime endDate) 
 
       return sales;
     } catch (error) {
-      print('Error fetching sales: $error');
       return [];
     }
   }

@@ -25,7 +25,8 @@ class CustomContainer extends StatelessWidget {
       margin: const EdgeInsets.only(right: 20),
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(5), color: white),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Row(
@@ -33,7 +34,7 @@ class CustomContainer extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: headline(bgColor, 12),
+                style: headline(bgColor, 14),
               ),
               const SizedBox(width: 7),
               Container(

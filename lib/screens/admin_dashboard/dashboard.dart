@@ -17,19 +17,12 @@ class Dashboard extends ConsumerWidget {
   final double screenWidth;
   final Size size;
 
-  String currentDate = DateFormat('dd MMMM, yyyy').format(DateTime.now());
+  final String currentDate = DateFormat('dd MMMM, yyyy').format(DateTime.now());
   final now = DateTime.now();
   Stream<DateTime> currentTimeStream() {
     return Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now());
   }
 
-  List<ProductSale> weeklySalesData = [
-    ProductSale('Product A', 100.0, 'best'),
-    ProductSale('Product B', 150.0, 'best'),
-    ProductSale('Product C', 80.0, 'worst'),
-    ProductSale('Product D', 200.0, 'best'),
-    // Add more products and their sales data with categories
-  ];
 
   List<ProductModel> getBestPerformers(List<ProductModel> allProducts) {
     // Count occurrences of each product
@@ -108,7 +101,7 @@ class Dashboard extends ConsumerWidget {
                             children: [
                               Text(
                                 'Total Estimate',
-                                style: bodyText(black, 15),
+                                style: bodyText(black, 16),
                               ),
                               const SizedBox(height: 10),
                               Row(
@@ -153,7 +146,7 @@ class Dashboard extends ConsumerWidget {
 
                                               return Text(
                                                 formattedTime,
-                                                style: headline(black, 12),
+                                                style: headline(black, 14),
                                               );
                                             } else {
                                               return const SizedBox(); // Display a loading indicator while waiting for the first data.
@@ -162,7 +155,7 @@ class Dashboard extends ConsumerWidget {
                                         ),
                                         Text(
                                           currentDate,
-                                          style: bodyText(Colors.grey, 12),
+                                          style: bodyText(Colors.grey, 14),
                                         ),
                                       ],
                                     ),
@@ -199,7 +192,7 @@ class Dashboard extends ConsumerWidget {
                                       children: [
                                         Text(
                                           'Total Products',
-                                          style: bodyText(black, 15),
+                                          style: bodyText(black, 16),
                                         ),
                                         const SizedBox(height: 10),
                                         Row(
@@ -218,7 +211,7 @@ class Dashboard extends ConsumerWidget {
                                                   color: Colors.green[50]),
                                               child: Text(
                                                 '+13%',
-                                                style: headline(green, 10),
+                                                style: headline(green, 14),
                                               ),
                                             ),
                                           ],
@@ -257,7 +250,7 @@ class Dashboard extends ConsumerWidget {
                                           children: [
                                             Text(
                                               'Total Stores',
-                                              style: bodyText(black, 15),
+                                              style: bodyText(black, 16),
                                             ),
                                             const SizedBox(height: 10),
                                             Row(
@@ -274,7 +267,7 @@ class Dashboard extends ConsumerWidget {
                                           children: [
                                             Text(
                                               'Total Staff',
-                                              style: bodyText(black, 15),
+                                              style: bodyText(black, 16),
                                             ),
                                             const SizedBox(height: 10),
                                             Text('100',
@@ -287,7 +280,8 @@ class Dashboard extends ConsumerWidget {
                             }),
                       ]),
                   const SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         child: _buildPerformanceList(
@@ -362,7 +356,7 @@ class EstimateTexts extends StatelessWidget {
         Text('₦ ${amount}', style: headline(black, 23)),
         Text(
           '• $text',
-          style: headline(color, 15),
+          style: headline(color, 16),
         ),
       ],
     );

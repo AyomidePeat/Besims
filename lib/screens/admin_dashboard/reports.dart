@@ -235,7 +235,7 @@ class _SalesState extends ConsumerState<Sales> {
                                     ),
                                     child: Text(
                                       'From',
-                                      style: bodyText(black, 12),
+                                      style: bodyText(black, 14),
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -292,7 +292,7 @@ class _SalesState extends ConsumerState<Sales> {
                                     ),
                                     child: Text(
                                       'To',
-                                      style: bodyText(black, 12),
+                                      style: bodyText(black, 14),
                                     ),
                                   ),
                                   const SizedBox(
@@ -413,7 +413,7 @@ class _SalesState extends ConsumerState<Sales> {
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Text('Download all',
-                                          style: bodyText(white, 10)),
+                                          style: bodyText(white, 14)),
                                     ),
                                   ),
                                 ],
@@ -428,61 +428,64 @@ class _SalesState extends ConsumerState<Sales> {
                       const SizedBox(
                         height: 40,
                       ),
-                      SaleHeadings(widgetSize: widgetSize),
-                      SizedBox(
-                        height: 300,
-                        width: widget.screenWidth - 290,
-                        child: FutureBuilder<List<ProductModel>>(
-                          future: getSales(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (snapshot.hasError) {
-                              return Center(
-                                child: Text(
-                                    'Error fetching sales: ${snapshot.error}'),
-                              );
-                            } else if (!snapshot.hasData ||
-                                snapshot.data!.isEmpty) {
-                              return const Center(
-                                child: Text(
-                                    'No sales found for the selected date range.'),
-                              );
-                            } else {
-                              return ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, index) {
-                                  final stocks = snapshot.data![index];
-                                  String productName = stocks.productName;
-                                  String category = stocks.category;
-                                  String sellingPrice = stocks.unitPrice;
-                                  String quantity = stocks.quantity;
-                                  String seller = stocks.seller;
-                                  String stockQty = stocks.stockQty;
-                                  String status = stocks.status;
-                                  String paymentMethod = stocks.paymentMethod;
-
-                                  return ListTile(
-                                    contentPadding: const EdgeInsets.all(0),
-                                    title: productList(widget.screenWidth,
-                                        sn: index + 1,
-                                        category: category,
-                                        seller: seller,
-                                        price: sellingPrice,
-                                        productName: productName,
-                                        quantity: quantity,
-                                        status: status,
-                                        stockQty: stockQty,
-                                        paymentMethod: paymentMethod),
+                      Column(
+                        children: [
+                          SaleHeadings(widgetSize: widgetSize),
+                          const Divider(),
+                          SizedBox(
+                            height: 300,
+                            width: widget.screenWidth - 290,
+                            child: FutureBuilder<List<ProductModel>>(
+                              future: getSales(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
                                   );
-                                },
-                              );
-                            }
-                          },
-                        ),
+                                } else if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text(
+                                        'Error fetching sales: ${snapshot.error}'),
+                                  );
+                                } else if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return const Center(
+                                    child: Text(
+                                        'No sales found for the selected date range.'),
+                                  );
+                                } else {
+                                  return ListView.builder(
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) {
+                                      final stocks = snapshot.data![index];
+                                      String productName = stocks.productName;
+                                      String category = stocks.category;
+                                      String sellingPrice = stocks.unitPrice;
+                                      String quantity = stocks.quantity;
+                                      String seller = stocks.seller;
+                                      String stockQty = stocks.stockQty;
+                                      String status = stocks.status;
+                                      String paymentMethod =
+                                          stocks.paymentMethod;
+
+                                      return productList(widget.screenWidth,
+                                          sn: index + 1,
+                                          category: category,
+                                          seller: seller,
+                                          price: sellingPrice,
+                                          productName: productName,
+                                          quantity: quantity,
+                                          status: status,
+                                          stockQty: stockQty,
+                                          paymentMethod: paymentMethod);
+                                    },
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         width: widget.screenWidth - 290,
@@ -530,63 +533,63 @@ class SaleHeadings extends StatelessWidget {
           width: widgetSize,
           child: Text(
             'S/N',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
         SizedBox(
           width: widgetSize,
           child: Text(
             'PRODUCTS',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
         SizedBox(
           width: widgetSize,
           child: Text(
             'CATEGORY',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
         SizedBox(
           width: widgetSize,
           child: Text(
             'PRICE',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
         SizedBox(
           width: widgetSize,
           child: Text(
             'STOCK QUANTITY',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
         SizedBox(
           width: widgetSize,
           child: Text(
             'QUANTITY',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
         SizedBox(
           width: widgetSize,
           child: Text(
             'SELLER',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
         SizedBox(
           width: widgetSize,
           child: Text(
             'PAYMENT METHOD',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
         SizedBox(
           width: widgetSize,
           child: Text(
             'STATUS',
-            style: headline(black, 10),
+            style: headline(black, 14),
           ),
         ),
       ],

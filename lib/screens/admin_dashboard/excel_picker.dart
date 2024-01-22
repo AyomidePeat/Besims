@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 
 Future pickExcelFile() async {
   try {
-    print('TRYING');
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx', 'xls'],
@@ -154,7 +153,7 @@ Future<void> importStoreFile(pickExcelFile) async {
       var dataRows = excel.tables[table]!.rows.skip(1);
 
       for (var row in dataRows) {
-        print(row);
+      
         final name = (row[0]!.value is SharedString)
             ? (row[0]!.value as SharedString).toString()
             : (row[0]!.value is int)
@@ -202,7 +201,6 @@ Future<void> importOrderFile(pickExcelFile) async {
       var dataRows = excel.tables[table]!.rows.skip(1);
 
       for (var row in dataRows) {
-        print(row);
         final productName = (row[0]!.value is SharedString)
             ? (row[0]!.value as SharedString).toString()
             : (row[0]!.value is int)

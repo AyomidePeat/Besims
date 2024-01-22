@@ -76,7 +76,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                 icon: Icons.category,
                                 circleColor: Colors.purple[50]!,
                                 iconColor:
-                                    const Color.fromARGB(255, 106, 71, 188),
+                                    const Color.fromARGB(255, 146, 71, 188),
                                 title: 'Total Orders',
                                 total: totalOrders.toString(),
                               ),
@@ -136,7 +136,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                                 BorderRadius.circular(5),
                                             color: purple),
                                         child: Text('Add Product',
-                                            style: bodyText(white, 10)),
+                                            style: bodyText(white, 14)),
                                       ),
                                     ),
                                     const SizedBox(width: 8),
@@ -159,7 +159,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                             ),
                                             const SizedBox(width: 5),
                                             Text('Import',
-                                                style: bodyText(black, 10)),
+                                                style: bodyText(black, 14)),
                                           ],
                                         ),
                                       ),
@@ -177,7 +177,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                             border: Border.all(
                                                 color: Colors.grey[400]!)),
                                         child: Text('Download all',
-                                            style: bodyText(black, 10)),
+                                            style: bodyText(black, 14)),
                                       ),
                                     ),
                                   ],
@@ -196,63 +196,63 @@ class _OrdersState extends ConsumerState<Orders> {
                                     width: widgetSize,
                                     child: Text(
                                       'S/N',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                   SizedBox(
                                     width: widgetSize,
                                     child: Text(
                                       'PRODUCTS',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                   SizedBox(
                                     width: widgetSize,
                                     child: Text(
                                       'CATEGORY',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                   SizedBox(
                                     width: widgetSize,
                                     child: Text(
                                       'PRICE',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                   SizedBox(
                                     width: widgetSize,
                                     child: Text(
                                       'STOCK QUANTITY',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                   SizedBox(
                                     width: widgetSize,
                                     child: Text(
                                       'QUANTITY',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                   SizedBox(
                                     width: widgetSize,
                                     child: Text(
                                       'SELLER',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                   SizedBox(
                                     width: widgetSize,
                                     child: Text(
                                       'PAYMENT METHOD',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                   SizedBox(
                                     width: widgetSize,
                                     child: Text(
                                       'STATUS',
-                                      style: headline(black, 10),
+                                      style: headline(black, 14),
                                     ),
                                   ),
                                 ],
@@ -318,7 +318,7 @@ class _OrdersState extends ConsumerState<Orders> {
                               icon: Icons.category,
                               circleColor: Colors.purple[50]!,
                               iconColor:
-                                  const Color.fromARGB(255, 106, 71, 188),
+                                  const Color.fromARGB(255, 146, 71, 188),
                               title: 'Total Orders',
                               total: '0',
                             ),
@@ -377,7 +377,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                                 BorderRadius.circular(5),
                                             color: purple),
                                         child: Text('Add Product',
-                                            style: bodyText(white, 10)),
+                                            style: bodyText(white, 14)),
                                       ),
                                     ),
                                     const SizedBox(width: 8),
@@ -400,7 +400,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                             ),
                                             const SizedBox(width: 5),
                                             Text('Import',
-                                                style: bodyText(black, 10)),
+                                                style: bodyText(black, 14)),
                                           ],
                                         ),
                                       ),
@@ -418,7 +418,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                             border: Border.all(
                                                 color: Colors.grey[400]!)),
                                         child: Text('Download all',
-                                            style: bodyText(black, 10)),
+                                            style: bodyText(black, 14)),
                                       ),
                                     ),
                                   ],
@@ -438,63 +438,63 @@ class _OrdersState extends ConsumerState<Orders> {
                                       width: widgetSize,
                                       child: Text(
                                         'S/N',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                     SizedBox(
                                       width: widgetSize,
                                       child: Text(
                                         'PRODUCTS',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                     SizedBox(
                                       width: widgetSize,
                                       child: Text(
                                         'CATEGORY',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                     SizedBox(
                                       width: widgetSize,
                                       child: Text(
                                         'PRICE',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                     SizedBox(
                                       width: widgetSize,
                                       child: Text(
                                         'STOCK QUANTITY',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                     SizedBox(
                                       width: widgetSize,
                                       child: Text(
                                         'QUANTITY',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                     SizedBox(
                                       width: widgetSize,
                                       child: Text(
                                         'SELLER',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                     SizedBox(
                                       width: widgetSize,
                                       child: Text(
                                         'PAYMENT METHOD',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                     SizedBox(
                                       width: widgetSize,
                                       child: Text(
                                         'STATUS',
-                                        style: headline(black, 10),
+                                        style: headline(black, 14),
                                       ),
                                     ),
                                   ],
@@ -502,7 +502,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                 const Divider(),
                                 Center(
                                     child: Text('Your stock inventory is empty',
-                                        style: bodyText(black, 15))),
+                                        style: bodyText(black, 16))),
                               ],
                             ),
                           ]))
@@ -511,8 +511,8 @@ class _OrdersState extends ConsumerState<Orders> {
     ]);
   }
 
-  excelPicker() async{
-  await  importOrderFile(pickExcelFile());
+  excelPicker() async {
+    await importOrderFile(pickExcelFile());
   }
 
   excelDownloader() {
@@ -577,7 +577,7 @@ class _OrdersState extends ConsumerState<Orders> {
                     TextFieldWidget(
                         controller: sellingPriceController,
                         label: 'Selling price'),
-                        const SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     TextFieldWidget(
@@ -679,7 +679,7 @@ class _OrdersState extends ConsumerState<Orders> {
                             child: Center(
                                 child: Text(
                               'Discard',
-                              style: bodyText(black, 10),
+                              style: bodyText(black, 14),
                             )),
                           ),
                         ),
@@ -695,29 +695,34 @@ class _OrdersState extends ConsumerState<Orders> {
                                 status: status!,
                                 productName: nameController.text,
                                 stockQty: stockQunatityController.text,
-                                unitPrice: sellingPriceController.text, costPrice: costPriceController.text,
+                                unitPrice: sellingPriceController.text,
+                                costPrice: costPriceController.text,
                                 quantity: quantityController.text,
                                 seller: sellerController.text);
                             if (uploadSuccess == 'Added') {
                               setState(() {
                                 isLoading = false;
                               });
-              
+
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  backgroundColor: purple,
-                                  content: Text(uploadSuccess,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(fontSize: 16))));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: purple,
+                                      content: Text(
+                                          uploadSuccess,
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 16))));
                             } else {
                               setState(() {
                                 isLoading = false;
                               });
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  backgroundColor: purple,
-                                  content: const Text('An error occured',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 16))));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: purple,
+                                      content: const Text('An error occured',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 16))));
                             }
                           },
                           child: Container(
@@ -732,7 +737,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                     ? const CircularProgressIndicator()
                                     : Text(
                                         'Add Product',
-                                        style: bodyText(white, 10),
+                                        style: bodyText(white, 14),
                                       )),
                           ),
                         ),
@@ -745,8 +750,6 @@ class _OrdersState extends ConsumerState<Orders> {
           ]);
         });
   }
-
-  
 }
 
 class Boxes extends StatelessWidget {
@@ -767,7 +770,7 @@ class Boxes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      height: 100,
+      height: 104,
       width: 300,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
@@ -787,7 +790,7 @@ class Boxes extends StatelessWidget {
         children: [
           Text(
             title,
-            style: bodyText(black, 13),
+            style: bodyText(black, 14),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -801,7 +804,7 @@ class Boxes extends StatelessWidget {
           ),
           Text(
             'Last 7 days',
-            style: headline(iconColor, 13),
+            style: headline(iconColor, 14),
           )
         ],
       ),
@@ -810,93 +813,93 @@ class Boxes extends StatelessWidget {
 }
 
 Widget productList(
-    screenWidth, {
-    sn,
-    productName,
-    category,
-    price,
-    stockQty,
-    paymentMethod,
-    quantity,
-    seller,
-    status,
-  }) {
-    final widgetSize = (screenWidth - 293) / 12;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              sn.toString(),
-              style: bodyText(black, 13),
-            ),
+  screenWidth, {
+  sn,
+  productName,
+  category,
+  price,
+  stockQty,
+  paymentMethod,
+  quantity,
+  seller,
+  status,
+}) {
+  final widgetSize = (screenWidth - 293) / 12;
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            sn.toString(),
+            style: bodyText(black, 14),
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              productName,
-              style: bodyText(black, 13),
-            ),
+        ),
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            productName,
+            style: bodyText(black, 14),
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              category,
-              style: bodyText(black, 13),
-            ),
+        ),
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            category,
+            style: bodyText(black, 14),
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              price,
-              style: bodyText(black, 13),
-            ),
+        ),
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            price,
+            style: bodyText(black, 14),
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              stockQty,
-              style: bodyText(black, 13),
-            ),
+        ),
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            stockQty,
+            style: bodyText(black, 14),
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              quantity,
-              style: bodyText(black, 13),
-            ),
+        ),
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            quantity,
+            style: bodyText(black, 14),
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              quantity,
-              style: bodyText(black, 13),
-            ),
+        ),
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            quantity,
+            style: bodyText(black, 14),
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              paymentMethod,
-              style: bodyText(black, 13),
-            ),
+        ),
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            paymentMethod,
+            style: bodyText(black, 14),
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              status,
-              style: bodyText(
-                  status == 'Returned'
-                      ? red
-                      : status == 'Confirmed'
-                          ? green
-                          : blue,
-                  13),
-            ),
+        ),
+        SizedBox(
+          width: widgetSize,
+          child: Text(
+            status,
+            style: bodyText(
+                status == 'Returned'
+                    ? red
+                    : status == 'Confirmed'
+                        ? green
+                        : blue,
+                13),
           ),
-        ]),
-        const Divider()
-      ],
-    );
-  }
+        ),
+      ]),
+      const Divider()
+    ],
+  );
+}

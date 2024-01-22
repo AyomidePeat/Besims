@@ -155,7 +155,7 @@ class Header extends StatelessWidget {
             children: [
               Text(
                 'Admin Name',
-                style: headline(black, 10),
+                style: headline(black, 14),
               ),
               Text(
                 'Admin@email.com',

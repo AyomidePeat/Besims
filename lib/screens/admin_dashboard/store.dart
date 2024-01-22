@@ -20,7 +20,6 @@ class _StoreState extends ConsumerState<Store> {
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
-    final widgetSize = (widget.screenWidth - 293) / 10;
     final size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +30,7 @@ class _StoreState extends ConsumerState<Store> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Stores',
+                'Manage Stores',
                 style: headline(black, widget.screenWidth * 0.013),
               ),
               Row(
@@ -45,7 +44,8 @@ class _StoreState extends ConsumerState<Store> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: purple),
-                      child: Center(child: Text('Add Store', style: bodyText(white, 10))),
+                      child: Center(
+                          child: Text('Add Store', style: bodyText(white, 12))),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -54,7 +54,7 @@ class _StoreState extends ConsumerState<Store> {
                     child: Container(
                       height: 35,
                       width: 90,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(vertical:7, horizontal: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.grey[400]!)),
@@ -65,7 +65,7 @@ class _StoreState extends ConsumerState<Store> {
                             size: 15,
                           ),
                           const SizedBox(width: 5),
-                          Text('Import', style: bodyText(black, 10)),
+                          Text('Import', style: bodyText(black, 12)),
                         ],
                       ),
                     ),
@@ -80,7 +80,7 @@ class _StoreState extends ConsumerState<Store> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.grey[400]!)),
-                      child: Text('Download all', style: bodyText(black, 10)),
+                      child: Text('Download all', style: bodyText(black, 12)),
                     ),
                   ),
                 ],
@@ -100,61 +100,6 @@ class _StoreState extends ConsumerState<Store> {
             const SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: widgetSize,
-                  child: Text(
-                    'S/N',
-                    style: headline(black, 10),
-                  ),
-                ),
-                SizedBox(
-                  width: widgetSize,
-                  child: Text(
-                    'NAME',
-                    style: headline(black, 10),
-                  ),
-                ),
-                SizedBox(
-                  width: widgetSize,
-                  child: Text(
-                    'LOCATION',
-                    style: headline(black, 10),
-                  ),
-                ),
-                SizedBox(
-                  width: widgetSize,
-                  child: Text(
-                    'MANAGER',
-                    style: headline(black, 10),
-                  ),
-                ),
-                SizedBox(
-                  width: widgetSize,
-                  child: Text(
-                    'PHONE',
-                    style: headline(black, 10),
-                  ),
-                ),
-                SizedBox(
-                  width: widgetSize,
-                  child: Text(
-                    'STATUS',
-                    style: headline(black, 10),
-                  ),
-                ),
-                SizedBox(
-                  width: widgetSize,
-                  child: Text(
-                    'ACTIONS',
-                    style: headline(black, 10),
-                  ),
-                ),
-              ],
-            ),
-            const Divider(),
             StreamBuilder(
                 stream: cloudStoreRef.getStores(),
                 builder: (context, snapshot) {
@@ -165,7 +110,7 @@ class _StoreState extends ConsumerState<Store> {
                     if (stores.isNotEmpty) {
                       return SizedBox(
                         width: widget.screenWidth - 280,
-                        height:size.height-320 ,
+                        height: size.height - 320,
                         child: ListView.builder(
                             itemCount: stores.length,
                             itemBuilder: (context, index) {
@@ -195,7 +140,7 @@ class _StoreState extends ConsumerState<Store> {
                     padding: const EdgeInsets.only(top: 20.0),
                     child: Center(
                         child: Text('You have not added any store yet!',
-                            style: bodyText(black, 15))),
+                            style: bodyText(black, 16))),
                   );
                 }),
             const SizedBox(
@@ -224,75 +169,83 @@ class _StoreState extends ConsumerState<Store> {
     phone,
     status,
   }) {
-    final widgetSize = (screenWidth - 293) / 10;
     final firestore = FirestoreClass();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              sn.toString(),
-              style: bodyText(black, 13),
-            ),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration:
+          BoxDecoration(border: Border.all(color: const Color(0xFFF0F1F3), width: 1)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                height: 150,
+                width: 290,
+                decoration: BoxDecoration(
+                    color: const Color(0xFFF0F1F3),
+                    borderRadius: BorderRadius.circular(6)),
+                child: Center(
+                  child: Text(
+                    '$name Branch',
+                    style: headline(black, 16),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    child: Text(
+                      'Managed by $location',
+                      style: headline(black, 16),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Text(
+                      manager,
+                      style: bodyText(black, 14),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Text(
+                      phone,
+                      style: bodyText(black, 14),
+                    ),
+                  ),
+                  SizedBox(
+                    child: Text(
+                      status,
+                      style: bodyText(black, 14),
+                    ),
+                  ),
+                  const Divider()
+                ],
+              ),
+            ],
           ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              name,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              location,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              manager,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              phone,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
-            child: Text(
-              status,
-              style: bodyText(black, 13),
-            ),
-          ),
-          SizedBox(
-            width: widgetSize,
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
             child: Row(
               children: [
                 InkWell(
                     onTap: () {},
-                    child: Icon(Icons.edit, size: 15, color: purple)),
+                    child: Icon(Icons.edit, size: 20, color: purple)),
                 const SizedBox(
-                  width: 8,
+                  width: 15,
                 ),
                 InkWell(
                     onTap: () async {
                       await firestore.deleteStore(name);
                     },
-                    child: Icon(Icons.delete_outlined, size: 15, color: red)),
+                    child: Icon(Icons.delete_outlined, size: 20, color: red)),
               ],
             ),
           ),
-        ]),
-        const Divider()
-      ],
+        ],
+      ),
     );
   }
 
@@ -379,7 +332,7 @@ class _StoreState extends ConsumerState<Store> {
                             child: Center(
                                 child: Text(
                               'Discard',
-                              style: bodyText(Colors.black, 10),
+                              style: bodyText(Colors.black, 14),
                             )),
                           ),
                         ),
@@ -427,7 +380,7 @@ class _StoreState extends ConsumerState<Store> {
                                 child: Center(
                                     child: Text(
                                   'Add Store',
-                                  style: bodyText(white, 10),
+                                  style: bodyText(white, 14),
                                 )),
                               ),
                             ],
