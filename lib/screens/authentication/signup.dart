@@ -1,7 +1,9 @@
 import 'package:bsims/const/textstyle.dart';
+import 'package:bsims/firebase_repos/authentication.dart';
 import 'package:bsims/screens/authentication/login.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../const/colors.dart';
 import '../admin_dashboard/home.dart';
@@ -17,14 +19,23 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final emailAddressController = TextEditingController();
   final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+  final businessController = TextEditingController();
+  bool isLoading = false;
+  bool emptyField = false;
+
   @override
   void dispose() {
     emailAddressController.dispose();
     passwordController.dispose();
+    businessController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
+  AuthenticationMethod auth = AuthenticationMethod();
   bool isObscure = true;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -37,8 +48,8 @@ class _SignUpPageState extends State<SignUpPage> {
           height: size.height * 0.8,
           decoration: BoxDecoration(
               color: white,
-              boxShadow: [
-                const BoxShadow(
+              boxShadow: const [
+                BoxShadow(
                     color: Colors.grey,
                     blurRadius: 2,
                     offset: Offset.zero,
@@ -67,12 +78,12 @@ class _SignUpPageState extends State<SignUpPage> {
                         height: 40,
                       ),
                       TextFieldWidget(
-                          controller: emailAddressController, label: 'Name'),
+                          controller: nameController, label: 'Name'),
                       const SizedBox(
                         height: 20,
                       ),
                       TextFieldWidget(
-                          controller: emailAddressController,
+                          controller: businessController,
                           label: 'Business Name'),
                       const SizedBox(
                         height: 20,
@@ -98,22 +109,61 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(color: black, fontSize: 12),
                           )),
                       const SizedBox(
-                        height: 35,
+                        height: 20,
+                      ),
+                      if(emptyField)
+                      Center(child: Text('Please fill all fields', style:bodyText(red, 13))),
+                      const SizedBox(
+                        height: 30,
                       ),
                       CustomMainButton(
                           width: 400,
                           height: 50,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Home()));
+                          onPressed: () async {
+                            if(emailAddressController.text.isNotEmpty&&passwordController.text.isNotEmpty&&businessController.text.isNotEmpty&&nameController.text.isNotEmpty) {
+                              setState(() {
+                              isLoading = true;
+                            });
+                             final message = await auth.firstSignUp(
+                                email: emailAddressController.text,
+                                password: passwordController.text,
+                                businessName: businessController.text,
+                                name: nameController.text);
+                            if (message == "Success") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Home()));
+                            }else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text(
+                                            message,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontSize: 16))));
+
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
+                            
+                            }
+                           else {
+                              setState(() {
+                                emptyField = true;
+                              });
+                            }
                           },
                           color: purple!,
-                          child: Text(
-                            'Sign Up',
-                            style: headline(white, 14),
-                          )),
+                          child: isLoading
+                              ? LoadingAnimationWidget.hexagonDots(
+                                  color: white, size: 20)
+                              : Text(
+                                  'Sign Up',
+                                  style: headline(white, 14),
+                                )),
                       const SizedBox(height: 30),
                       Row(
                         children: [
@@ -135,11 +185,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold),
                               )),
-
                         ],
                       ),
-                                            const SizedBox(height: 20),
-
+                      const SizedBox(height: 20),
                     ]),
               ),
               Container(

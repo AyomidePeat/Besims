@@ -2,7 +2,8 @@ import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/authentication/signup.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
-
+import 'package:bsims/firebase_repos/authentication.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../const/colors.dart';
 import '../admin_dashboard/home.dart';
 import '../../widgets/main_button.dart';
@@ -24,7 +25,10 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  AuthenticationMethod auth = AuthenticationMethod();
+  bool isLoading = false;
   bool isObscure = true;
+  bool emptyField = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -90,22 +94,62 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(color: black, fontSize: 12),
                           )),
                       const SizedBox(
-                        height: 35,
+                        height: 20,
+                      ),
+                      if(emptyField)
+                      Center(child: Text('Please fill all fields', style:bodyText(red, 13))),
+                      const SizedBox(
+                        height: 30,
                       ),
                       CustomMainButton(
                           width: 400,
                           height: 50,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Home()));
+                          onPressed: () async {
+                            if (emailAddressController.text.isNotEmpty &&
+                                passwordController.text.isNotEmpty) {
+                              setState(() {
+                                emptyField = false;
+                                isLoading = true;
+                              });
+                              final message = await auth.signIn(
+                                  email: emailAddressController.text,
+                                  password: passwordController.text);
+                              if (message == "Success") {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Home()));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text(
+                                            message,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontSize: 16))));
+
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
+                            } else {
+                              setState(() {
+                                emptyField = true;
+                              });
+                            }
                           },
                           color: purple!,
-                          child: Text(
-                            'Login',
-                            style: headline(white, 14),
-                          )),
+                          child: isLoading
+                              ? LoadingAnimationWidget.beat(
+                                  color: white, size: 20)
+                              : Text(
+                                  'Login',
+                                  style: headline(white, 14),
+                                )),
                       const SizedBox(height: 30),
                       Row(
                         children: [
@@ -163,10 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(height: 550, child: Image.asset('assets/bgg.png')),
+                    SizedBox(height: 540, child: Image.asset('assets/bgg.png')),
                   ],
                 ),
               ),

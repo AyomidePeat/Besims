@@ -1,14 +1,53 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:bsims/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:path/path.dart' as path;
 import 'cloud_firestore.dart';
 
 class AuthenticationMethod {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirestoreClass firestoreClass = FirestoreClass();
+
+  Future<String> firstSignUp(
+      {required String email,
+      required String password,
+      required String businessName,
+      required String name}) async {
+    String message = 'Something went wrong';
+    email.trim();
+    password.trim();
+    if (name != "" && email != "" && password != "") {
+      try {
+        final userCredential = await auth.createUserWithEmailAndPassword(
+            email: email, password: password);
+
+        await firestoreClass.addUser(
+            name: name,
+            username: name,
+            email: email,
+            role: 'admin',
+            image: '',
+            phoneNumber: '',
+            gender: '');
+        message = "Success";
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          message = "Password is too weak";
+        } else if (e.code == 'email-already-in-use') {
+          message = 'Email already registered';
+        } else if (e.code == 'user not found') {
+          message = 'Email or Password is incorrect';
+        } else if (e.code == '') {
+          message = 'No internet connection';
+        }
+        return message;
+      } catch (e) {
+        return e.toString();
+      }
+    } else {
+      message = "Please fill up all the fields.";
+    }
+    return message;
+  }
 
   Future<String> signUp(
       {required String email,
@@ -29,10 +68,10 @@ class AuthenticationMethod {
         final fileName = name;
         final firebaseStorageRef =
             firebase_storage.FirebaseStorage.instance.ref().child(fileName);
- await firebaseStorageRef.putData(pickedImage);
+        await firebaseStorageRef.putData(pickedImage);
 
         final image = await firebaseStorageRef.getDownloadURL();
-       
+
         await firestoreClass.addUser(
             name: name,
             username: username,

@@ -54,6 +54,8 @@ dependencies:
   html: ^0.15.4
   http: ^1.2.0
   dio: ^5.4.0
+  loading_animation_widget: ^1.2.0+4
+  flutter_animate: ^4.4.0
  
 
 dev_dependencies:
