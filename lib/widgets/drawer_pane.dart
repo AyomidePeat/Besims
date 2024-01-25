@@ -38,6 +38,10 @@ class MenuItems {
     'Orders',
     Icons.delivery_dining,
   );
+  static const pointOfSales = MenuStuff(
+    'Point of Sales',
+    Icons.business,
+  );
   static const reports = MenuStuff('Reports', Icons.bar_chart);
   static const sales = MenuStuff(
     'Sales',
@@ -51,6 +55,7 @@ class MenuItems {
     category,
     products,
     orders,
+    pointOfSales,
     reports,
   ];
 }

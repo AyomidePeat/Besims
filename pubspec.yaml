@@ -43,7 +43,7 @@ dependencies:
   firebase_auth: ^4.10.1
   intl: ^0.18.1
   excel: ^2.1.0
-  pdf: ^3.10.4
+  pdf: ^3.10.7
   file_picker: ^6.0.0
   fl_chart: ^0.64.0
   firebase_storage: ^11.3.1

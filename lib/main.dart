@@ -1,3 +1,4 @@
+import 'package:bsims/screens/admin_dashboard/home.dart';
 import 'package:bsims/screens/authentication/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
@@ -30,7 +31,10 @@ class MyApp extends StatelessWidget {
        fontFamily: 'Kanit'
       ),      
      
-      home:  const LoginPage(),
+      home:  const Home(),
     );
   }
 }
+
+
+

@@ -2,6 +2,7 @@ import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/admin_dashboard/category.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
 import 'package:bsims/screens/admin_dashboard/orders.dart';
+import 'package:bsims/screens/admin_dashboard/point_of_sales.dart';
 import 'package:bsims/screens/admin_dashboard/reports.dart';
 import 'package:bsims/screens/admin_dashboard/stock_inventory.dart';
 import 'package:bsims/screens/admin_dashboard/store.dart';
@@ -11,7 +12,6 @@ import 'package:bsims/widgets/drawer_pane.dart';
 import 'package:bsims/widgets/menu_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../const/colors.dart';
 
 class Home extends StatefulWidget {
@@ -43,7 +43,8 @@ class _HomeState extends State<Home> {
     'Category',
     'Products',
     'Orders',
-    'Reports'
+    'Point of Sales'
+        'Reports'
   ];
 
   Widget getScreen() {
@@ -78,7 +79,8 @@ class _HomeState extends State<Home> {
         return Store(
           screenWidth: screenWidth,
         );
-
+      case MenuItems.pointOfSales:
+        return PointofSales(screenWidth: screenWidth);
       default:
         return Dashboard(
           screenWidth: screenWidth,

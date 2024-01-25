@@ -86,11 +86,16 @@ class AuthenticationMethod {
           message = "Password is too weak";
         } else if (e.code == 'email-already-in-use') {
           message = 'Email already registered';
-        } else if (e.code == 'user not found') {
+        } else if (e.code == 'user-not-found') {
           message = 'Email or Password is incorrect';
         } else if (e.code == '') {
           message = 'No internet connection';
-        }
+        } else if (e.code == 'network-request-failed') {
+          message = 'No internet connection';
+        } else {
+     
+      message = 'Authentication failed. Please try again.';
+    }
         return message;
       } catch (e) {
         return e.toString();
@@ -116,6 +121,12 @@ class AuthenticationMethod {
         } else if (e.code == 'network-request-failed') {
           message = 'No internet connection';
         }
+        else if (e.code == 'wrong-password') {
+      message = 'Email or Password is incorrect';
+    } else {
+     
+      message = 'Authentication failed. Please try again.';
+    }
       } catch (e) {
         return e.toString();
       }
