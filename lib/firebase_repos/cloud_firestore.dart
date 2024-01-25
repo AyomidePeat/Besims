@@ -305,4 +305,15 @@ class FirestoreClass {
     }
     return message;
   }
+  Stream<List<StockInventoryModel>> filterStocksByName(String query) {
+    return firebaseFirestore
+        .collection('stock-inventory') // Replace with your actual collection name
+        .where('name', isGreaterThanOrEqualTo: query)
+        .where('name', isLessThan: '${query}z')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => StockInventoryModel.fromFirestore(doc))
+            .toList());
+  }
 }
+

@@ -14,52 +14,139 @@ class PointofSales extends ConsumerStatefulWidget {
 }
 
 class _PointofSalesState extends ConsumerState<PointofSales> {
+  final firestore = FirestoreClass();
+  List<StockInventoryModel> selectedItems = [];
+  TextEditingController searchController = TextEditingController();
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
-    return StreamBuilder(
-      stream: cloudStoreRef.getStocks(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Center(child: CircularProgressIndicator(color: purple))
-          ]);
-        } else {
-          final List<StockInventoryModel> stocks = snapshot.data!;
-          final totalProducts = stocks.length;
-          return SizedBox(
-            width: widget.screenWidth - 280,
-            height: 446,
-            child: ListView.builder(
-                itemCount: stocks.length,
-                itemBuilder: (context, index) {
-                  String productName = stocks[index].name;
-                  String category = stocks[index].category;
-                  //String costPrice = stocks[index].costPrice;
-                  String sellingPrice = stocks[index].sellingPrice;
-                  String quantity = stocks[index].quantity;
-
-                  String expiryDate = stocks[index].expiryDate;
-                  String status = stocks[index].status;
-
-                  return ListTile(
-                    contentPadding: const EdgeInsets.all(0),
-                    title: ProductList(
-                      screenWidth: widget.screenWidth,
-                      sn: index + 1,
-                      category: category,
-                      expiryDate: expiryDate,
-                      price: sellingPrice,
-                      productName: productName,
-                      status: status,
-                      quantity: quantity,
-                    ),
-                  );
-                }),
-          );
-        }
-      },
+    return Material(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: (widget.screenWidth - 293) / 2,
+            child: Column(
+              children: [
+              //    Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: TextField(
+              //     controller: searchController,
+              //     onChanged: (query) {
+              //       // Call a function to filter items based on the search query
+              //       filterItems(query);
+              //     },
+              //     decoration: InputDecoration(
+              //       labelText: 'Search',
+              //       hintText: 'Type to search...',
+              //       prefixIcon: Icon(Icons.search),
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(10.0),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+                StreamBuilder(
+                  stream: cloudStoreRef.getStocks(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(child: CircularProgressIndicator(color: purple))
+                          ]);
+                    } else {
+                      final List<StockInventoryModel> stocks = snapshot.data!;
+                      return SizedBox(
+                        width: widget.screenWidth - 280,
+                        height: 446,
+                        child: ListView.builder(
+                            itemCount: stocks.length,
+                            itemBuilder: (context, index) {
+                              String productName = stocks[index].name;
+                              String category = stocks[index].category;
+                              //String costPrice = stocks[index].costPrice;
+                              String sellingPrice = stocks[index].sellingPrice;
+                              String quantity = stocks[index].quantity;
+                
+                              String expiryDate = stocks[index].expiryDate;
+                              String status = stocks[index].status;
+                
+                              return ListTile(
+                                contentPadding: const EdgeInsets.all(0),
+                                title: Container(
+                                  child: ProductList(
+                                    screenWidth: widget.screenWidth,
+                                    sn: index + 1,
+                                    category: category,
+                                    expiryDate: expiryDate,
+                                    price: sellingPrice,
+                                    productName: productName,
+                                    status: status,
+                                    quantity: quantity,
+                                    onTap: () {
+                                      setState(() {
+                                        selectedItems.add(stocks[index]);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              );
+                            }),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: (widget.screenWidth - 293) / 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Selected Items:',
+                  style: bodyText(black, 16),
+                ),
+                SizedBox(
+                  height: 600,
+                  child: ListView.builder(
+                    itemCount: selectedItems.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(selectedItems[index].name),
+                        subtitle: Text(selectedItems[index].sellingPrice),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Total Price: \$${calculateTotal()}',
+                  style: bodyText(black, 16),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
+  }
+ void filterItems(String query) {
+    // Implement the logic to filter items based on the search query
+    // Use the new filterStocksByName method in FirestoreClass
+    firestore.filterStocksByName(query);
+  }
+  double calculateTotal() {
+    return selectedItems.fold(
+        0, (total, product) => total + num.parse(product.sellingPrice));
   }
 }
 
@@ -72,6 +159,7 @@ class ProductList extends StatefulWidget {
   final double screenWidth;
   final String quantity;
   final int sn;
+  final VoidCallback onTap;
   const ProductList(
       {super.key,
       required this.category,
@@ -81,6 +169,7 @@ class ProductList extends StatefulWidget {
       required this.screenWidth,
       required this.sn,
       required this.quantity,
+      required this.onTap,
       required this.status});
 
   @override
@@ -98,71 +187,70 @@ class _ProductListState extends State<ProductList> {
 
   void decrementer() {
     setState(() {
-      if (counter > 0) {
+      if (counter >= 1) {
         counter--;
       }
     });
   }
+  // List<StockInventoryModel> selectedItems = [];
 
   @override
   Widget build(BuildContext context) {
-    final widgetSize = (widget.screenWidth - 293) / 12;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(
-            widget.sn.toString(),
-            style: bodyText(black, 14),
-          ),
-          Text(
-            widget.productName,
-            style: bodyText(black, 14),
-          ),
-          Text(
-            widget.category,
-            style: bodyText(black, 14),
-          ),
-          Text(
-            widget.expiryDate,
-            style: bodyText(black, 14),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(
+            children: [
+              Text(
+                '${widget.sn}. ',
+                style: bodyText(black, 14),
+              ),
+              Text(
+                widget.productName,
+                style: bodyText(black, 14),
+              ),
+            ],
           ),
           Text(
             widget.price,
             style: bodyText(black, 14),
           ),
-          Text(
-            widget.status,
-            style: bodyText(
-                widget.status == 'Unavailable' ||
-                        widget.status == 'unavailable'
-                    ? red
-                    : green,
-                13),
-          ),
-          Row(
-            children: [
-              InkWell(
-                  onTap: incrementer,
-                  child: Container(
-                      color: purple,
-                      child: Icon(Icons.add, size: 15, color: white))),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                ' $counter',
-                style: bodyText(black, 13),
-              ),
-              InkWell(
-                  onTap: decrementer,
-                  child: Container(
-                      color: purple,
-                      child: Icon(Icons.remove, size: 15, color: white))),
-            ],
-          ),
+          InkWell(
+            onTap: widget.onTap,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              color: purple,
+              child: Icon(Icons.add, size: 15, color: white),
+            ),
+          )
+          // Row(
+          //   children: [
+          //     InkWell(
+          //         onTap: decrementer,
+          //         child: Container(
+          //             padding: EdgeInsets.all(10),
+          //             color: purple,
+          //             child: Icon(Icons.remove, size: 15, color: white))),
+          //     const SizedBox(
+          //       width: 8,
+          //     ),
+          //     Text(
+          //       ' $counter',
+          //       style: bodyText(black, 16),
+          //     ),
+          //     const SizedBox(
+          //       width: 8,
+          //     ),
+          //     InkWell(
+          //         onTap: incrementer,
+          //         child: Container(
+          //             padding: EdgeInsets.all(10),
+          //             color: purple,
+          //             child: Icon(Icons.add, size: 15, color: white))),
+          //   ],
+          // ),
         ]),
-       
       ],
     );
   }

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class StockInventoryModel {
   final String name;
   final String expiryDate;
@@ -45,4 +47,20 @@ class StockInventoryModel {
         dateAdded:json['dateAdded'],
         status: json['status']);
   }
+
+  factory StockInventoryModel.fromFirestore(DocumentSnapshot doc) {
+  Map<String, dynamic> json = doc.data() as Map<String, dynamic>;
+
+  return StockInventoryModel(
+    name: json['name'] ?? '',
+    expiryDate: json['expiryDate'] ?? '',
+    sellingPrice: json['sellingPrice'] ?? '',
+    costPrice: json['costPrice'] ?? '',
+    quantity: json['quantity'] ?? '',
+    supplier: json['supplier'] ?? '',
+    category: json['category'] ?? '',
+    status: json['status'] ?? '',
+    dateAdded: json['dateAdded'] ?? '',
+  );
+}
 }
