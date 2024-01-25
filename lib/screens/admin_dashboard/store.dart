@@ -18,6 +18,7 @@ class Store extends ConsumerStatefulWidget {
 
 class _StoreState extends ConsumerState<Store> {
   @override
+  bool isLoading = false;
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
     final size = MediaQuery.of(context).size;
@@ -54,7 +55,8 @@ class _StoreState extends ConsumerState<Store> {
                     child: Container(
                       height: 35,
                       width: 90,
-                      padding: const EdgeInsets.symmetric(vertical:7, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 7, horizontal: 10),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.grey[400]!)),
@@ -129,7 +131,7 @@ class _StoreState extends ConsumerState<Store> {
                                   status: status,
                                   manager: manager,
                                   location: location,
-                                  phone: phone,
+                                  phone: phone,isLoading: isLoading
                                 ),
                               );
                             }),
@@ -160,20 +162,14 @@ class _StoreState extends ConsumerState<Store> {
     exportStoreExcelFile();
   }
 
-  Widget productList(
-    screenWidth, {
-    sn,
-    name,
-    location,
-    manager,
-    phone,
-    status,
-  }) {
+  Widget productList(screenWidth,
+      {sn, name, location, manager, phone, status, isLoading}) {
     final firestore = FirestoreClass();
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      decoration:
-          BoxDecoration(border: Border.all(color: const Color(0xFFF0F1F3), width: 1)),
+      decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFFF0F1F3), width: 1)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -231,8 +227,42 @@ class _StoreState extends ConsumerState<Store> {
             child: Row(
               children: [
                 InkWell(
-                    onTap: () {},
-                    child: Icon(Icons.edit, size: 20, color: purple)),
+                    onTap: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      FirestoreClass fireStore = FirestoreClass();
+                      final nameController = TextEditingController();
+                      final managerController = TextEditingController();
+                      final locationController = TextEditingController();
+                      final phoneController = TextEditingController();
+                      final statusOptions = ['Open', 'Closed'];
+                      String? status;
+                      final storeDetails =
+                          await firestore.getStoreDetails(name);
+                      nameController.text = storeDetails['name'] as String;
+                      managerController.text =
+                          storeDetails['manager'] as String;
+                      locationController.text =
+                          storeDetails['location'] as String;
+                      phoneController.text = storeDetails['phone'] as String;
+                      status = storeDetails['status'] as String?;
+                      editDialog(
+                          nameController,
+                          managerController,
+                          locationController,
+                          phoneController,
+                          status,
+                          statusOptions,
+                          fireStore,
+                          name);
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                    child: isLoading
+                        ? CircularProgressIndicator()
+                        : Icon(Icons.edit, size: 20, color: purple)),
                 const SizedBox(
                   width: 15,
                 ),
@@ -247,6 +277,158 @@ class _StoreState extends ConsumerState<Store> {
         ],
       ),
     );
+  }
+
+  Future<dynamic> editDialog(
+      TextEditingController nameController,
+      TextEditingController managerController,
+      TextEditingController locationController,
+      TextEditingController phoneController,
+      String? status,
+      List<String> statusOptions,
+      FirestoreClass fireStore,
+      name) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 700,
+            width: 700,
+            child: SimpleDialog(children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Edit Store', style: headline(black, 20)),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    TextFieldWidget(controller: nameController, label: 'Name'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: managerController, label: 'Location'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: locationController, label: 'Manager'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: phoneController, label: 'Store Phone'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: DropdownButtonFormField(
+                        hint: const Text('Status'),
+                        value: status,
+                        onChanged: (value) {
+                          setState(() {
+                            status = value as String;
+                          });
+                        },
+                        items: statusOptions
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(e.toString()),
+                                ))
+                            .toList(),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey)),
+                            child: Center(
+                                child: Text(
+                              'Discard',
+                              style: bodyText(Colors.black, 14),
+                            )),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        InkWell(
+                          onTap: () async {
+                            final updateSuccess = await fireStore.updateStore(
+                              originalName: name,
+                              newName: nameController.text,
+                              manager: managerController.text,
+                              location: locationController.text,
+                              phone: phoneController.text,
+                              status: status!,
+                            );
+
+                            if (updateSuccess == 'Updated') {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: purple,
+                                content: Text(
+                                  updateSuccess,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ));
+                              Navigator.pop(context);
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  updateSuccess,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ));
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: 110,
+                                height: 40,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: purple),
+                                child: Center(
+                                    child: Text(
+                                  'Update Store',
+                                  style: bodyText(white, 14),
+                                )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ]),
+          );
+        });
   }
 
   void addStore() {

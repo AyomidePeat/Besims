@@ -186,6 +186,66 @@ class FirestoreClass {
           .toList();
     });
   }
+   Future<String> updateStore({
+    required String originalName,
+    required String newName,
+    required String manager,
+    required String location,
+    required String phone,
+    required String status,
+  }) async {
+    try {
+      CollectionReference storesCollection = firebaseFirestore.collection('stores');
+
+      // Check if the store with the original name exists
+      QuerySnapshot storeSnapshot = await storesCollection
+          .where('name', isEqualTo: originalName)
+          .get();
+
+      if (storeSnapshot.docs.isNotEmpty) {
+        // Update the store data
+        await storesCollection.doc(storeSnapshot.docs.first.id).update({
+          'name': newName,
+          'manager': manager,
+          'location': location,
+          'phone': phone,
+          'status': status,
+        });
+
+        return 'Updated';
+      } else {
+        return 'Store not found';
+      }
+    } catch (error) {
+      print("Error updating store: $error");
+      return 'Failed to update store';
+    }
+  }
+
+   Future<Map<String, dynamic>> getStoreDetails(String storeName) async {
+    try {
+    
+      CollectionReference storesCollection = firebaseFirestore.collection('stores');
+
+      
+      QuerySnapshot storeSnapshot =
+          await storesCollection.where('name', isEqualTo: storeName).get();
+
+      
+      if (storeSnapshot.docs.isNotEmpty) {
+      
+        Map<String, dynamic> storeData = storeSnapshot.docs.first.data()
+            as Map<String, dynamic>;
+
+        return storeData;
+      } else {
+        throw Exception("Store not found");
+      }
+    } catch (error) {
+      print("Error getting store details: $error");
+      rethrow;
+    }
+  }
 
   Future deleteStore(String name) async {
     String message = 'Something went wrong';
@@ -197,6 +257,8 @@ class FirestoreClass {
     }
     return message;
   }
+
+
 
   Future addSupplier(
       {required String name,
