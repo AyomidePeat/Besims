@@ -111,7 +111,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                         borderRadius: BorderRadius.circular(5),
                                         color: purple),
                                     child: Text('Add Product',
-                                        style: bodyText(white, 14)),
+                                        style: bodyText(white, 12)),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -133,7 +133,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                         ),
                                         const SizedBox(width: 5),
                                         Text('Import',
-                                            style: bodyText(black, 14)),
+                                            style: bodyText(black, 12)),
                                       ],
                                     ),
                                   ),
@@ -150,7 +150,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                         border: Border.all(
                                             color: Colors.grey[400]!)),
                                     child: Text('Download all',
-                                        style: bodyText(black, 14)),
+                                        style: bodyText(black, 12)),
                                   ),
                                 ),
                               ],
@@ -337,7 +337,8 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   child: Container(
                                     height: 35,
                                     width: 90,
-                                    padding: const EdgeInsets.symmetric(horizontal:10, vertical: 7),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 7),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         color: purple),
@@ -351,7 +352,8 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   child: Container(
                                     height: 35,
                                     width: 90,
-                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 7),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
@@ -375,7 +377,8 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   child: Container(
                                     height: 35,
                                     width: 90,
-                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 7),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
@@ -486,10 +489,8 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
     final quantityController = TextEditingController();
     var isLoading = false;
     String? supplier;
-
     String? category;
-
-    final statusOptions = ['Available', 'Unavailable'];
+    final statusOptions = ['available', 'unavailable'];
     String? status;
     showDialog(
         context: context,
@@ -841,7 +842,45 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
             child: Row(
               children: [
                 InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      final nameController = TextEditingController();
+                      FirestoreClass fireStore = FirestoreClass();
+                      final expiryDateController = TextEditingController();
+                      final sellingPriceController = TextEditingController();
+                      final costPriceController = TextEditingController();
+                      final quantityController = TextEditingController();
+                      String? supplier;
+                      String? category;
+                      final statusOptions = ['available', 'unavailable'];
+                      String? status;
+                      final productDetails =
+                          await fireStore.getStockDetails(productName);
+                      nameController.text = productDetails['name'] as String;
+                      expiryDateController.text =
+                          productDetails['expiryDate'] as String;
+                      sellingPriceController.text =
+                          productDetails['sellingPrice'] as String;
+                      costPriceController.text =
+                          productDetails['costPrice'] as String;
+                      quantityController.text =
+                          productDetails['quantity'] as String;
+                      supplier = productDetails['supplier'] as String?;
+                      category = productDetails['category'] as String?;
+                      status = productDetails['status'] as String?;
+
+                      editDialog(
+                          fireStore,
+                          nameController,
+                          expiryDateController,
+                          sellingPriceController,
+                          costPriceController,
+                          quantityController,
+                          supplier!,
+                          category,
+                          statusOptions,
+                          status,
+                          productName);
+                    },
                     child: Icon(Icons.edit, size: 15, color: purple)),
                 const SizedBox(
                   width: 8,
@@ -866,6 +905,288 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
 
   excelDownloader() {
     exportInventoryExcelFile();
+  }
+
+  Future<dynamic> editDialog(
+      FirestoreClass fireStore,
+      final nameController,
+      final expiryDateController,
+      final sellingPriceController,
+      final costPriceController,
+      final quantityController,
+      String supplier,
+      String? category,
+      List<String> statusOptions,
+      String? status,
+      String name) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Update Product', style: headline(black, 20)),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  TextFieldWidget(
+                      controller: nameController, label: 'Product Name'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFieldWidget(
+                      controller: costPriceController, label: 'Cost price'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFieldWidget(
+                      controller: sellingPriceController,
+                      label: 'Selling price'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFieldWidget(
+                      controller: quantityController, label: 'Qty(Carton)'),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  DropdownButtonFormField(
+                    hint: const Text('Status'),
+                    value: status,
+                    onChanged: (value) {
+                      setState(() {
+                        status = value as String;
+                      });
+                    },
+                    items: statusOptions
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.toString()),
+                            ))
+                        .toList(),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  StreamBuilder(
+                    stream: fireStore.getCategories(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator(
+                            color: Colors.purple);
+                      } else {
+                        if (snapshot.hasData) {
+                          final categories = snapshot.data;
+                          if (categories!.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                  'You have not added any category yet!',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.black)),
+                            );
+                          }
+
+                          return DropdownButtonFormField<String>(
+                            hint: const Text('Category'),
+                            value: category != null &&
+                                    categories.contains(supplier)
+                                ? supplier
+                                : null,
+                            onChanged: (value) {
+                              setState(() {
+                                category = value!;
+                              });
+                            },
+                            items: categories
+                                .map((e) => DropdownMenuItem<String>(
+                                      value: e.categoryName,
+                                      child: Text(e.categoryName),
+                                    ))
+                                .toList(),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          );
+                        }
+                      }
+                      return const CircularProgressIndicator(
+                          color: Colors.purple);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  StreamBuilder(
+                    stream: fireStore.getSuppliers(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator(
+                            color: Colors.purple);
+                      } else {
+                        if (snapshot.hasData) {
+                          final supplierss = snapshot.data;
+                          if (supplierss!.isEmpty) {
+                            return const Center(
+                              child: Text('You have not added suppliers yet!',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.black)),
+                            );
+                          }
+
+                          return DropdownButtonFormField<String>(
+                            hint: const Text('Supplier'),
+                            value: supplier != null &&
+                                    supplierss.contains(supplier)
+                                ? supplier
+                                : null,
+                            onChanged: (value) {
+                              setState(() {
+                                supplier = value!;
+                              });
+                            },
+                            items: supplierss
+                                .map((e) => DropdownMenuItem<String>(
+                                      value: e.name,
+                                      child: Text(e.name),
+                                    ))
+                                .toList(),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          );
+                        }
+                      }
+                      return const CircularProgressIndicator(
+                          color: Colors.purple);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextField(
+                    decoration: const InputDecoration(
+                        suffixIcon: Icon(Icons.calendar_month),
+                        hintText: 'Expiry Date',
+                        border: InputBorder.none),
+                    style: TextStyle(
+                      fontSize: 16,
+                      height: 1.188,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Kanit',
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                    controller: expiryDateController,
+                    onTap: () async {
+                      DateTime? pickeddate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+
+                      if (pickeddate != null) {
+                        setState(() {
+                          expiryDateController.text =
+                              DateFormat('dd/MM/yyyy').format(pickeddate);
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 103,
+                          height: 40,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.grey)),
+                          child: Center(
+                              child: Text(
+                            'Discard',
+                            style: bodyText(black, 14),
+                          )),
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      InkWell(
+                        onTap: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          final updateSuccess = await fireStore.updateStock(
+                              originalName: name,
+                              newName: nameController.text,
+                              expiryDate: expiryDateController.text,
+                              sellingPrice: sellingPriceController.text,
+                              costPrice: costPriceController.text,
+                              quantity: quantityController.text,
+                              supplier: supplier!,
+                              category: category!,
+                              status: status!);
+                          if (updateSuccess == 'Updated') {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: purple,
+                                content: Text(updateSuccess,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 16))));
+                            Navigator.pop(context);
+                          } else {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                backgroundColor: purple,
+                                content: const Text('An error occured',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 16))));
+                          }
+                        },
+                        child: Container(
+                          width: 103,
+                          height: 40,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: purple),
+                          child: Center(
+                              child: isLoading
+                                  ? const CircularProgressIndicator()
+                                  : Text(
+                                      'Update Product',
+                                      style: bodyText(white, 14),
+                                    )),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ]);
+        });
   }
 }
 

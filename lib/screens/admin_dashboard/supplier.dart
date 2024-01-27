@@ -18,6 +18,7 @@ class Supplier extends ConsumerStatefulWidget {
 }
 
 class _SupplierState extends ConsumerState<Supplier> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
@@ -39,7 +40,8 @@ class _SupplierState extends ConsumerState<Supplier> {
                     child: Container(
                       height: 35,
                       width: 100,
-                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 7),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: purple),
@@ -52,7 +54,8 @@ class _SupplierState extends ConsumerState<Supplier> {
                     child: Container(
                       height: 35,
                       width: 90,
-                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 7),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.grey[400]!)),
@@ -74,7 +77,8 @@ class _SupplierState extends ConsumerState<Supplier> {
                     child: Container(
                       height: 35,
                       width: 90,
-                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 7),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.grey[400]!)),
@@ -406,7 +410,40 @@ class _SupplierState extends ConsumerState<Supplier> {
             child: Row(
               children: [
                 InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      final nameController = TextEditingController();
+                      final companyController = TextEditingController();
+                      final addressController = TextEditingController();
+                      final phoneController = TextEditingController();
+                      final emailController = TextEditingController();
+                      FirestoreClass fireStore = FirestoreClass();
+                      final now = DateTime.now();
+                      String regDate = DateFormat('dd-MMMM-yyyy').format(now);
+                      final supplierDetails =
+                          await firestore.getSupplierDetails(name);
+                      nameController.text = supplierDetails['name'] as String;
+                      companyController.text =
+                          supplierDetails['company'] as String;
+                      addressController.text =
+                          supplierDetails['address'] as String;
+                      phoneController.text = supplierDetails['phone'] as String;
+                      emailController.text = supplierDetails['email'] as String;
+                      editDialog(
+                          nameController,
+                          companyController,
+                          phoneController,
+                          emailController,
+                          addressController,
+                          regDate,
+                          fireStore,
+                          name);
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
                     child: Icon(Icons.edit, size: 15, color: purple)),
                 const SizedBox(
                   width: 8,
@@ -423,5 +460,135 @@ class _SupplierState extends ConsumerState<Supplier> {
         const Divider()
       ],
     );
+  }
+
+  Future<dynamic> editDialog(
+      TextEditingController nameController,
+      TextEditingController companyController,
+      TextEditingController phoneController,
+      TextEditingController emailController,
+      TextEditingController addressController,
+      final String date,
+      FirestoreClass fireStore,
+      name) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 700,
+            width: 700,
+            child: SimpleDialog(children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Edit Supplier Details', style: headline(black, 20)),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    TextFieldWidget(
+                        controller: nameController, label: 'Supplier Name'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: companyController, label: 'Company Name'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: emailController, label: 'E-mail'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: phoneController, label: 'Supplier Phone'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldWidget(
+                        controller: addressController,
+                        label: 'Supplier Address'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey)),
+                            child: Center(
+                                child: Text(
+                              'Discard',
+                              style: bodyText(Colors.black, 14),
+                            )),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        InkWell(
+                          onTap: () async {
+                            final updateSuccess =
+                                await fireStore.updateSupplier(
+                                    originalName: name,
+                                    newName: nameController.text,
+                                    company: companyController.text,
+                                    phone: phoneController.text,
+                                    address: addressController.text,
+                                    email: emailController.text,
+                                    date: date);
+                            if (updateSuccess == 'Updated') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: purple,
+                                      content: Text(
+                                          updateSuccess,
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 16))));
+                              Navigator.pop(context);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: purple,
+                                      content: const Text('An error occured',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 16))));
+                            }
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: purple),
+                            child: Center(
+                                child: Text(
+                              'Update',
+                              style: bodyText(white, 14),
+                            )),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ]),
+          );
+        });
   }
 }

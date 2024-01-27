@@ -50,9 +50,15 @@ class _HomeState extends State<Home> {
   Widget getScreen() {
     switch (currentItem) {
       case MenuItems.dashboard:
-        return Dashboard(
-          screenWidth: screenWidth,
-          size: size,
+        return Row(
+          children: [
+            SingleChildScrollView(
+              child: Dashboard(
+                screenWidth: screenWidth,
+                size: size,
+              ),
+            ),
+          ],
         );
       case MenuItems.category:
         return ProductCategoryList(

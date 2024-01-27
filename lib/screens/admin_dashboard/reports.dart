@@ -98,30 +98,29 @@ class _SalesState extends ConsumerState<Sales> {
   Widget build(BuildContext context) {
     final widgetSize = (widget.screenWidth - 293) / 12;
     final cloudstoreRef = ref.watch(cloudStoreProvider);
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.bar_chart,
-                color: purple,
-                size: widget.screenWidth * 0.03,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                'Sales Report for the Month of ',
-                style: headline(black, widget.screenWidth * 0.013),
-              ),
-              Text(
-                currentDate,
-                style: headline(purple!, widget.screenWidth * 0.013),
-              )
-            ],
-          ),
-          StreamBuilder(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.bar_chart,
+              color: purple,
+              size: widget.screenWidth * 0.03,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              'Sales Report for the Month of ',
+              style: headline(black, widget.screenWidth * 0.013),
+            ),
+            Text(
+              currentDate,
+              style: headline(purple!, widget.screenWidth * 0.013),
+            )
+          ],
+        ),
+        SingleChildScrollView(
+          child: StreamBuilder(
               stream: cloudstoreRef.getProducts(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -264,7 +263,7 @@ class _SalesState extends ConsumerState<Sales> {
                                           firstDate: DateTime(2020),
                                           lastDate: DateTime.now(),
                                         );
-
+              
                                         if (fromDate != null) {
                                           setState(() {
                                             fromController.text =
@@ -326,7 +325,7 @@ class _SalesState extends ConsumerState<Sales> {
                                           lastDate: DateTime
                                               .now(), // Maximum selectable date
                                         );
-
+              
                                         if (toDate != null) {
                                           setState(() {
                                             toController.text =
@@ -468,7 +467,7 @@ class _SalesState extends ConsumerState<Sales> {
                                       String status = stocks.status;
                                       String paymentMethod =
                                           stocks.paymentMethod;
-
+              
                                       return productList(widget.screenWidth,
                                           sn: index + 1,
                                           category: category,
@@ -510,8 +509,8 @@ class _SalesState extends ConsumerState<Sales> {
                   );
                 }
               }),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

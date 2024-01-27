@@ -136,7 +136,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                                 BorderRadius.circular(5),
                                             color: purple),
                                         child: Text('Add Product',
-                                            style: bodyText(white, 14)),
+                                            style: bodyText(white, 12)),
                                       ),
                                     ),
                                     const SizedBox(width: 8),
@@ -145,7 +145,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                       child: Container(
                                         height: 35,
                                         width: 90,
-                                        padding: const EdgeInsets.all(10),
+                                        padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(5),
@@ -159,7 +159,7 @@ class _OrdersState extends ConsumerState<Orders> {
                                             ),
                                             const SizedBox(width: 5),
                                             Text('Import',
-                                                style: bodyText(black, 14)),
+                                                style: bodyText(black, 12)),
                                           ],
                                         ),
                                       ),
@@ -170,14 +170,14 @@ class _OrdersState extends ConsumerState<Orders> {
                                       child: Container(
                                         height: 35,
                                         width: 90,
-                                        padding: const EdgeInsets.all(10),
+                                        padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             border: Border.all(
                                                 color: Colors.grey[400]!)),
                                         child: Text('Download all',
-                                            style: bodyText(black, 14)),
+                                            style: bodyText(black, 12)),
                                       ),
                                     ),
                                   ],

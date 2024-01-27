@@ -92,6 +92,53 @@ class FirestoreClass {
     }
     return message;
   }
+ Future<Map<String, dynamic>> getCategoryDetails(String stockName) async {
+    try {
+      CollectionReference stockCollection =
+          firebaseFirestore.collection('product-categories');
+
+      QuerySnapshot categorySnapshot =
+          await stockCollection.where('categoryName', isEqualTo: stockName).get();
+
+      if (categorySnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> stockData =
+            categorySnapshot.docs.first.data() as Map<String, dynamic>;
+
+        return stockData;
+      } else {
+        throw Exception("stock not found");
+      }
+    } catch (error) {
+      print("Error getting stock details: $error");
+      rethrow;
+    }
+  }
+  Future<String> updateCtegory({
+    required String originalName,
+    required String newName,
+  }) async {
+    try {
+      CollectionReference categoriesCollection =
+          firebaseFirestore.collection('product-categories');
+
+      QuerySnapshot storeSnapshot = await categoriesCollection
+          .where('categoryName', isEqualTo: originalName)
+          .get();
+
+      if (storeSnapshot.docs.isNotEmpty) {
+        await categoriesCollection.doc(storeSnapshot.docs.first.id).update({
+          'categoryName': newName,
+        });
+
+        return 'Updated';
+      } else {
+        return 'Category not found';
+      }
+    } catch (error) {
+      print("Error updating Category: $error");
+      return 'Failed to update Category';
+    }
+  }
 
   Future addStockInventory(
       {required String name,
@@ -148,6 +195,70 @@ class FirestoreClass {
     }
     return message;
   }
+  Future<Map<String, dynamic>> getStockDetails(String stockName) async {
+    try {
+      CollectionReference stockCollection =
+          firebaseFirestore.collection('stock-inventory');
+
+      QuerySnapshot stockSnapshot =
+          await stockCollection.where('name', isEqualTo: stockName).get();
+
+      if (stockSnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> stockData =
+            stockSnapshot.docs.first.data() as Map<String, dynamic>;
+
+        return stockData;
+      } else {
+        throw Exception("stock not found");
+      }
+    } catch (error) {
+      print("Error getting stock details: $error");
+      rethrow;
+    }
+  }
+
+  Future<String> updateStock({
+    required String originalName,
+    required String newName,
+    required String expiryDate,
+    required String sellingPrice,
+    required String costPrice,
+    required String quantity,
+    required String supplier,
+    required String category,
+    required String status,
+   
+  }) async {
+     DateTime dateAdded = DateTime.now();
+    try {
+      CollectionReference stockCollection =
+          firebaseFirestore.collection('stock-inventory');
+
+      QuerySnapshot storeSnapshot =
+          await stockCollection.where('name', isEqualTo: originalName).get();
+
+      if (storeSnapshot.docs.isNotEmpty) {
+        await stockCollection.doc(storeSnapshot.docs.first.id).update({
+          'name': newName,
+          'expiryDate': expiryDate,
+          'sellingPrice': sellingPrice,
+          'costPrice': costPrice,
+          'quantity': quantity,
+          'supplier': supplier,
+          'category': category,
+          'status': status,
+          'dateAdded': dateAdded
+        });
+
+        return 'Updated';
+      } else {
+        return 'Stock not found';
+      }
+    } catch (error) {
+      print("Error updating stock: $error");
+      return 'Failed to update stock';
+    }
+  }
 
   Future addStore({
     required String name,
@@ -186,7 +297,8 @@ class FirestoreClass {
           .toList();
     });
   }
-   Future<String> updateStore({
+
+  Future<String> updateStore({
     required String originalName,
     required String newName,
     required String manager,
@@ -195,15 +307,13 @@ class FirestoreClass {
     required String status,
   }) async {
     try {
-      CollectionReference storesCollection = firebaseFirestore.collection('stores');
+      CollectionReference storesCollection =
+          firebaseFirestore.collection('stores');
 
-      // Check if the store with the original name exists
-      QuerySnapshot storeSnapshot = await storesCollection
-          .where('name', isEqualTo: originalName)
-          .get();
+      QuerySnapshot storeSnapshot =
+          await storesCollection.where('name', isEqualTo: originalName).get();
 
       if (storeSnapshot.docs.isNotEmpty) {
-        // Update the store data
         await storesCollection.doc(storeSnapshot.docs.first.id).update({
           'name': newName,
           'manager': manager,
@@ -222,20 +332,17 @@ class FirestoreClass {
     }
   }
 
-   Future<Map<String, dynamic>> getStoreDetails(String storeName) async {
+  Future<Map<String, dynamic>> getStoreDetails(String storeName) async {
     try {
-    
-      CollectionReference storesCollection = firebaseFirestore.collection('stores');
+      CollectionReference storesCollection =
+          firebaseFirestore.collection('stores');
 
-      
       QuerySnapshot storeSnapshot =
           await storesCollection.where('name', isEqualTo: storeName).get();
 
-      
       if (storeSnapshot.docs.isNotEmpty) {
-      
-        Map<String, dynamic> storeData = storeSnapshot.docs.first.data()
-            as Map<String, dynamic>;
+        Map<String, dynamic> storeData =
+            storeSnapshot.docs.first.data() as Map<String, dynamic>;
 
         return storeData;
       } else {
@@ -257,8 +364,6 @@ class FirestoreClass {
     }
     return message;
   }
-
-
 
   Future addSupplier(
       {required String name,
@@ -307,6 +412,64 @@ class FirestoreClass {
       return e.toString();
     }
     return message;
+  }
+   Future<Map<String, dynamic>> getSupplierDetails(String supplierName) async {
+    try {
+      CollectionReference supplierCollection =
+          firebaseFirestore.collection('suppliers');
+
+      QuerySnapshot supplierSnapshot =
+          await supplierCollection.where('name', isEqualTo: supplierName).get();
+
+      if (supplierSnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> supplierData =
+            supplierSnapshot.docs.first.data() as Map<String, dynamic>;
+
+        return supplierData;
+      } else {
+        throw Exception("Supplier not found");
+      }
+    } catch (error) {
+      print("Error getting supplier details: $error");
+      rethrow;
+    }
+  }
+
+
+  Future<String> updateSupplier(
+      {required String originalName,
+      required String newName,
+      required String company,
+      required String phone,
+      required String address,
+      required String email,
+      required String date}) async {
+    try {
+      CollectionReference suppliersCollection =
+          firebaseFirestore.collection('suppliers');
+
+      QuerySnapshot supplierSnapshot = await suppliersCollection
+          .where('name', isEqualTo: originalName)
+          .get();
+
+      if (supplierSnapshot.docs.isNotEmpty) {
+        await suppliersCollection.doc(supplierSnapshot.docs.first.id).update({
+          'name': newName,
+          'company': company,
+          'address': address,
+          'email': email,
+          'phone': phone,
+          'date': date
+        });
+
+        return 'Updated';
+      } else {
+        return 'Store not found';
+      }
+    } catch (error) {
+      print("Error updating store: $error");
+      return 'Failed to update store';
+    }
   }
 
   Future addProduct({
@@ -367,9 +530,11 @@ class FirestoreClass {
     }
     return message;
   }
+
   Stream<List<StockInventoryModel>> filterStocksByName(String query) {
     return firebaseFirestore
-        .collection('stock-inventory') // Replace with your actual collection name
+        .collection(
+            'stock-inventory') // Replace with your actual collection name
         .where('name', isGreaterThanOrEqualTo: query)
         .where('name', isLessThan: '${query}z')
         .snapshots()
@@ -378,4 +543,3 @@ class FirestoreClass {
             .toList());
   }
 }
-

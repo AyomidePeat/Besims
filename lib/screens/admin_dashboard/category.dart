@@ -1,6 +1,7 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ class ProductCategoryList extends ConsumerStatefulWidget {
 }
 
 class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
@@ -41,7 +43,8 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                     child: Container(
                       height: 35,
                       width: 100,
-                      padding: const EdgeInsets.symmetric(horizontal:10,vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 7),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: purple),
@@ -51,7 +54,6 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                     ),
                   ),
                   const SizedBox(width: 8),
-       
                 ],
               ),
             ],
@@ -121,11 +123,11 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
 
                               String name = categories[index].categoryName;
                               String date =
-                                  DateFormat('dd/mm/yyyy').format(now);
+                                  DateFormat('dd/MM/yyyy').format(now);
 
                               return ListTile(
                                 contentPadding: const EdgeInsets.all(0),
-                                title: categoryList(widget.screenWidth,
+                                title: categoryList(widget.screenWidth,isLoading: isLoading,
                                     sn: index + 1,
                                     name: name,
                                     dateCreated: date),
@@ -201,14 +203,12 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                             height: 40,
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.black)
-                            ),
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.black)),
                             child: Center(
                                 child: Text(
                               'Discard',
-                              style: bodyText(black, 14
-                              ),
+                              style: bodyText(black, 14),
                             )),
                           ),
                         ),
@@ -249,7 +249,7 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
                             child: Center(
                                 child: Text(
                               'Create',
-                              style: bodyText(white, 14 ),
+                              style: bodyText(white, 14),
                             )),
                           ),
                         ),
@@ -263,7 +263,8 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
         });
   }
 
-  Widget categoryList(screenWidth, {sn, name, dateCreated}) {
+  Widget categoryList(screenWidth,
+      {sn, name, dateCreated, required bool isLoading}) {
     final widgetSize = (screenWidth - 293) / 10;
     final firestore = FirestoreClass();
     return Column(
@@ -296,8 +297,24 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
             child: Row(
               children: [
                 InkWell(
-                    onTap: () {},
-                    child: Icon(Icons.edit, size: 15, color: purple)),
+                    onTap: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      final nameController = TextEditingController();
+                      FirestoreClass fireStore = FirestoreClass();
+                      final categoryDetails =
+                          await firestore.getCategoryDetails(name);
+                      nameController.text =
+                          categoryDetails['categoryName'] as String;
+                      editDialog(nameController, fireStore, name);
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                    child: isLoading
+                        ? CircularProgressIndicator()
+                        : Icon(Icons.edit, size: 15, color: purple)),
                 const SizedBox(
                   width: 8,
                 ),
@@ -313,5 +330,114 @@ class _ProductCategoryListState extends ConsumerState<ProductCategoryList> {
         const Divider()
       ],
     );
+  }
+
+  Future<dynamic> editDialog(TextEditingController nameController,
+      FirestoreClass fireStore, String name) {
+    const double space = 10;
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 700,
+            width: 700,
+            child: SimpleDialog(children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Update Category', style: headline(black, 20)),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.cancel_outlined))
+                      ],
+                    ),
+                    const SizedBox(
+                      height: space,
+                    ),
+                    TextFieldWidget(
+                        controller: nameController, label: 'Category name'),
+                    const SizedBox(
+                      height: space,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 103,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.black)),
+                            child: Center(
+                                child: Text(
+                              'Discard',
+                              style: bodyText(black, 14),
+                            )),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        InkWell(
+                          onTap: () async {
+                            final updateSuccess = await fireStore.updateCtegory(
+                                originalName: name,
+                                newName: nameController.text);
+                            if (updateSuccess == 'Updated') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: purple,
+                                      content: Text(
+                                          updateSuccess,
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 16))));
+                              Navigator.pop(context);
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                      backgroundColor: Colors.purple,
+                                      content: Text(
+                                        updateSuccess,
+                                        textAlign: TextAlign.center,
+                                        style: bodyText(black, 14),
+                                      )));
+                            }
+                          },
+                          child: Container(
+                            width: 103,
+                            height: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: purple),
+                            child: Center(
+                                child: Text(
+                              'Update',
+                              style: bodyText(white, 14),
+                            )),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ]),
+          );
+        });
   }
 }
