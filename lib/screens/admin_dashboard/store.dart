@@ -261,7 +261,7 @@ class _StoreState extends ConsumerState<Store> {
                       });
                     },
                     child: isLoading
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : Icon(Icons.edit, size: 20, color: purple)),
                 const SizedBox(
                   width: 15,

@@ -119,397 +119,391 @@ class _SalesState extends ConsumerState<Sales> {
             )
           ],
         ),
-        SingleChildScrollView(
-          child: StreamBuilder(
-              stream: cloudstoreRef.getProducts(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Column(
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      //crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [CircularProgressIndicator(color: purple)]);
-                } else {
-                  final stocks = snapshot.data!;
-                  double cash = 0;
-                  double cashPrice = 0;
-                  double cheque = 0;
-                  double chequePrice = 0;
-                  double transfer = 0;
-                  double transferPrice = 0;
-                  double pos = 0;
-                  double posPrice = 0;
-                  for (int index = 0; index < stocks.length; index++) {
-                    if (stocks[index].paymentMethod == "Cash") {
-                      cash++;
-                      cashPrice += int.parse(stocks[index].unitPrice);
-                    }
-                    if (stocks[index].paymentMethod == "Transfer") {
-                      transfer++;
-                      transferPrice += int.parse(stocks[index].unitPrice);
-                    }
-                    if (stocks[index].paymentMethod == "Cheque") {
-                      cheque++;
-                      chequePrice += int.parse(stocks[index].unitPrice);
-                    }
-                    if (stocks[index].paymentMethod == "POS") {
-                      pos++;
-                      posPrice += int.parse(stocks[index].unitPrice);
-                    }
+        StreamBuilder(
+            stream: cloudstoreRef.getProducts(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    //crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [CircularProgressIndicator(color: purple)]);
+              } else {
+                final stocks = snapshot.data!;
+                double cash = 0;
+                double cashPrice = 0;
+                double cheque = 0;
+                double chequePrice = 0;
+                double transfer = 0;
+                double transferPrice = 0;
+                double pos = 0;
+                double posPrice = 0;
+                for (int index = 0; index < stocks.length; index++) {
+                  if (stocks[index].paymentMethod == "Cash") {
+                    cash++;
+                    cashPrice += int.parse(stocks[index].unitPrice);
                   }
-                  String formattedCashPrice =
-                      NumberFormat('#,###').format(cashPrice);
-                  String formattedTransferPrice =
-                      NumberFormat('#,###').format(transferPrice);
-                  String formattedChequePrice =
-                      NumberFormat('#,###').format(chequePrice);
-                  String formattedPosPrice =
-                      NumberFormat('#,###').format(posPrice);
-                  List<String> quantity = [
-                    formattedCashPrice,
-                    formattedTransferPrice,
-                    formattedChequePrice,
-                    formattedPosPrice
-                  ];
-                  return Column(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxHeight: 100, maxWidth: widget.size.width - 293),
-                        child: GridView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5,
-                              mainAxisExtent: 90,
-                            ),
-                            itemCount: labels.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return CustomContainer(
-                                  icon: Icons.credit_card,
-                                  bgColor: bgColors[index],
-                                  iconColor: iconColors[index],
-                                  label: labels[index],
-                                  quantity: quantity[index]);
-                            }),
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
-                        width: widget.size.width - 293,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: white),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              'You can filter sales record by date range',
-                              style: headline(
-                                  const Color.fromARGB(255, 230, 221, 221),
-                                  widget.screenWidth * 0.012),
-                            ),
-                            const Divider(
-                              thickness: 2,
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: const Color.fromARGB(
-                                          255, 230, 221, 221),
-                                    ),
-                                    child: Text(
-                                      'From',
-                                      style: bodyText(black, 14),
-                                    ),
+                  if (stocks[index].paymentMethod == "Transfer") {
+                    transfer++;
+                    transferPrice += int.parse(stocks[index].unitPrice);
+                  }
+                  if (stocks[index].paymentMethod == "Cheque") {
+                    cheque++;
+                    chequePrice += int.parse(stocks[index].unitPrice);
+                  }
+                  if (stocks[index].paymentMethod == "POS") {
+                    pos++;
+                    posPrice += int.parse(stocks[index].unitPrice);
+                  }
+                }
+                String formattedCashPrice =
+                    NumberFormat('#,###').format(cashPrice);
+                String formattedTransferPrice =
+                    NumberFormat('#,###').format(transferPrice);
+                String formattedChequePrice =
+                    NumberFormat('#,###').format(chequePrice);
+                String formattedPosPrice =
+                    NumberFormat('#,###').format(posPrice);
+                List<String> quantity = [
+                  formattedCashPrice,
+                  formattedTransferPrice,
+                  formattedChequePrice,
+                  formattedPosPrice
+                ];
+                return Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxHeight: 100, maxWidth: widget.size.width - 293),
+                      child: GridView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5,
+                            mainAxisExtent: 90,
+                          ),
+                          itemCount: labels.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return CustomContainer(
+                                icon: Icons.credit_card,
+                                bgColor: bgColors[index],
+                                iconColor: iconColors[index],
+                                label: labels[index],
+                                quantity: quantity[index]);
+                          }),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      width: widget.size.width - 293,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: white),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'You can filter sales record by date range',
+                            style: headline(
+                                const Color.fromARGB(255, 230, 221, 221),
+                                widget.screenWidth * 0.012),
+                          ),
+                          const Divider(
+                            thickness: 2,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: const Color.fromARGB(
+                                        255, 230, 221, 221),
                                   ),
-                                  const SizedBox(width: 10),
-                                  SizedBox(
-                                    width: 250,
-                                    height: 40,
-                                    child: TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: 'dd/mm/yyyy',
-                                          border: InputBorder.none),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        height: 1.188,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: 'Kanit',
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                      controller: fromController,
-                                      onTap: () async {
-                                        fromDate = await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2020),
-                                          lastDate: DateTime.now(),
-                                        );
-              
-                                        if (fromDate != null) {
+                                  child: Text(
+                                    'From',
+                                    style: bodyText(black, 14),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                SizedBox(
+                                  width: 250,
+                                  height: 40,
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                        hintText: 'dd/mm/yyyy',
+                                        border: InputBorder.none),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      height: 1.188,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Kanit',
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                    controller: fromController,
+                                    onTap: () async {
+                                      fromDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(2020),
+                                        lastDate: DateTime.now(),
+                                      );
+                            
+                                      if (fromDate != null) {
+                                        setState(() {
+                                          fromController.text =
+                                              DateFormat('dd/MM/yyyy')
+                                                  .format(fromDate!);
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                const Icon(Icons.calendar_month),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: const Color.fromARGB(
+                                        255, 230, 221, 221),
+                                  ),
+                                  child: Text(
+                                    'To',
+                                    style: bodyText(black, 14),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                SizedBox(
+                                  width: 250,
+                                  height: 40,
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                        hintText: 'dd/mm/yyyy',
+                                        border: InputBorder.none),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      height: 1.188,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Kanit',
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                    controller: toController,
+                                    onTap: () async {
+                                      toDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime
+                                            .now(), // Initial date when the picker opens
+                                        firstDate: DateTime(2020),
+                                        // Minimum selectable date
+                                        lastDate: DateTime
+                                            .now(), // Maximum selectable date
+                                      );
+                            
+                                      if (toDate != null) {
+                                        setState(() {
+                                          toController.text =
+                                              DateFormat('dd/MM/yyyy')
+                                                  .format(toDate!);
+                                        });
+                                      }
+                                      getSales();
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                const Icon(Icons.calendar_month),
+                                const SizedBox(
+                                  width: 90,
+                                ),
+                                Container(
+                                  height: 40,
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: Center(
+                                      child: DropdownButtonFormField(
+                                        hint: const Text('All Payments'),
+                                        value: sales,
+                                        onChanged: (value) {
                                           setState(() {
-                                            fromController.text =
-                                                DateFormat('dd/MM/yyyy')
-                                                    .format(fromDate!);
+                                            sales = value as String;
                                           });
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                  ),
-                                  const Icon(Icons.calendar_month),
-                                  const SizedBox(
-                                    width: 30,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: const Color.fromARGB(
-                                          255, 230, 221, 221),
-                                    ),
-                                    child: Text(
-                                      'To',
-                                      style: bodyText(black, 14),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                  ),
-                                  SizedBox(
-                                    width: 250,
-                                    height: 40,
-                                    child: TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: 'dd/mm/yyyy',
-                                          border: InputBorder.none),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        height: 1.188,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: 'Kanit',
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                      controller: toController,
-                                      onTap: () async {
-                                        toDate = await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime
-                                              .now(), // Initial date when the picker opens
-                                          firstDate: DateTime(2020),
-                                          // Minimum selectable date
-                                          lastDate: DateTime
-                                              .now(), // Maximum selectable date
-                                        );
-              
-                                        if (toDate != null) {
-                                          setState(() {
-                                            toController.text =
-                                                DateFormat('dd/MM/yyyy')
-                                                    .format(toDate!);
-                                          });
-                                        }
-                                        getSales();
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                  ),
-                                  const Icon(Icons.calendar_month),
-                                  const SizedBox(
-                                    width: 90,
-                                  ),
-                                  Container(
-                                    height: 40,
-                                    width: 200,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: Center(
-                                        child: DropdownButtonFormField(
-                                          hint: const Text('All Payments'),
-                                          value: sales,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              sales = value as String;
-                                            });
-                                          },
-                                          items: salesOption
-                                              .map((e) => DropdownMenuItem(
-                                                    value: e,
-                                                    child: Text(e.toString()),
-                                                  ))
-                                              .toList(),
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                          ),
+                                        },
+                                        items: salesOption
+                                            .map((e) => DropdownMenuItem(
+                                                  value: e,
+                                                  child: Text(e.toString()),
+                                                ))
+                                            .toList(),
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 90),
-                                  SizedBox(
-                                    height: 40,
-                                    width: 300,
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.search,
-                                            color: black,
-                                          ),
-                                          hintText: 'Search for a record',
-                                          border: InputBorder.none),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        height: 1.188,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: 'Kanit',
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                      controller: searchController,
+                                ),
+                                const SizedBox(width: 90),
+                                SizedBox(
+                                  height: 40,
+                                  width: 300,
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                        prefixIcon: Icon(
+                                          Icons.search,
+                                          color: black,
+                                        ),
+                                        hintText: 'Search for a record',
+                                        border: InputBorder.none),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      height: 1.188,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Kanit',
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
+                                    controller: searchController,
                                   ),
-                                  const SizedBox(width: 70),
-                                  InkWell(
-                                    onTap: excelDownloader,
-                                    child: Container(
-                                      height: 35,
-                                      width: 90,
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: purple,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Text('Download all',
-                                          style: bodyText(white, 14)),
+                                ),
+                                const SizedBox(width: 70),
+                                InkWell(
+                                  onTap: excelDownloader,
+                                  child: Container(
+                                    height: 35,
+                                    width: 90,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: purple,
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
+                                    child: Text('Download all',
+                                        style: bodyText(white, 14)),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Column(
-                        children: [
-                          SaleHeadings(widgetSize: widgetSize),
-                          const Divider(),
-                          SizedBox(
-                            height: 300,
-                            width: widget.screenWidth - 290,
-                            child: FutureBuilder<List<ProductModel>>(
-                              future: getSales(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Center(
-                                    child: Text(
-                                        'Error fetching sales: ${snapshot.error}'),
-                                  );
-                                } else if (!snapshot.hasData ||
-                                    snapshot.data!.isEmpty) {
-                                  return const Center(
-                                    child: Text(
-                                        'No sales found for the selected date range.'),
-                                  );
-                                } else {
-                                  return ListView.builder(
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, index) {
-                                      final stocks = snapshot.data![index];
-                                      String productName = stocks.productName;
-                                      String category = stocks.category;
-                                      String sellingPrice = stocks.unitPrice;
-                                      String quantity = stocks.quantity;
-                                      String seller = stocks.seller;
-                                      String stockQty = stocks.stockQty;
-                                      String status = stocks.status;
-                                      String paymentMethod =
-                                          stocks.paymentMethod;
-              
-                                      return productList(widget.screenWidth,
-                                          sn: index + 1,
-                                          category: category,
-                                          seller: seller,
-                                          price: sellingPrice,
-                                          productName: productName,
-                                          quantity: quantity,
-                                          status: status,
-                                          stockQty: stockQty,
-                                          paymentMethod: paymentMethod);
-                                    },
-                                  );
-                                }
-                              },
-                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: widget.screenWidth - 290,
-                        child: TextField(
-                          controller: _productNameController,
-                          decoration:
-                              const InputDecoration(labelText: 'Product Name'),
-                        ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    SizedBox(width:  (widget.screenWidth - 293),
+                      child: SaleHeadings(widgetSize: widgetSize)),
+                    const Divider(),
+                    SizedBox(
+                      height: 300,
+                      width: widget.screenWidth - 290,
+                      child: FutureBuilder<List<ProductModel>>(
+                        future: getSales(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text(
+                                  'Error fetching sales: ${snapshot.error}'),
+                            );
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                  'No sales found for the selected date range.'),
+                            );
+                          } else {
+                            return ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                final stocks = snapshot.data![index];
+                                String productName = stocks.productName;
+                                String category = stocks.category;
+                                String sellingPrice = stocks.unitPrice;
+                                String quantity = stocks.quantity;
+                                String seller = stocks.seller;
+                                String stockQty = stocks.stockQty;
+                                String status = stocks.status;
+                                String paymentMethod =
+                                    stocks.paymentMethod;
+                                  
+                                return productList(widget.screenWidth,
+                                    sn: index + 1,
+                                    category: category,
+                                    seller: seller,
+                                    price: sellingPrice,
+                                    productName: productName,
+                                    quantity: quantity,
+                                    status: status,
+                                    stockQty: stockQty,
+                                    paymentMethod: paymentMethod);
+                              },
+                            );
+                          }
+                        },
                       ),
-                      const SizedBox(height: 5.0),
-                      ElevatedButton(
-                        onPressed: () =>
-                            _predictPrice(_productNameController.text),
-                        child: const Text('Predict Price'),
+                    ),
+                    SizedBox(
+                      width: widget.screenWidth - 290,
+                      child: TextField(
+                        controller: _productNameController,
+                        decoration:
+                            const InputDecoration(labelText: 'Product Name'),
                       ),
-                      const SizedBox(height: 14.0),
-                      _predictedPrice != null
-                          ? Text(
-                              'Predicted Price: \$${_predictedPrice!.toStringAsFixed(2)}')
-                          : Container(),
-                    ],
-                  );
-                }
-              }),
-        ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    ElevatedButton(
+                      onPressed: () =>
+                          _predictPrice(_productNameController.text),
+                      child: const Text('Predict Price'),
+                    ),
+                    const SizedBox(height: 14.0),
+                    _predictedPrice != null
+                        ? Text(
+                            'Predicted Price: \$${_predictedPrice!.toStringAsFixed(2)}')
+                        : Container(),
+                  ],
+                );
+              }
+            }),
       ],
     );
   }
