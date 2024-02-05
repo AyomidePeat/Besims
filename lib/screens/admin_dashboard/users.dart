@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:html' as html;
-import 'dart:io' show File;
 import 'package:http/http.dart' as http;
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/authentication.dart';
@@ -12,7 +10,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../const/colors.dart';
 
@@ -37,7 +34,7 @@ class _UsersState extends ConsumerState<Users> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: widget.screenWidth - 293,
+          width: size.width <1000? widget.screenWidth - 270 :widget.screenWidth - 293,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -76,7 +73,7 @@ class _UsersState extends ConsumerState<Users> {
           height: 30,
         ),
         Container(
-          width: widget.screenWidth - 293,
+          width:size.width <1000? widget.screenWidth - 270 : widget.screenWidth - 293,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),
@@ -92,42 +89,42 @@ class _UsersState extends ConsumerState<Users> {
                   width: widgetSize,
                   child: Text(
                     'NAME',
-                    style: headline(black, 14),
+                    style: headline(black,size.width <1000? 12 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'USERNAME',
-                    style: headline(black, 14),
+                    style: headline(black,size.width <1000? 12 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'EMAIL',
-                    style: headline(black, 14),
+                    style: headline(black,size.width <1000? 12 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'PHONE NO.',
-                    style: headline(black, 14),
+                    style: headline(black,size.width <1000? 12 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ROLE',
-                    style: headline(black, 14),
+                    style: headline(black,size.width <1000? 12 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ACTIONS',
-                    style: headline(black, 14),
+                    style: headline(black,size.width <1000? 11 : 14),
                   ),
                 ),
               ],
@@ -142,7 +139,7 @@ class _UsersState extends ConsumerState<Users> {
                     final users = snapshot.data!;
                     if (users.isNotEmpty) {
                       return SizedBox(
-                        width: widget.screenWidth - 280,
+                        width: size.width <1000? widget.screenWidth - 270 :widget.screenWidth - 280,
                         height: size.height - 320,
                         child: ListView.builder(
                             itemCount: users.length,
@@ -487,36 +484,36 @@ class _UsersState extends ConsumerState<Users> {
                         width: widgetSize,
                         child: Text(
                           name,
-                          style: bodyText(black, 14),
+                    style: bodyText(black,widget.screenWidth <1000? 12 : 14),
                         ),
                       ),
                       SizedBox(
                         width: widgetSize,
                         child: Text(
                           username,
-                          style: bodyText(black, 14),
+                    style: bodyText(black,widget.screenWidth <1000? 12 : 14),
                         ),
                       ),
                       SizedBox(
                         width: widgetSize,
                         child: Text(
                           email,
-                          style: bodyText(black, 14),
+                    style: bodyText(black,widget.screenWidth <1000? 12 : 14),
                         ),
                       ),
                       SizedBox(
                         width: widgetSize,
                         child: Text(
                           phoneNumber,
-                          style: bodyText(black, 14),
+                    style: bodyText(black,widget.screenWidth <1000? 12 : 14),
                         ),
                       ),
                       SizedBox(
                         width: widgetSize,
                         child: Text(
                           role,
-                          style: bodyText(
-                              role == 'Admin' ? Colors.green : blue, 14),
+                          style: headline(
+                              role == 'Admin' ? purple! : blue, widget.screenWidth <1000? 12 : 14),
                         ),
                       ),
                       SizedBox(
