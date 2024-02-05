@@ -26,7 +26,7 @@ class _StoreState extends ConsumerState<Store> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: widget.screenWidth - 293,
+          width:  size.width <1000? widget.screenWidth - 270 : widget.screenWidth - 293,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -94,7 +94,7 @@ class _StoreState extends ConsumerState<Store> {
           height: 40,
         ),
         Container(
-          width: widget.screenWidth - 293,
+          width:size.width <1000? widget.screenWidth - 270 : widget.screenWidth - 293,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),

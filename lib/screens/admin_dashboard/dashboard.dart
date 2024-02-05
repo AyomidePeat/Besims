@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
 import 'package:bsims/models/product_model.dart';
@@ -17,11 +19,11 @@ class Dashboard extends ConsumerWidget {
   final Size size;
 
   final String currentDate = DateFormat('dd MMMM, yyyy').format(DateTime.now());
+  final String shortCurrentDate = DateFormat('dd-MM-yy').format(DateTime.now());
   final now = DateTime.now();
   Stream<DateTime> currentTimeStream() {
     return Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now());
   }
-
 
   List<ProductModel> getBestPerformers(List<ProductModel> allProducts) {
     // Count occurrences of each product
@@ -41,67 +43,72 @@ class Dashboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final size = MediaQuery.of(context).size;
+
     final cloudstoreRef = ref.watch(cloudStoreProvider);
-    return StreamBuilder(
-        stream: cloudstoreRef.getProducts(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [CircularProgressIndicator(color: purple)]);
-          } else {
-            final stocks = snapshot.data!;
-            int totalSales = 0;
-            int costPrice = 0;
-            int profits = 0;
-            String dateAdded = '';
-            for (int index = 0; index < stocks.length; index++) {
-              totalSales += int.parse(stocks[index].unitPrice);
-              costPrice += int.parse(stocks[index].costPrice);
-              dateAdded = stocks[index].dateAdded.toString();
-            }
-            String currentDates = DateFormat('EEEE').format(now);
-            profits = totalSales - costPrice;
-
-            int returnedCount = 0;
-            int returnedprice = 0;
-
-            for (int index = 0; index < stocks.length; index++) {
-              if (stocks[index].status == "Returned") {
-                returnedCount++;
-                returnedprice += int.parse(stocks[index].unitPrice);
+    return SizedBox(
+      width:size.width <1000? screenWidth - 270: size.width - 293,
+      child: StreamBuilder(
+          stream: cloudstoreRef.getProducts(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [CircularProgressIndicator(color: purple)]);
+            } else {
+              final stocks = snapshot.data!;
+              int totalSales = 0;
+              int costPrice = 0;
+              int profits = 0;
+              String dateAdded = '';
+              for (int index = 0; index < stocks.length; index++) {
+                totalSales += int.parse(stocks[index].unitPrice);
+                costPrice += int.parse(stocks[index].costPrice);
+                dateAdded = stocks[index].dateAdded.toString();
               }
-            }
-            String formattedTotalSales =
-                NumberFormat('#,###').format(totalSales);
-            String formattedProfits = NumberFormat('#,###').format(profits);
-            String formattedReturnedPrice =
-                NumberFormat('#,###').format(returnedprice);
-            List<ProductModel> bestPerformers = getBestPerformers(stocks);
+              String currentDates = DateFormat('EEEE').format(now);
+              profits = totalSales - costPrice;
 
-            return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SingleChildScrollView(
-                    child: Row(
+              int returnedCount = 0;
+              int returnedprice = 0;
+
+              for (int index = 0; index < stocks.length; index++) {
+                if (stocks[index].status == "Returned") {
+                  returnedCount++;
+                  returnedprice += int.parse(stocks[index].unitPrice);
+                }
+              }
+              String formattedTotalSales =
+                  NumberFormat('#,###').format(totalSales);
+              String formattedProfits = NumberFormat('#,###').format(profits);
+              String formattedReturnedPrice =
+                  NumberFormat('#,###').format(returnedprice);
+              List<ProductModel> bestPerformers = getBestPerformers(stocks);
+
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
                             padding: const EdgeInsets.all(20),
                             height: 135,
-                            width: 700,
+                            width: size.width < 1000 ? 350 : 700,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: white,
-                              border: Border.all(width: 0.5, color: Colors.grey),
+                              border:
+                                  Border.all(width: 0.5, color: Colors.grey),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Total Estimate',
-                                  style: bodyText(black, 16),
+                                  style: bodyText(
+                                      black, size.width < 1000 ? 13 : 16),
                                 ),
                                 const SizedBox(height: 10),
                                 Row(
@@ -143,10 +150,14 @@ class Dashboard extends ConsumerWidget {
                                                 String formattedTime =
                                                     DateFormat.Hm()
                                                         .format(currentTime);
-                    
+
                                                 return Text(
                                                   formattedTime,
-                                                  style: headline(black, 14),
+                                                  style: headline(
+                                                      black,
+                                                      size.width < 1000
+                                                          ? 11
+                                                          : 14),
                                                 );
                                               } else {
                                                 return const SizedBox(); // Display a loading indicator while waiting for the first data.
@@ -154,8 +165,11 @@ class Dashboard extends ConsumerWidget {
                                             },
                                           ),
                                           Text(
-                                            currentDate,
-                                            style: bodyText(Colors.grey, 14),
+                                            size.width < 1000
+                                                ? shortCurrentDate
+                                                : currentDate,
+                                            style: bodyText(Colors.grey,
+                                                size.width > 600 ? 11 : 14),
                                           ),
                                         ],
                                       ),
@@ -165,21 +179,22 @@ class Dashboard extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          SizedBox(width: 30),
+                          SizedBox(width: size.width < 1000 ? 10 : 30),
                           StreamBuilder(
                               stream: cloudstoreRef.getStocks(),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator(color: purple);
+                                  return CircularProgressIndicator(
+                                      color: purple);
                                 } else {
                                   final stocks = snapshot.data!;
                                   final totalStocks = stocks.length;
-                    
+
                                   return Container(
                                       padding: const EdgeInsets.all(20),
                                       height: 135,
-                                      width: 400,
+                                      width: size.width < 1000 ? 140 : 400,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         color: white,
@@ -192,26 +207,37 @@ class Dashboard extends ConsumerWidget {
                                         children: [
                                           Text(
                                             'Total Products',
-                                            style: bodyText(black, 16),
+                                            style: bodyText(black,
+                                                size.width < 1000 ? 13 : 16),
                                           ),
-                                          const SizedBox(height: 10),
+                                          const SizedBox(height: 25),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(totalStocks.toString(),
-                                                  style: headline(black, 23)),
+                                                  style: headline(
+                                                      black,
+                                                      size.width < 1000
+                                                          ? 15
+                                                          : 23)),
                                               Container(
-                                                height: 20,
+                                                height:
+                                                    size.width < 1000 ? 20 : 35,
                                                 width: 35,
                                                 padding: EdgeInsets.all(5),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(5),
+                                                        BorderRadius.circular(
+                                                            5),
                                                     color: Colors.green[50]),
                                                 child: Text(
                                                   '+13%',
-                                                  style: headline(green, 14),
+                                                  style: headline(
+                                                      green,
+                                                      size.width < 1000
+                                                          ? 10
+                                                          : 14),
                                                 ),
                                               ),
                                             ],
@@ -220,20 +246,21 @@ class Dashboard extends ConsumerWidget {
                                       ));
                                 }
                               }),
-                          SizedBox(width: 30),
+                          SizedBox(width: size.width < 1000 ? 10 : 30),
                           StreamBuilder(
                               stream: cloudstoreRef.getStores(),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator(color: purple);
+                                  return CircularProgressIndicator(
+                                      color: purple);
                                 } else {
                                   final stores = snapshot.data!;
                                   final totalStores = stores.length;
                                   return Container(
                                       padding: const EdgeInsets.all(20),
                                       height: 135,
-                                      width: 400,
+                                      width: size.width < 1000 ? 178 : 400,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         color: white,
@@ -249,14 +276,24 @@ class Dashboard extends ConsumerWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Total Stores',
-                                                style: bodyText(black, 16),
+                                                size.width < 1000
+                                                    ? 'Stores'
+                                                    : "Total Stores",
+                                                style: bodyText(
+                                                    black,
+                                                    size.width < 1000
+                                                        ? 13
+                                                        : 16),
                                               ),
-                                              const SizedBox(height: 10),
+                                              const SizedBox(height: 25),
                                               Row(
                                                 children: [
                                                   Text(totalStores.toString(),
-                                                      style: headline(black, 23)),
+                                                      style: headline(
+                                                          black,
+                                                          size.width < 1000
+                                                              ? 15
+                                                              : 23)),
                                                 ],
                                               ),
                                             ],
@@ -266,12 +303,22 @@ class Dashboard extends ConsumerWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Total Staff',
-                                                style: bodyText(black, 16),
+                                                size.width < 1000
+                                                    ? 'Staff'
+                                                    : "Total Staff",
+                                                style: bodyText(
+                                                    black,
+                                                    size.width < 1000
+                                                        ? 13
+                                                        : 16),
                                               ),
-                                              const SizedBox(height: 10),
-                                              Text('100',
-                                                  style: headline(black, 23)),
+                                              const SizedBox(height: 25),
+                                              Text('4',
+                                                  style: headline(
+                                                      black,
+                                                      size.width < 1000
+                                                          ? 15
+                                                          : 23)),
                                             ],
                                           )
                                         ],
@@ -279,39 +326,42 @@ class Dashboard extends ConsumerWidget {
                                 }
                               }),
                         ]),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: _buildPerformanceList(
-                            'Best Performers', bestPerformers),
+                    const SizedBox(height: 20),
+                    SingleChildScrollView(scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: _buildPerformanceList(
+                             context,   'Best Performers', bestPerformers),
+                          ),
+                          SizedBox(width: 20),
+                          Container(
+                            child: _buildPerformanceList(
+                               context, 'Worst Performers', bestPerformers),
+                          ),
+                          SizedBox(width: 20),
+                          Container(
+                            child: _buildPerformanceList(
+                           context,     'Top Suppliers', bestPerformers),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 20),
-                      Container(
-                        child: _buildPerformanceList(
-                            'Worst Performers', bestPerformers),
-                      ),
-                      SizedBox(width: 20),
-                      Container(
-                        child: _buildPerformanceList(
-                            'Top Suppliers', bestPerformers),
-                      ),
-                    ],
-                  )
-                ]);
-          }
-        });
+                    )
+                  ]);
+            }
+          }),
+    );
   }
 
   Widget verticalLine() {
     return Container(height: 40, width: 2, color: grey);
   }
 
-  Widget _buildPerformanceList(String title, List<ProductModel> products) {
+  Widget _buildPerformanceList(BuildContext context, String title, List<ProductModel> products) {
+    final size = MediaQuery.of(context).size;
     return Container(
-      width: 510,
+      width:  size.width < 1000? 250:510,
       padding: EdgeInsets.all(20),
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(10), color: white),
@@ -320,7 +370,7 @@ class Dashboard extends ConsumerWidget {
         children: [
           Text(
             title,
-            style: bodyText(black, 18),
+            style: bodyText(black, size.width < 1000? 15:18),
           ),
           SizedBox(height: 10),
           for (var product in products)
@@ -351,13 +401,15 @@ class EstimateTexts extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('₦ ${amount}', style: headline(black, 23)),
+        Text('₦ ${amount}',
+            style: headline(black, size.width < 1000 ? 15 : 23)),
         Text(
           '• $text',
-          style: headline(color, 16),
+          style: headline(color, size.width < 1000 ? 12 : 16),
         ),
       ],
     );

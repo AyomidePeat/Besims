@@ -106,7 +106,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-
+    print(size.width);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: LayoutBuilder(
@@ -159,10 +159,11 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
+    final size = MediaQuery.of(context).size;
     String currentDate = DateFormat('EEEE, MMMM dd, yyyy').format(now);
     return Container(
       padding: const EdgeInsets.all(10),
-      width: screenWidth - 293,
+      width: size.width <1000? screenWidth - 270 :screenWidth - 293,
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(10), color: white),
       child: Row(

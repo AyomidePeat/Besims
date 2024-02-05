@@ -15,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-await FirebaseFirestore.instance.enablePersistence();
+//await FirebaseFirestore.instance.enablePersistence();
   runApp(const ProviderScope(child: MyApp()));
 }
 
