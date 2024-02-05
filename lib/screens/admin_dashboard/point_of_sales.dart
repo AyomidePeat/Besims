@@ -34,24 +34,24 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
             width: (widget.screenWidth - 293) / 2,
             child: Column(
               children: [
-              //    Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextField(
-              //     controller: searchController,
-              //     onChanged: (query) {
-              //       // Call a function to filter items based on the search query
-              //       filterItems(query);
-              //     },
-              //     decoration: InputDecoration(
-              //       labelText: 'Search',
-              //       hintText: 'Type to search...',
-              //       prefixIcon: Icon(Icons.search),
-              //       border: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(10.0),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+                //    Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: TextField(
+                //     controller: searchController,
+                //     onChanged: (query) {
+                //       // Call a function to filter items based on the search query
+                //       filterItems(query);
+                //     },
+                //     decoration: InputDecoration(
+                //       labelText: 'Search',
+                //       hintText: 'Type to search...',
+                //       prefixIcon: Icon(Icons.search),
+                //       border: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(10.0),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 StreamBuilder(
                   stream: cloudStoreRef.getStocks(),
                   builder: (context, snapshot) {
@@ -59,7 +59,8 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
                       return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Center(child: CircularProgressIndicator(color: purple))
+                            Center(
+                                child: CircularProgressIndicator(color: purple))
                           ]);
                     } else {
                       final List<StockInventoryModel> stocks = snapshot.data!;
@@ -74,13 +75,18 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
                               //String costPrice = stocks[index].costPrice;
                               String sellingPrice = stocks[index].sellingPrice;
                               String quantity = stocks[index].quantity;
-                
+
                               String expiryDate = stocks[index].expiryDate;
                               String status = stocks[index].status;
-                
+
                               return ListTile(
                                 contentPadding: const EdgeInsets.all(0),
-                                title: Container(
+                                title: Container(height: MediaQuery.of(context).size.height-100,
+                                  margin: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: grey,
+                                      borderRadius: BorderRadius.circular(10)),
                                   child: ProductList(
                                     screenWidth: widget.screenWidth,
                                     sn: index + 1,
@@ -127,7 +133,7 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
                     },
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   'Total Price: \$${calculateTotal()}',
                   style: bodyText(black, 16),
@@ -139,11 +145,13 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
       ),
     );
   }
- void filterItems(String query) {
+
+  void filterItems(String query) {
     // Implement the logic to filter items based on the search query
     // Use the new filterStocksByName method in FirestoreClass
     firestore.filterStocksByName(query);
   }
+
   double calculateTotal() {
     return selectedItems.fold(
         0, (total, product) => total + num.parse(product.sellingPrice));
@@ -219,7 +227,7 @@ class _ProductListState extends State<ProductList> {
           InkWell(
             onTap: widget.onTap,
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               color: purple,
               child: Icon(Icons.add, size: 15, color: white),
             ),

@@ -137,7 +137,7 @@ class _UsersState extends ConsumerState<Users> {
                 stream: cloudStoreRef.getUser(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(color: purple);
+                    return Center(child: SizedBox(height:10, width: 10, child: CircularProgressIndicator(color: purple)));
                   } else {
                     final users = snapshot.data!;
                     if (users.isNotEmpty) {

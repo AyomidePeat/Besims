@@ -482,7 +482,6 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
   addProduct() {
     FirestoreClass firestore = FirestoreClass();
     final nameController = TextEditingController();
-    FirestoreClass fireStore = FirestoreClass();
     final expiryDateController = TextEditingController();
     final sellingPriceController = TextEditingController();
     final costPriceController = TextEditingController();
@@ -571,10 +570,10 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                           return ListTile(
                             title: DropdownButtonFormField<String>(
                               hint: const Text('Category'),
-                              value: supplier,
+                              value: category,
                               onChanged: (value) {
                                 setState(() {
-                                  supplier = value!;
+                                  category = value!;
                                 });
                               },
                               items: categories
@@ -701,11 +700,9 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                       const SizedBox(width: 30),
                       InkWell(
                         onTap: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
+
                           final uploadSuccess =
-                              await fireStore.addStockInventory(
+                              await firestore.addStockInventory(
                                   name: nameController.text,
                                   expiryDate: expiryDateController.text,
                                   sellingPrice: sellingPriceController.text,
@@ -714,6 +711,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                                   supplier: supplier!,
                                   category: category!,
                                   status: status!);
+
                           if (uploadSuccess == 'Added') {
                             setState(() {
                               isLoading = false;

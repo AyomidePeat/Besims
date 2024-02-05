@@ -1,4 +1,5 @@
 import 'package:bsims/models/category_model.dart';
+import 'package:bsims/models/change_model.dart';
 import 'package:bsims/models/product_model.dart';
 import 'package:bsims/models/stock_inventory_model.dart';
 import 'package:bsims/models/store_model.dart';
@@ -92,13 +93,15 @@ class FirestoreClass {
     }
     return message;
   }
- Future<Map<String, dynamic>> getCategoryDetails(String stockName) async {
+
+  Future<Map<String, dynamic>> getCategoryDetails(String stockName) async {
     try {
       CollectionReference stockCollection =
           firebaseFirestore.collection('product-categories');
 
-      QuerySnapshot categorySnapshot =
-          await stockCollection.where('categoryName', isEqualTo: stockName).get();
+      QuerySnapshot categorySnapshot = await stockCollection
+          .where('categoryName', isEqualTo: stockName)
+          .get();
 
       if (categorySnapshot.docs.isNotEmpty) {
         Map<String, dynamic> stockData =
@@ -113,6 +116,7 @@ class FirestoreClass {
       rethrow;
     }
   }
+
   Future<String> updateCtegory({
     required String originalName,
     required String newName,
@@ -160,15 +164,19 @@ class FirestoreClass {
         category: category,
         status: status,
         dateAdded: dateAdded);
+       
+
 
     String message = 'Something went wrong';
     try {
+     
       await firebaseFirestore
           .collection('stock-inventory')
           .doc(name)
           .set(stockInventoryModel.toJson());
       message = 'Added';
     } catch (e) {
+      print(e);
       return e.toString();
     }
     return message;
@@ -195,6 +203,7 @@ class FirestoreClass {
     }
     return message;
   }
+
   Future<Map<String, dynamic>> getStockDetails(String stockName) async {
     try {
       CollectionReference stockCollection =
@@ -227,9 +236,8 @@ class FirestoreClass {
     required String supplier,
     required String category,
     required String status,
-   
   }) async {
-     DateTime dateAdded = DateTime.now();
+    DateTime dateAdded = DateTime.now();
     try {
       CollectionReference stockCollection =
           firebaseFirestore.collection('stock-inventory');
@@ -364,7 +372,43 @@ class FirestoreClass {
     }
     return message;
   }
+ Future<List<Change>> getOfflineChanges() async {
+    // Placeholder for retrieving offline changes
+    // You may want to query a local database or use a state management solution
+    // Note: Firestore persistence handles offline changes automatically
 
+    List<Change> changes = [
+      Change( changeData: {'name': 'Updated Product'}),
+      // Add more changes as needed
+    ];
+
+    return changes;
+  }
+
+  // Future<void> applyOfflineChanges() async {
+  //   try {
+  //     List<Change> offlineChanges = await getOfflineChanges();
+
+  //     for (Change change in offlineChanges) {
+  //       await applyChangeToFirebase(change);
+  //     }
+  //   } catch (e) {
+  //     print('Error applying offline changes: $e');
+  //   }
+  // }
+
+  // Future<void> applyChangeToFirebase(Change change) async {
+   
+
+  //   final CollectionReference productsCollection =
+  //       FirebaseFirestore.instance.collection('products');
+
+  //   try {
+  //     await productsCollection.doc(change.productId).update(change.changeData);
+  //   } catch (e) {
+  //     print('Error applying change to Firebase: $e');
+  //   }
+  // }
   Future addSupplier(
       {required String name,
       required String company,
@@ -413,7 +457,8 @@ class FirestoreClass {
     }
     return message;
   }
-   Future<Map<String, dynamic>> getSupplierDetails(String supplierName) async {
+
+  Future<Map<String, dynamic>> getSupplierDetails(String supplierName) async {
     try {
       CollectionReference supplierCollection =
           firebaseFirestore.collection('suppliers');
@@ -434,7 +479,6 @@ class FirestoreClass {
       rethrow;
     }
   }
-
 
   Future<String> updateSupplier(
       {required String originalName,

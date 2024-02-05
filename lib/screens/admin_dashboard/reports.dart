@@ -66,7 +66,6 @@ class _SalesState extends ConsumerState<Sales> {
   }
 
   Future<void> _predictPrice(String productName) async {
-    // Replace these values with your actual Firebase configuration
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     final CollectionReference _productsCollection =
         _firestore.collection('stock-inventory');
@@ -75,7 +74,7 @@ class _SalesState extends ConsumerState<Sales> {
       String lowerCaseProductName = productName.toLowerCase();
 
       DocumentSnapshot productSnapshot = productsSnapshot.docs.firstWhere(
-        (doc) => doc.id.toLowerCase() == lowerCaseProductName,
+        (doc) => doc['name'].toLowerCase() == lowerCaseProductName,
         orElse: () => throw Exception('Product not found'),
       );
       if (productSnapshot.exists) {
@@ -90,12 +89,11 @@ class _SalesState extends ConsumerState<Sales> {
       print('Error predicting price: $e');
       _predictedPrice = null;
     }
-
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final multiply = 0.012;
     final widgetSize = (widget.screenWidth - 293) / 12;
     final cloudstoreRef = ref.watch(cloudStoreProvider);
     return Column(
@@ -199,8 +197,7 @@ class _SalesState extends ConsumerState<Sales> {
                       width: widget.size.width - 293,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: white),
+                          borderRadius: BorderRadius.circular(5), color: white),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -219,8 +216,7 @@ class _SalesState extends ConsumerState<Sales> {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
@@ -261,7 +257,7 @@ class _SalesState extends ConsumerState<Sales> {
                                         firstDate: DateTime(2020),
                                         lastDate: DateTime.now(),
                                       );
-                            
+
                                       if (fromDate != null) {
                                         setState(() {
                                           fromController.text =
@@ -323,7 +319,7 @@ class _SalesState extends ConsumerState<Sales> {
                                         lastDate: DateTime
                                             .now(), // Maximum selectable date
                                       );
-                            
+
                                       if (toDate != null) {
                                         setState(() {
                                           toController.text =
@@ -425,11 +421,12 @@ class _SalesState extends ConsumerState<Sales> {
                     const SizedBox(
                       height: 30,
                     ),
-                    SizedBox(width:  (widget.screenWidth - 293),
-                      child: SaleHeadings(widgetSize: widgetSize)),
+                    SizedBox(
+                        width: (widget.screenWidth - 293),
+                        child: SaleHeadings(widgetSize: widgetSize)),
                     const Divider(),
                     SizedBox(
-                      height: 300,
+                      height: 200,
                       width: widget.screenWidth - 290,
                       child: FutureBuilder<List<ProductModel>>(
                         future: getSales(),
@@ -462,9 +459,8 @@ class _SalesState extends ConsumerState<Sales> {
                                 String seller = stocks.seller;
                                 String stockQty = stocks.stockQty;
                                 String status = stocks.status;
-                                String paymentMethod =
-                                    stocks.paymentMethod;
-                                  
+                                String paymentMethod = stocks.paymentMethod;
+
                                 return productList(widget.screenWidth,
                                     sn: index + 1,
                                     category: category,
@@ -481,6 +477,7 @@ class _SalesState extends ConsumerState<Sales> {
                         },
                       ),
                     ),
+                    SizedBox(height: 20),
                     SizedBox(
                       width: widget.screenWidth - 290,
                       child: TextField(
@@ -496,10 +493,15 @@ class _SalesState extends ConsumerState<Sales> {
                       child: const Text('Predict Price'),
                     ),
                     const SizedBox(height: 14.0),
-                    _predictedPrice != null
-                        ? Text(
-                            'Predicted Price: \$${_predictedPrice!.toStringAsFixed(2)}')
-                        : Container(),
+                    if (_predictedPrice != null)
+                      Text(
+                        'Predicted Price: \₦${_predictedPrice!.toStringAsFixed(2)}',
+                      ),
+                    // if (_predictedPrice == null)
+                    //   Text(
+                    //     'Product not found',
+                    //     style: TextStyle(color: Colors.red),
+                    //   ),
                   ],
                 );
               }
