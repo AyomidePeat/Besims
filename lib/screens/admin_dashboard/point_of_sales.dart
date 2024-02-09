@@ -4,6 +4,7 @@ import 'package:bsims/firebase_repos/cloud_firestore.dart';
 import 'package:bsims/models/stock_inventory_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class PointofSales extends ConsumerStatefulWidget {
   final double screenWidth;
@@ -23,6 +24,8 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
     super.dispose();
   }
 
+  List paymentOption = ['Cash', 'Transfer', 'POS', 'Cheque'];
+  String? payment;
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
@@ -34,7 +37,153 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: ((widget.screenWidth - 293) / 2)-100,
+              width: (widget.screenWidth - 293) / 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: purple,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Product',
+                            style: bodyText(white, 14),
+                          ),
+                          Text(
+                            'Price',
+                            style: bodyText(white, 14),
+                          ),
+                          Text(
+                            'Quantity',
+                            style: bodyText(white, 14),
+                          ),
+                          Text(
+                            'Sub-Total',
+                            style: bodyText(white, 14),
+                          )
+                        ],
+                      )),
+                  SizedBox(
+                    height: 600,
+                    child: ListView.builder(
+                      itemCount: selectedItems.length,
+                      itemBuilder: (context, index) {
+                        int price =
+                            int.parse(selectedItems[index].sellingPrice);
+                        final formattedPrice =
+                            NumberFormat('#,###').format(price);
+                        return Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(selectedItems[index].name),
+                              Text(formattedPrice),
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(color: black)),
+                                width: 60,
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '$counter',
+                                        style: bodyText(black, 15),
+                                      ),
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                              onTap: incrementer,
+                                              child: const Icon(
+                                                  Icons.arrow_drop_up,
+                                                  size: 25)),
+                                          InkWell(
+                                              onTap: decrementer,
+                                              child: const Icon(
+                                                  Icons.arrow_drop_down,
+                                                  size: 25)),
+                                        ],
+                                      ),
+                                    ]),
+                              ),
+                              Text('${getTotal(price)}'),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal:10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: purple,
+                    ),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Total Items: ${selectedItems.length}',
+                              style: bodyText(white, 16),
+                            ),
+                            Text(
+                              'Total Price:  ₦${formatTotal(calculateTotal())}',
+                              style: bodyText(white, 16),
+                            ),
+                          ],
+                        ),
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                                 height:37,
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                              child: DropdownButtonFormField(dropdownColor:purple ,
+                                hint:  Text('Cash', style:bodyText(white, 16)),
+                                value: payment,
+                                onChanged: (value) {
+                                  setState(() {
+                                    payment = value as String;
+                                  });
+                                },
+                                items: paymentOption
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.toString(),style:bodyText(white, 16) ),
+                                        ))
+                                    .toList(),
+                                decoration:  InputDecoration(fillColor: purple,
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                            Text('Print Receipt',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: white,
+                                    fontSize: 16))
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: ((widget.screenWidth - 293) / 2) - 100,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -56,11 +205,10 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
                   //     ),
                   //   ),
                   // ),
-                  Text(
-                    'Available Products in the store:',
-                    style: bodyText(black, 16),
+
+                  const SizedBox(
+                    height: 20,
                   ),
-                  SizedBox(height: 20,),
                   StreamBuilder(
                     stream: cloudStoreRef.getStocks(),
                     builder: (context, snapshot) {
@@ -122,35 +270,6 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
                 ],
               ),
             ),
-            SizedBox(
-              width: (widget.screenWidth - 293) / 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Selected Items:',
-                    style: bodyText(black, 16),
-                  ),
-                  SizedBox(
-                    height: 600,
-                    child: ListView.builder(
-                      itemCount: selectedItems.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(selectedItems[index].name),
-                          subtitle: Text(selectedItems[index].sellingPrice),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Total Price: \$${calculateTotal()}',
-                    style: bodyText(black, 16),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -158,14 +277,37 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
   }
 
   void filterItems(String query) {
-    // Implement the logic to filter items based on the search query
-    // Use the new filterStocksByName method in FirestoreClass
     firestore.filterStocksByName(query);
   }
 
   double calculateTotal() {
     return selectedItems.fold(
         0, (total, product) => total + num.parse(product.sellingPrice));
+  }
+
+  String formatTotal(double total) {
+    final formattedPrice = NumberFormat('#,###').format(total);
+    return formattedPrice;
+  }
+
+  int counter = 1;
+
+  void incrementer() {
+    setState(() {
+      counter++;
+    });
+  }
+
+  void decrementer() {
+    setState(() {
+      if (counter > 1) {
+        counter--;
+      }
+    });
+  }
+
+  double getTotal(total) {
+    return total * counter;
   }
 }
 
@@ -197,25 +339,10 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   final firestore = FirestoreClass();
-  int counter = 1;
-  void incrementer() {
-    setState(() {
-      counter++;
-    });
-  }
-
-  void decrementer() {
-    setState(() {
-      if (counter >= 1) {
-        counter--;
-      }
-    });
-  }
-  // List<StockInventoryModel> selectedItems = [];
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -242,7 +369,8 @@ class _ProductListState extends State<ProductList> {
               color: purple,
               child: Icon(Icons.add, size: 15, color: white),
             ),
-          )
+          ),
+          const Divider()
           // Row(
           //   children: [
           //     InkWell(
