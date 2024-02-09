@@ -27,121 +27,132 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
     return Material(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: (widget.screenWidth - 293) / 2,
-            child: Column(
-              children: [
-                //    Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: TextField(
-                //     controller: searchController,
-                //     onChanged: (query) {
-                //       // Call a function to filter items based on the search query
-                //       filterItems(query);
-                //     },
-                //     decoration: InputDecoration(
-                //       labelText: 'Search',
-                //       hintText: 'Type to search...',
-                //       prefixIcon: Icon(Icons.search),
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(10.0),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                StreamBuilder(
-                  stream: cloudStoreRef.getStocks(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                                child: CircularProgressIndicator(color: purple))
-                          ]);
-                    } else {
-                      final List<StockInventoryModel> stocks = snapshot.data!;
-                      return SizedBox(
-                        width: widget.screenWidth - 280,
-                        height: 446,
-                        child: ListView.builder(
-                            itemCount: stocks.length,
-                            itemBuilder: (context, index) {
-                              String productName = stocks[index].name;
-                              String category = stocks[index].category;
-                              //String costPrice = stocks[index].costPrice;
-                              String sellingPrice = stocks[index].sellingPrice;
-                              String quantity = stocks[index].quantity;
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: ((widget.screenWidth - 293) / 2)-100,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //    Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: TextField(
+                  //     controller: searchController,
+                  //     onChanged: (query) {
+                  //       // Call a function to filter items based on the search query
+                  //       filterItems(query);
+                  //     },
+                  //     decoration: InputDecoration(
+                  //       labelText: 'Search',
+                  //       hintText: 'Type to search...',
+                  //       prefixIcon: Icon(Icons.search),
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(10.0),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  Text(
+                    'Available Products in the store:',
+                    style: bodyText(black, 16),
+                  ),
+                  SizedBox(height: 20,),
+                  StreamBuilder(
+                    stream: cloudStoreRef.getStocks(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                  child:
+                                      CircularProgressIndicator(color: purple))
+                            ]);
+                      } else {
+                        final List<StockInventoryModel> stocks = snapshot.data!;
+                        return SizedBox(
+                          width: widget.screenWidth - 280,
+                          height: 446,
+                          child: ListView.builder(
+                              itemCount: stocks.length,
+                              itemBuilder: (context, index) {
+                                String productName = stocks[index].name;
+                                String category = stocks[index].category;
+                                //String costPrice = stocks[index].costPrice;
+                                String sellingPrice =
+                                    stocks[index].sellingPrice;
+                                String quantity = stocks[index].quantity;
 
-                              String expiryDate = stocks[index].expiryDate;
-                              String status = stocks[index].status;
+                                String expiryDate = stocks[index].expiryDate;
+                                String status = stocks[index].status;
 
-                              return ListTile(
-                                contentPadding: const EdgeInsets.all(0),
-                                title: Container(height: MediaQuery.of(context).size.height-100,
-                                  margin: const EdgeInsets.all(10),
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      color: grey,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: ProductList(
-                                    screenWidth: widget.screenWidth,
-                                    sn: index + 1,
-                                    category: category,
-                                    expiryDate: expiryDate,
-                                    price: sellingPrice,
-                                    productName: productName,
-                                    status: status,
-                                    quantity: quantity,
-                                    onTap: () {
-                                      setState(() {
-                                        selectedItems.add(stocks[index]);
-                                      });
-                                    },
+                                return Container(
+                                  color: grey,
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.all(0),
+                                    title: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ProductList(
+                                        screenWidth: widget.screenWidth,
+                                        sn: index + 1,
+                                        category: category,
+                                        expiryDate: expiryDate,
+                                        price: sellingPrice,
+                                        productName: productName,
+                                        status: status,
+                                        quantity: quantity,
+                                        onTap: () {
+                                          setState(() {
+                                            selectedItems.add(stocks[index]);
+                                          });
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              );
-                            }),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: (widget.screenWidth - 293) / 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Selected Items:',
-                  style: bodyText(black, 16),
-                ),
-                SizedBox(
-                  height: 600,
-                  child: ListView.builder(
-                    itemCount: selectedItems.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(selectedItems[index].name),
-                        subtitle: Text(selectedItems[index].sellingPrice),
-                      );
+                                );
+                              }),
+                        );
+                      }
                     },
                   ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Total Price: \$${calculateTotal()}',
-                  style: bodyText(black, 16),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            SizedBox(
+              width: (widget.screenWidth - 293) / 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Selected Items:',
+                    style: bodyText(black, 16),
+                  ),
+                  SizedBox(
+                    height: 600,
+                    child: ListView.builder(
+                      itemCount: selectedItems.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(selectedItems[index].name),
+                          subtitle: Text(selectedItems[index].sellingPrice),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Total Price: \$${calculateTotal()}',
+                    style: bodyText(black, 16),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

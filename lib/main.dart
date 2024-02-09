@@ -1,21 +1,23 @@
 import 'package:bsims/screens/admin_dashboard/home.dart';
-import 'package:bsims/screens/authentication/login.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:bsims/screens/authentication/login.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:firebase_core/firebase_core.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'firebase_options.dart';
 
-
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  WidgetsFlutterBinding.ensureInitialized(); 
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-//await FirebaseFirestore.instance.enablePersistence();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -27,14 +29,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'BeSeamless',
       theme: FlexThemeData.light(
-        scheme: FlexScheme.deepPurple,
-       fontFamily: 'Kanit'
-      ),      
-     
-      home:  const Home(),
+          scheme: FlexScheme.deepPurple, fontFamily: 'Kanit'),
+      home: Builder(builder: (context) {
+        if (kIsWeb) {
+          return const Home();
+        } else {
+          return const LoginPage();
+        }
+      }),
     );
   }
 }
-
-
-

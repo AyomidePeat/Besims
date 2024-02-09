@@ -1,6 +1,7 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/authentication/signup.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bsims/firebase_repos/authentication.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -25,19 +26,19 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  AuthenticationMethod auth = AuthenticationMethod();
   bool isLoading = false;
   bool isObscure = true;
   bool emptyField = false;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final containerWidth =size.width * 0.7;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 226, 222, 235),
       body: Center(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 70, vertical: 100),
-          width: size.width * 0.7,
+          width: containerWidth,
           height: size.height * 0.8,
           decoration: BoxDecoration(
               color: white,
@@ -52,131 +53,150 @@ class _LoginPageState extends State<LoginPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 50.0,
-                  left: 50,
-                ),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 50),
-                      Row(
-                        children: [
-                          Text('BeSeamless', style: headline(purple!, 25)),
-                          Icon(
-                            Icons.show_chart_sharp,
-                            color: Colors.purple[900],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      TextFieldWidget(
-                          controller: emailAddressController,
-                          label: 'Email Address'),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFieldWidget(
-                          isObscure: isObscure,
-                          controller: passwordController,
-                          label: 'Password'),
-                      TextButton(
-                          onPressed: () {
-                            setState(() {
-                              isObscure = !isObscure;
-                            });
-                          },
-                          child: Text(
-                            isObscure ? 'Show password' : 'Hide password',
-                            style: TextStyle(color: black, fontSize: 12),
-                          )),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      if(emptyField)
-                      Center(child: Text('Please fill all fields', style:bodyText(red, 13))),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      CustomMainButton(
-                          width: 400,
-                          height: 50,
-                          onPressed: () async {
-                            if (emailAddressController.text.isNotEmpty &&
-                                passwordController.text.isNotEmpty) {
+              SizedBox(width: containerWidth/2,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 50.0,
+                    left: 50,
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 50),
+                        Row(
+                          children: [
+                            Text('BeSeamless', style: headline(purple!,size.width<1000?15: 25)),
+                            Icon(
+                              Icons.show_chart_sharp,
+                              color: Colors.purple[900],
+                            ),
+                          ],
+                        ),
+                         SizedBox(
+                          height: size.width<1500?25: 40,
+                        ),
+                        TextFieldWidget(
+                            controller: emailAddressController,
+                            label: 'Email Address'),
+                         SizedBox(
+                          height:size.width<1500?15: 20,
+                        ),
+                        TextFieldWidget(
+                            isObscure: isObscure,
+                            controller: passwordController,
+                            label: 'Password'),
+                        TextButton(
+                            onPressed: () {
+                              
                               setState(() {
-                                emptyField = false;
-                                isLoading = true;
+                                isObscure = !isObscure;
                               });
-                              final message = await auth.signIn(
-                                  email: emailAddressController.text,
-                                  password: passwordController.text);
-                              if (message == "Success") {
+                            },
+                            child: Text(
+                              isObscure ? 'Show password' : 'Hide password',
+                              style: TextStyle(color: black, fontSize: 12),
+                            )),
+                         SizedBox(
+                          height:size.width<1500?15: 20,
+                        ),
+                        if(emptyField)
+                        Text('Please fill all fields', style:bodyText(red, 13)),
+                         SizedBox(
+                          height:size.width<1500?20: 30,
+                        ),
+                        if(!kIsWeb)
+                        CustomMainButton(width: size.width<1500?200:400,
+                            height: 50, onPressed: (){ Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Home()));},  color: purple!,
+                            child: isLoading
+                                ? LoadingAnimationWidget.beat(
+                                    color: white, size: 20)
+                                : Text(
+                                    'Login',
+                                    style: headline(white, size.width<1500?12: 14),
+                                  )),
+                         if (kIsWeb)
+                        CustomMainButton(
+                            width:size.width<1500?300: 400,
+                            height: 50,
+                            onPressed: () async {
+                                AuthenticationMethod auth = AuthenticationMethod();
+                
+                              if (emailAddressController.text.isNotEmpty &&
+                                  passwordController.text.isNotEmpty) {
                                 setState(() {
-                                  isLoading = false;
+                                  emptyField = false;
+                                  isLoading = true;
                                 });
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Home()));
+                                final message = await auth.signIn(
+                                    email: emailAddressController.text,
+                                    password: passwordController.text);
+                                if (message == "Success") {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Home()));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          backgroundColor: Colors.red,
+                                          content: Text(
+                                              message,
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  fontSize: 16))));
+                
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                }
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        backgroundColor: Colors.red,
-                                        content: Text(
-                                            message,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontSize: 16))));
-
                                 setState(() {
-                                  isLoading = false;
+                                  emptyField = true;
                                 });
                               }
-                            } else {
-                              setState(() {
-                                emptyField = true;
-                              });
-                            }
-                          },
-                          color: purple!,
-                          child: isLoading
-                              ? LoadingAnimationWidget.beat(
-                                  color: white, size: 20)
-                              : Text(
-                                  'Login',
-                                  style: headline(white, 14),
-                                )),
-                      const SizedBox(height: 30),
-                      Row(
-                        children: [
-                          const SizedBox(width: 64),
-                          Text('Don\'t have an account?',
-                              style: bodyText(Colors.grey, 14)),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignUpPage()));
-                              },
-                              child: const Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold),
-                              ))
-                        ],
-                      ),
-                    ]),
+                            },
+                            color: purple!,
+                            child: isLoading
+                                ? LoadingAnimationWidget.beat(
+                                    color: white, size: 20)
+                                : Text(
+                                    'Login',
+                                    style: headline(white, size.width<1500?12:14),
+                                  )),
+                         SizedBox(height: size.width<1500?15:30),
+                        Row(
+                          children: [
+                             SizedBox(width: size.width<1500?40:64),
+                            Text('Don\'t have an account?',
+                                style: bodyText(Colors.grey,size.width<1500?12: 14)),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SignUpPage()));
+                                },
+                                child:  Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      fontSize: size.width<1500?10:12,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
+                        ),
+                      ]),
+                ),
               ),
               Container(
-                width: (size.width * 0.7) / 2,
+                width: containerWidth/2,
                 height: size.height * 0.8,
                 padding: EdgeInsets.only(left: 20),
                 decoration: const BoxDecoration(
@@ -184,30 +204,30 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: Column(
                   children: [
-                    const SizedBox(
-                      height: 50,
+                     SizedBox(
+                      height: size.width<1500? 30:50,
                     ),
                     Text(
                       'Welcome back to BeSeamless!',
                       style: TextStyle(
                           color: white,
-                          fontSize: 30,
+                          fontSize:size.width<1500?15: 30,
                           letterSpacing: 1,
                           fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(
+                     SizedBox(
                       height: 35,
                     ),
                     Text(
                       'Get rid of the stress that comes\n with manual bookkeeping',
                       style: TextStyle(
                         color: white,
-                        fontSize: 13,
+                        fontSize:size.width<1500?10: 13,
                         letterSpacing: 1,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 540, child: Image.asset('assets/bgg.png')),
+                    SizedBox(height: size.width<1500?400:540, child: Image.asset('assets/bgg.png')),
                   ],
                 ),
               ),
