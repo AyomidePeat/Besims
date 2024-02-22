@@ -174,11 +174,11 @@ class Header extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Admin Name',
+                      'Cshier Name',
                       style: headline(black, 14),
                     ),
                     Text(
-                      'Admin@email.com',
+                      'Cashier@email.com',
                       style: bodyText(purple!, 8),
                     ),
                   ],

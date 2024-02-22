@@ -17,8 +17,8 @@ class AuthenticationMethod {
     password.trim();
     if (name != "" && email != "" && password != "") {
       try {
-        final userCredential = await auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+        // final userCredential = await auth.createUserWithEmailAndPassword(
+        //     email: email, password: password);
 
         await firestoreClass.addUser(
             name: name,
@@ -63,8 +63,8 @@ class AuthenticationMethod {
     password.trim();
     if (name != "" && email != "" && password != "") {
       try {
-        final userCredential = await auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+        // final userCredential = await auth.createUserWithEmailAndPassword(
+        //     email: email, password: password);
         final fileName = name;
         final firebaseStorageRef =
             firebase_storage.FirebaseStorage.instance.ref().child(fileName);

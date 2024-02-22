@@ -43,7 +43,7 @@ class _MenuContainerState extends State<MenuContainer> {
     'Category',
     'Products',
     'Orders',
-    'Point of Sales'
+    'Point of Sales',
     'Reports'
   ];
 
