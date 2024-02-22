@@ -1,4 +1,5 @@
 import 'package:bsims/screens/admin_dashboard/home.dart';
+import 'package:bsims/screens/cashier_dashboard/cashier_home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
           scheme: FlexScheme.deepPurple, fontFamily: 'Kanit'),
       home: Builder(builder: (context) {
         if (kIsWeb) {
-          return const Home();
+          return const CashierHome();
         } else {
           return const LoginPage();
         }

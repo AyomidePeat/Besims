@@ -1,5 +1,5 @@
 import 'package:bsims/const/colors.dart';
- 
+
 import 'package:flutter/material.dart';
 
 class MenuStuff {
@@ -14,8 +14,7 @@ class MenuItems {
     'DashBoard',
     Icons.home,
   );
-
-
+ 
   static const category = MenuStuff(
     'Category',
     Icons.category_outlined,
@@ -28,19 +27,23 @@ class MenuItems {
     'Orders',
     Icons.delivery_dining,
   );
-  static const reports = MenuStuff('Reports', Icons.bar_chart);
+  static const pointOfSales = MenuStuff(
+    'Point of Sales',
+    Icons.business,
+  );
+ 
   static const sales = MenuStuff(
     'Sales',
     Icons.shopping_cart_checkout,
   );
   static final all = <MenuStuff>[
     dashboard,
-  
+   
     category,
     products,
-    sales,
     orders,
-    reports,
+    pointOfSales,
+  
   ];
 }
 
@@ -55,21 +58,34 @@ class CashierNavigationPane extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          //Spacer(),
-
           ...MenuItems.all.map(buildMenuItem).toList(),
-
-          Spacer(flex: 2),
+          const Spacer(flex: 2),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Row(
+              children: [
+                Icon(Icons.logout_rounded, color: Colors.grey),
+                Text(
+                  'Log Out',
+                ),
+              ],
+            ),
+          )
         ],
       );
-  Widget buildMenuItem(MenuStuff item) => ListTileTheme(
-        selectedColor: black,
-        selectedTileColor: green,
-        child: ListTile(tileColor: red,
-          //selectedTileColor: Colors.black26,
+  Widget buildMenuItem(MenuStuff item) => Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: ListTile(
+          selectedColor: purple,
+          contentPadding: const EdgeInsets.all(0),
           selected: currentItem == item,
-          minLeadingWidth: 20, hoverColor: red,
-          leading: Icon(item.icon, color: white),
+          minLeadingWidth: 20,
+          hoverColor: Colors.red[600],
+          leading: Icon(
+            item.icon,
+          ),
           title: Text(
             item.title,
           ),

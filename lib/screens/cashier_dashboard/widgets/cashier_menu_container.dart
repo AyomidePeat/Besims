@@ -1,7 +1,6 @@
 import 'package:bsims/const/colors.dart';
 import 'package:bsims/const/textstyle.dart';
-
-import 'package:bsims/screens/cashier_dashboard/widgets/cashier_drawer.dart';
+import 'package:bsims/screens/cashier_dashboard/widgets/cashier_drawer_pane.dart';
 
 import 'package:flutter/material.dart';
 

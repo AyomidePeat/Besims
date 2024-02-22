@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bsims/const/colors.dart';
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/firebase_repos/cloud_firestore.dart';
@@ -5,6 +7,9 @@ import 'package:bsims/models/stock_inventory_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'dart:html' as html;
 
 class PointofSales extends ConsumerStatefulWidget {
   final double screenWidth;
@@ -24,8 +29,10 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
     super.dispose();
   }
 
+  final pdf = pw.Document();
   List paymentOption = ['Cash', 'Transfer', 'POS', 'Cheque'];
   String? payment;
+  String paymentFile = '';
   @override
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
@@ -123,11 +130,13 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
                   ),
                   const SizedBox(height: 10),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal:10, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: purple,
                     ),
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,38 +151,132 @@ class _PointofSalesState extends ConsumerState<PointofSales> {
                             ),
                           ],
                         ),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                                 height:37,
-                                  width: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                              child: DropdownButtonFormField(dropdownColor:purple ,
-                                hint:  Text('Cash', style:bodyText(white, 16)),
+                              height: 37,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: DropdownButtonFormField(
+                                dropdownColor: purple,
+                                hint: Text('Cash', style: bodyText(white, 16)),
                                 value: payment,
                                 onChanged: (value) {
                                   setState(() {
                                     payment = value as String;
+                                    payment = payment;
+                                  });
+                                  setState(() {
+                                    paymentFile = payment!;
                                   });
                                 },
                                 items: paymentOption
                                     .map((e) => DropdownMenuItem(
                                           value: e,
-                                          child: Text(e.toString(),style:bodyText(white, 16) ),
+                                          child: Text(e.toString(),
+                                              style: bodyText(white, 16)),
                                         ))
                                     .toList(),
-                                decoration:  InputDecoration(fillColor: purple,
+                                decoration: InputDecoration(
+                                  fillColor: purple,
                                   border: InputBorder.none,
                                 ),
                               ),
                             ),
-                            Text('Print Receipt',
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: white,
-                                    fontSize: 16))
+                            InkWell(
+                              onTap: () async {
+                                pdf.addPage(pw.Page(
+                                    pageFormat: PdfPageFormat.a4,
+                                    build: (pw.Context context) {
+                                      return pw.Container(
+                                          padding: pw.EdgeInsets.all(10),
+                                          width: 500,
+                                          decoration: pw.BoxDecoration(
+                                              border: pw.Border.all(
+                                                  color: PdfColors.black)),
+                                          child: pw.Column(
+                                              crossAxisAlignment:
+                                                  pw.CrossAxisAlignment.center,
+                                              children: [
+                                                pw.Row(
+                                                  mainAxisAlignment: pw
+                                                      .MainAxisAlignment.center,
+                                                  children: [
+                                                    pw.Text(
+                                                      'BeSeamless',
+                                                      // style: headline(purple!, 35)
+                                                    ),
+                                                    pw.Icon(pw.IconData(0x2699),
+                                                        color:
+                                                            PdfColors.purple),
+                                                  ],
+                                                ),
+                                                pw.Row(
+                                                  mainAxisAlignment: pw
+                                                      .MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: [
+                                                    pw.Text(
+                                                      'Payment Type',
+                                                      // style: headline(purple!, 35)
+                                                    ),
+                                                    pw.Text(
+                                                      paymentFile,
+                                                    ),
+                                                  ],
+                                                ),
+                                                pw.Text(
+                                                    '--------------------------------------------'),
+                                                pw.Row(
+                                                    mainAxisAlignment: pw
+                                                        .MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      pw.Text('Item'),
+                                                      pw.Text('Qty'),
+                                                      pw.Text('Price'),
+                                                      pw.Text('Amount'),
+                                                    ]),
+                                                pw.Text(
+                                                    '--------------------------------------------'),
+                                                pw.Row(
+                                                  mainAxisAlignment: pw
+                                                      .MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: [
+                                                    for (int index = -1;
+                                                        index <=
+                                                            selectedItems
+                                                                .length;
+                                                        index++)
+                                                      pw.Text(
+                                                          selectedItems[index]
+                                                              .name),
+                                                    // pw.Text(selectedItems[index].name),
+                                                    // pw.Text(selectedItems[index].name),
+                                                    // pw.Text(selectedItems[index].name),
+                                                  ],
+                                                )
+                                              ])); // Center
+                                    }));
+                                var savedFile = await pdf.save();
+                                List<int> fileInts = List.from(savedFile);
+                                html.AnchorElement(
+                                    href:
+                                        "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(fileInts)}")
+                                  ..setAttribute("download",
+                                      "${DateTime.now().millisecondsSinceEpoch}.pdf")
+                                  ..click();
+                              },
+                              child: Text('Print Receipt',
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: white,
+                                      fontSize: 16)),
+                            )
                           ],
                         )
                       ],

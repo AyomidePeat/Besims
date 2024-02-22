@@ -32,6 +32,7 @@ class _HomeState extends State<Home> {
     Icons.category_outlined,
     Icons.shopify_rounded,
     Icons.delivery_dining,
+    Icons.business,
     Icons.bar_chart
   ];
 
@@ -43,8 +44,8 @@ class _HomeState extends State<Home> {
     'Category',
     'Products',
     'Orders',
-    'Point of Sales'
-        'Reports'
+    'Point of Sales',
+    'Reports'
   ];
 
   Widget getScreen() {
@@ -163,7 +164,7 @@ class Header extends StatelessWidget {
     String currentDate = DateFormat('EEEE, MMMM dd, yyyy').format(now);
     return Container(
       padding: const EdgeInsets.all(10),
-      width: size.width <1000? screenWidth - 270 :screenWidth - 293,
+      width: size.width < 1000 ? screenWidth - 270 : screenWidth - 293,
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(10), color: white),
       child: Row(

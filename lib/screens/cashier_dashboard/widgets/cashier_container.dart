@@ -5,13 +5,13 @@ import 'package:bsims/widgets/drawer_pane.dart';
 
 import 'package:flutter/material.dart';
 
-class MenuContainer extends StatefulWidget {
+class CashierMenuContainer extends StatefulWidget {
   final double screenWidth;
   final MenuStuff currentItem;
   final Size size;
   final ValueChanged<MenuStuff> onSelectedItem;
 
-  MenuContainer(
+  CashierMenuContainer(
       {super.key,
       required this.screenWidth,
       required this.size,
@@ -19,10 +19,10 @@ class MenuContainer extends StatefulWidget {
       required this.currentItem});
 
   @override
-  State<MenuContainer> createState() => _MenuContainerState();
+  State<CashierMenuContainer> createState() => _CashierMenuContainerState();
 }
 
-class _MenuContainerState extends State<MenuContainer> {
+class _CashierMenuContainerState extends State<CashierMenuContainer> {
   List icons = [
     Icons.home,
     Icons.store,

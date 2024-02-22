@@ -1,15 +1,13 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/admin_dashboard/category.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
-import 'package:bsims/screens/admin_dashboard/reports.dart';
+import 'package:bsims/screens/admin_dashboard/orders.dart';
+import 'package:bsims/screens/admin_dashboard/point_of_sales.dart';
 import 'package:bsims/screens/admin_dashboard/stock_inventory.dart';
-
-import 'package:bsims/screens/cashier_dashboard/sell_product.dart';
-import 'package:bsims/screens/cashier_dashboard/widgets/cashier_drawer.dart';
+import 'package:bsims/screens/cashier_dashboard/widgets/cashier_drawer_pane.dart';
 import 'package:bsims/screens/cashier_dashboard/widgets/cashier_menu_container.dart';
-
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../../const/colors.dart';
 
 class CashierHome extends StatefulWidget {
@@ -21,55 +19,54 @@ class CashierHome extends StatefulWidget {
 
 class _CashierHomeState extends State<CashierHome> {
   double screenWidth = 0;
-  Size size = Size(0, 0);
+  Size size = const Size(0, 0);
   List icons = [
     Icons.home,
     Icons.category_outlined,
     Icons.shopify_rounded,
-    Icons.shopping_cart_checkout,
     Icons.delivery_dining,
-    Icons.bar_chart
+    Icons.business,
+   
   ];
 
   List screens = [
     'DashBoard',
     'Category',
     'Products',
-    'Sales'
-        'Orders',
-    'Reports'
+    'Orders',
+    'Point of Sales',
+  
   ];
 
   Widget getScreen() {
     switch (currentItem) {
       case MenuItems.dashboard:
-        return Dashboard(
-          screenWidth: screenWidth,
-          size: size,
+        return Row(
+          children: [
+            SingleChildScrollView(
+              child: Dashboard(
+                screenWidth: screenWidth,
+                size: size,
+              ),
+            ),
+          ],
         );
       case MenuItems.category:
         return ProductCategoryList(
           screenWidth: screenWidth,
         );
       case MenuItems.orders:
-        return ProductCategoryList(
+        return Orders(
           screenWidth: screenWidth,
         );
       case MenuItems.products:
         return StockInventory(
           screenWidth: screenWidth,
         );
-      case MenuItems.reports:
-        return Sales(
-          screenWidth: screenWidth,
-          size: size,
-        );
-      case MenuItems.sales:
-        return SellProduct(
-          screenWidth: screenWidth,
-          size: size,
-        );
-
+     
+     
+      case MenuItems.pointOfSales:
+        return PointofSales(screenWidth: screenWidth);
       default:
         return Dashboard(
           screenWidth: screenWidth,
@@ -79,18 +76,23 @@ class _CashierHomeState extends State<CashierHome> {
   }
 
   MenuStuff currentItem = MenuItems.dashboard;
+  final searchController = TextEditingController();
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-
+    print(size.width);
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 230, 221, 221),
+      backgroundColor: Colors.grey[200],
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         screenWidth = constraints.maxWidth;
 
-//double containerWidth =
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
@@ -107,14 +109,13 @@ class _CashierHomeState extends State<CashierHome> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Header(screenWidth: screenWidth),
+                  Header(
+                      screenWidth: screenWidth,
+                      searchController: searchController),
                   const SizedBox(
                     height: 30,
                   ),
                   getScreen()
-
-                  // SellProduct (screenWidth: screenWidth, size:size)
-                  // Dashboard(screenWidth: screenWidth, size: size, )
                 ],
               ),
             ],
@@ -129,48 +130,70 @@ class Header extends StatelessWidget {
   const Header({
     super.key,
     required this.screenWidth,
+    required this.searchController,
   });
 
   final double screenWidth;
+  final TextEditingController searchController;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), color: green),
-          child: Text(
-            'Be Seamless (Business Enterprise Sales and Inventory Management System)',
-            style: headline(white, screenWidth * 0.015),
-          ),
-        ),
-        SizedBox(width: screenWidth * 0.005),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final now = DateTime.now();
+    final size = MediaQuery.of(context).size;
+    String currentDate = DateFormat('EEEE, MMMM dd, yyyy').format(now);
+    return Container(
+      padding: const EdgeInsets.all(10),
+      width: size.width <1000? screenWidth - 270 :screenWidth - 293,
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(10), color: white),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+              height: 40,
+              width: (screenWidth - 293) / 3,
+              child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                      filled: false,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          borderSide: BorderSide(color: grey)),
+                      label: Text(
+                        'Search product, supplier, order',
+                        style: bodyText(Colors.grey[400]!, 14),
+                      ),
+                      prefixIcon: const Icon(Icons.search)))),
+          Row(
             children: [
-              Text(
-                'Admin Name',
-                style: headline(black, 14),
+              Text(currentDate),
+              const SizedBox(width: 20),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Admin Name',
+                      style: headline(black, 14),
+                    ),
+                    Text(
+                      'Admin@email.com',
+                      style: bodyText(purple!, 8),
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                'Admin@email.com',
-                style: bodyText(green, 8),
+              const SizedBox(
+                width: 10,
+              ),
+              CircleAvatar(
+                backgroundColor: purple,
               ),
             ],
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        CircleAvatar(
-          backgroundColor: green,
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
