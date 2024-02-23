@@ -874,7 +874,7 @@ Widget productList(
         SizedBox(
           width: widgetSize,
           child: Text(
-            quantity,
+            seller,
             style: bodyText(black, 14),
           ),
         ),

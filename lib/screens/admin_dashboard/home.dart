@@ -1,4 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
+import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/models/user_model.dart';
 import 'package:bsims/screens/admin_dashboard/category.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
 import 'package:bsims/screens/admin_dashboard/orders.dart';
@@ -11,17 +13,21 @@ import 'package:bsims/screens/admin_dashboard/users.dart';
 import 'package:bsims/widgets/drawer_pane.dart';
 import 'package:bsims/widgets/menu_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../const/colors.dart';
-
-class Home extends StatefulWidget {
+final userDetailsProvider = FutureProvider<UserModel?>((ref) async {
+  final cloudStoreRef = ref.read(cloudStoreProvider);
+  return cloudStoreRef.getUserDetails();
+});
+class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends ConsumerState<Home> {
   double screenWidth = 0;
   Size size = const Size(0, 0);
   List icons = [
@@ -47,6 +53,10 @@ class _HomeState extends State<Home> {
     'Point of Sales',
     'Reports'
   ];
+    String name = '';
+  String email = '';
+  String username = '';
+  String image = '';
 
   Widget getScreen() {
     switch (currentItem) {
@@ -107,6 +117,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+        final userDetailsAsyncValue = ref.watch(userDetailsProvider);
     print(size.width);
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -130,11 +141,31 @@ class _HomeState extends State<Home> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Header(
-                      screenWidth: screenWidth,
-                      searchController: searchController),
-                  const SizedBox(
-                    height: 30,
+                 userDetailsAsyncValue.when(
+                    data: (userDetails) {
+                      if (userDetails != null) {
+                        name = userDetails.name;
+                        email = userDetails.email;
+                        image = userDetails.image;
+
+                        return Header(
+                            image: image,
+                            email: email,
+                            name: name,
+                            screenWidth: screenWidth,
+                            searchController: searchController);
+                      } else {
+                        return Header(
+                            image:
+                                'https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg',
+                            email: 'admin@gmail.com',
+                            name: 'Admin',
+                            screenWidth: screenWidth,
+                            searchController: searchController);
+                      }
+                    },
+                    loading: () => const CircularProgressIndicator(),
+                    error: (error, stackTrace) => Text('Error: $error'),
                   ),
                   getScreen()
                 ],
@@ -148,13 +179,17 @@ class _HomeState extends State<Home> {
 }
 
 class Header extends StatelessWidget {
-  const Header({
-    super.key,
-    required this.screenWidth,
-    required this.searchController,
-  });
-
+  const Header(
+      {super.key,
+      required this.screenWidth,
+      required this.searchController,
+      required this.name,
+      required this.email,
+      required this.image});
+  final String name;
+  final String email;
   final double screenWidth;
+  final String image;
   final TextEditingController searchController;
 
   @override
@@ -195,11 +230,11 @@ class Header extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Admin Name',
+                      name,
                       style: headline(black, 14),
                     ),
                     Text(
-                      'Admin@email.com',
+                      email,
                       style: bodyText(purple!, 8),
                     ),
                   ],
@@ -209,7 +244,7 @@ class Header extends StatelessWidget {
                 width: 10,
               ),
               CircleAvatar(
-                backgroundColor: purple,
+                backgroundImage: NetworkImage(image),
               ),
             ],
           )
