@@ -7,12 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../const/colors.dart';
 
+
 class CashierDashboard extends ConsumerWidget {
-  CashierDashboard({
-    super.key,
-    required this.screenWidth,
-    required this.size,
-  });
+  CashierDashboard(
+      {super.key,
+      required this.screenWidth,
+      required this.size,
+      required this.fullName});
 
   final double screenWidth;
   final Size size;
@@ -40,17 +41,20 @@ class CashierDashboard extends ConsumerWidget {
     return allProducts.take(3).toList();
   }
 
+  
+  final String fullName;
+  
   @override
   Widget build(BuildContext context, ref) {
     final size = MediaQuery.of(context).size;
+   
 
-    
     if (kIsWeb) {
       final cloudstoreRef = ref.watch(cloudStoreProvider);
       return SizedBox(
         width: size.width < 1000 ? screenWidth - 270 : size.width - 293,
         child: StreamBuilder(
-            stream: cloudstoreRef.getProducts(),
+            stream: cloudstoreRef.getCashierProducts(seller: fullName),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Column(

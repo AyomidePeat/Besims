@@ -1,5 +1,6 @@
 import 'package:bsims/const/textstyle.dart';
 import 'package:bsims/screens/authentication/signup.dart';
+import 'package:bsims/screens/cashier_dashboard/cashier_home.dart';
 import 'package:bsims/widgets/textfield_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const Home()));
+                                          builder: (context) => const CashierHome()));
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(

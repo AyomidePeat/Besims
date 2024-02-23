@@ -1,23 +1,33 @@
 import 'package:bsims/const/textstyle.dart';
+import 'package:bsims/firebase_repos/cloud_firestore.dart';
+import 'package:bsims/models/user_model.dart';
 import 'package:bsims/screens/admin_dashboard/category.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
 import 'package:bsims/screens/admin_dashboard/orders.dart';
 import 'package:bsims/screens/admin_dashboard/point_of_sales.dart';
 import 'package:bsims/screens/admin_dashboard/stock_inventory.dart';
+import 'package:bsims/screens/cashier_dashboard/cashier_dashboard.dart';
+import 'package:bsims/screens/cashier_dashboard/cashier_orders.dart';
 import 'package:bsims/screens/cashier_dashboard/widgets/cashier_drawer_pane.dart';
 import 'package:bsims/screens/cashier_dashboard/widgets/cashier_menu_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../const/colors.dart';
 
-class CashierHome extends StatefulWidget {
+final userDetailsProvider = FutureProvider<UserModel?>((ref) async {
+  final cloudStoreRef = ref.read(cloudStoreProvider);
+  return cloudStoreRef.getUserDetails();
+});
+
+class CashierHome extends ConsumerStatefulWidget {
   const CashierHome({super.key});
 
   @override
-  State<CashierHome> createState() => _CashierHomeState();
+  ConsumerState<CashierHome> createState() => _CashierHomeState();
 }
 
-class _CashierHomeState extends State<CashierHome> {
+class _CashierHomeState extends ConsumerState<CashierHome> {
   double screenWidth = 0;
   Size size = const Size(0, 0);
   List icons = [
@@ -26,7 +36,6 @@ class _CashierHomeState extends State<CashierHome> {
     Icons.shopify_rounded,
     Icons.delivery_dining,
     Icons.business,
-   
   ];
 
   List screens = [
@@ -35,8 +44,11 @@ class _CashierHomeState extends State<CashierHome> {
     'Products',
     'Orders',
     'Point of Sales',
-  
   ];
+  String name = '';
+  String email = '';
+  String username = '';
+  String image = '';
 
   Widget getScreen() {
     switch (currentItem) {
@@ -44,7 +56,8 @@ class _CashierHomeState extends State<CashierHome> {
         return Row(
           children: [
             SingleChildScrollView(
-              child: Dashboard(
+              child: CashierDashboard(
+                fullName: name,
                 screenWidth: screenWidth,
                 size: size,
               ),
@@ -56,15 +69,14 @@ class _CashierHomeState extends State<CashierHome> {
           screenWidth: screenWidth,
         );
       case MenuItems.orders:
-        return Orders(
+        return CashierOrders(name: name,
           screenWidth: screenWidth,
         );
       case MenuItems.products:
         return StockInventory(
           screenWidth: screenWidth,
         );
-     
-     
+
       case MenuItems.pointOfSales:
         return PointofSales(screenWidth: screenWidth);
       default:
@@ -85,8 +97,8 @@ class _CashierHomeState extends State<CashierHome> {
 
   @override
   Widget build(BuildContext context) {
+    final userDetailsAsyncValue = ref.watch(userDetailsProvider);
     size = MediaQuery.of(context).size;
-    print(size.width);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: LayoutBuilder(
@@ -109,9 +121,32 @@ class _CashierHomeState extends State<CashierHome> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Header(
-                      screenWidth: screenWidth,
-                      searchController: searchController),
+                  userDetailsAsyncValue.when(
+                    data: (userDetails) {
+                      if (userDetails != null) {
+                        name = userDetails.name;
+                        email = userDetails.email;
+                        image = userDetails.image;
+
+                        return Header(
+                            image: image,
+                            email: email,
+                            name: name,
+                            screenWidth: screenWidth,
+                            searchController: searchController);
+                      } else {
+                        return Header(
+                            image:
+                                'https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg',
+                            email: 'cashier@gmail.com',
+                            name: 'Cashier',
+                            screenWidth: screenWidth,
+                            searchController: searchController);
+                      }
+                    },
+                    loading: () => const CircularProgressIndicator(),
+                    error: (error, stackTrace) => Text('Error: $error'),
+                  ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -127,13 +162,17 @@ class _CashierHomeState extends State<CashierHome> {
 }
 
 class Header extends StatelessWidget {
-  const Header({
-    super.key,
-    required this.screenWidth,
-    required this.searchController,
-  });
-
+  const Header(
+      {super.key,
+      required this.screenWidth,
+      required this.searchController,
+      required this.name,
+      required this.email,
+      required this.image});
+  final String name;
+  final String email;
   final double screenWidth;
+  final String image;
   final TextEditingController searchController;
 
   @override
@@ -143,7 +182,7 @@ class Header extends StatelessWidget {
     String currentDate = DateFormat('EEEE, MMMM dd, yyyy').format(now);
     return Container(
       padding: const EdgeInsets.all(10),
-      width: size.width <1000? screenWidth - 270 :screenWidth - 293,
+      width: size.width < 1000 ? screenWidth - 270 : screenWidth - 293,
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(10), color: white),
       child: Row(
@@ -174,11 +213,11 @@ class Header extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Cshier Name',
+                      name,
                       style: headline(black, 14),
                     ),
                     Text(
-                      'Cashier@email.com',
+                      email,
                       style: bodyText(purple!, 8),
                     ),
                   ],
@@ -188,7 +227,7 @@ class Header extends StatelessWidget {
                 width: 10,
               ),
               CircleAvatar(
-                backgroundColor: purple,
+                backgroundImage: NetworkImage(image),
               ),
             ],
           )

@@ -48,6 +48,20 @@ class FirestoreClass {
     });
   }
 
+  Future<UserModel?> getUserDetails() async {
+    DocumentSnapshot snapshot = await firebaseFirestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .get();
+    if (snapshot.exists) {
+      UserModel user =
+          UserModel.getModelFromJson(json: snapshot.data() as dynamic);
+      return user;
+    } else {
+      return null;
+    }
+  }
+
   Future addCategory({
     required String categoryName,
   }) async {
@@ -586,7 +600,8 @@ class FirestoreClass {
     return message;
   }
 
-  Future deleteCashierProduct({required String name, required String seller}) async {
+  Future deleteCashierProduct(
+      {required String name, required String seller}) async {
     String message = 'Something went wrong';
     try {
       await firebaseFirestore.collection('$seller products').doc(name).delete();

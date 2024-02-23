@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           scheme: FlexScheme.deepPurple, fontFamily: 'Kanit'),
       home: Builder(builder: (context) {
         if (kIsWeb) {
-          return const CashierHome();
+          return const LoginPage();
         } else {
           return const LoginPage();
         }
