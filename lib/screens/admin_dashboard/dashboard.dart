@@ -87,275 +87,279 @@ class Dashboard extends ConsumerWidget {
                     NumberFormat('#,###').format(returnedprice);
                 List<ProductModel> bestPerformers = getBestPerformers(stocks);
 
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              height: 135,
-                              width: size.width < 1000 ? 350 : 700,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: white,
-                                border:
-                                    Border.all(width: 0.5, color: Colors.grey),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Total Estimate',
-                                    style: bodyText(
-                                        black, size.width < 1000 ? 13 : 16),
+                return SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SingleChildScrollView(scrollDirection: Axis.horizontal,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(20),
+                                  height: 135,
+                                  width: size.width < 1000 ? 350 : 700,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: white,
+                                    border:
+                                        Border.all(width: 0.5, color: Colors.grey),
                                   ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      EstimateTexts(
-                                        amount: formattedTotalSales,
-                                        color: blue,
-                                        text: 'Sales',
+                                      Text(
+                                        'Total Estimate',
+                                        style: bodyText(
+                                            black, size.width < 1000 ? 13 : 16),
                                       ),
-                                      verticalLine(),
-                                      EstimateTexts(
-                                        amount: formattedProfits,
-                                        color: green,
-                                        text: 'Profits',
-                                      ),
-                                      verticalLine(),
-                                      EstimateTexts(
-                                        amount: formattedReturnedPrice,
-                                        color: red,
-                                        text: 'Returned',
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 18.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            StreamBuilder<DateTime>(
-                                              stream: currentTimeStream(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  DateTime currentTime =
-                                                      snapshot.data!;
-                                                  String formattedTime =
-                                                      DateFormat.Hm()
-                                                          .format(currentTime);
-
-                                                  return Text(
-                                                    formattedTime,
-                                                    style: headline(
-                                                        black,
-                                                        size.width < 1000
-                                                            ? 11
-                                                            : 14),
-                                                  );
-                                                } else {
-                                                  return const SizedBox(); // Display a loading indicator while waiting for the first data.
-                                                }
-                                              },
-                                            ),
-                                            Text(
-                                              size.width < 1000
-                                                  ? shortCurrentDate
-                                                  : currentDate,
-                                              style: bodyText(Colors.grey,
-                                                  size.width > 600 ? 11 : 14),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: size.width < 1000 ? 10 : 30),
-                            StreamBuilder(
-                                stream: cloudstoreRef.getStocks(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator(
-                                        color: purple);
-                                  } else {
-                                    final stocks = snapshot.data!;
-                                    final totalStocks = stocks.length;
-
-                                    return Container(
-                                        padding: const EdgeInsets.all(20),
-                                        height: 135,
-                                        width: size.width < 1000 ? 140 : 400,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: white,
-                                          border: Border.all(
-                                              width: 0.5, color: Colors.grey),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Total Products',
-                                              style: bodyText(black,
-                                                  size.width < 1000 ? 13 : 16),
-                                            ),
-                                            const SizedBox(height: 25),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          EstimateTexts(
+                                            amount: formattedTotalSales,
+                                            color: blue,
+                                            text: 'Sales',
+                                          ),
+                                          verticalLine(),
+                                          EstimateTexts(
+                                            amount: formattedProfits,
+                                            color: green,
+                                            text: 'Profits',
+                                          ),
+                                          verticalLine(),
+                                          EstimateTexts(
+                                            amount: formattedReturnedPrice,
+                                            color: red,
+                                            text: 'Returned',
+                                          ),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 18.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text(totalStocks.toString(),
-                                                    style: headline(
-                                                        black,
-                                                        size.width < 1000
-                                                            ? 15
-                                                            : 23)),
-                                                Container(
-                                                  height: size.width < 1000
-                                                      ? 20
-                                                      : 35,
-                                                  width: 35,
-                                                  padding: EdgeInsets.all(5),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      color: Colors.green[50]),
-                                                  child: Text(
-                                                    '+13%',
-                                                    style: headline(
-                                                        green,
-                                                        size.width < 1000
-                                                            ? 10
-                                                            : 14),
-                                                  ),
+                                                StreamBuilder<DateTime>(
+                                                  stream: currentTimeStream(),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.hasData) {
+                                                      DateTime currentTime =
+                                                          snapshot.data!;
+                                                      String formattedTime =
+                                                          DateFormat.Hm()
+                                                              .format(currentTime);
+                                            
+                                                      return Text(
+                                                        formattedTime,
+                                                        style: headline(
+                                                            black,
+                                                            size.width < 1000
+                                                                ? 11
+                                                                : 14),
+                                                      );
+                                                    } else {
+                                                      return const SizedBox(); // Display a loading indicator while waiting for the first data.
+                                                    }
+                                                  },
+                                                ),
+                                                Text(
+                                                  size.width < 1000
+                                                      ? shortCurrentDate
+                                                      : currentDate,
+                                                  style: bodyText(Colors.grey,
+                                                      size.width > 600 ? 11 : 14),
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ));
-                                  }
-                                }),
-                            SizedBox(width: size.width < 1000 ? 10 : 30),
-                            StreamBuilder(
-                                stream: cloudstoreRef.getStores(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator(
-                                        color: purple);
-                                  } else {
-                                    final stores = snapshot.data!;
-                                    final totalStores = stores.length;
-                                    return Container(
-                                        padding: const EdgeInsets.all(20),
-                                        height: 135,
-                                        width: size.width < 1000 ? 178 : 400,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: white,
-                                          border: Border.all(
-                                              width: 0.5, color: Colors.grey),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: size.width < 1000 ? 10 : 30),
+                                StreamBuilder(
+                                    stream: cloudstoreRef.getStocks(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator(
+                                            color: purple);
+                                      } else {
+                                        final stocks = snapshot.data!;
+                                        final totalStocks = stocks.length;
+                                            
+                                        return Container(
+                                            padding: const EdgeInsets.all(20),
+                                            height: 135,
+                                            width: size.width < 1000 ? 140 : 400,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: white,
+                                              border: Border.all(
+                                                  width: 0.5, color: Colors.grey),
+                                            ),
+                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  size.width < 1000
-                                                      ? 'Stores'
-                                                      : "Total Stores",
-                                                  style: bodyText(
-                                                      black,
-                                                      size.width < 1000
-                                                          ? 13
-                                                          : 16),
+                                                  'Total Products',
+                                                  style: bodyText(black,
+                                                      size.width < 1000 ? 13 : 16),
                                                 ),
                                                 const SizedBox(height: 25),
                                                 Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
-                                                    Text(totalStores.toString(),
+                                                    Text(totalStocks.toString(),
+                                                        style: headline(
+                                                            black,
+                                                            size.width < 1000
+                                                                ? 15
+                                                                : 23)),
+                                                    Container(
+                                                      height: size.width < 1000
+                                                          ? 20
+                                                          : 35,
+                                                      width: 35,
+                                                      padding: EdgeInsets.all(5),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  5),
+                                                          color: Colors.green[50]),
+                                                      child: Text(
+                                                        '+13%',
+                                                        style: headline(
+                                                            green,
+                                                            size.width < 1000
+                                                                ? 10
+                                                                : 14),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ));
+                                      }
+                                    }),
+                                SizedBox(width: size.width < 1000 ? 10 : 30),
+                                StreamBuilder(
+                                    stream: cloudstoreRef.getStores(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator(
+                                            color: purple);
+                                      } else {
+                                        final stores = snapshot.data!;
+                                        final totalStores = stores.length;
+                                        return Container(
+                                            padding: const EdgeInsets.all(20),
+                                            height: 135,
+                                            width: size.width < 1000 ? 178 : 400,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: white,
+                                              border: Border.all(
+                                                  width: 0.5, color: Colors.grey),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      size.width < 1000
+                                                          ? 'Stores'
+                                                          : "Total Stores",
+                                                      style: bodyText(
+                                                          black,
+                                                          size.width < 1000
+                                                              ? 13
+                                                              : 16),
+                                                    ),
+                                                    const SizedBox(height: 25),
+                                                    Row(
+                                                      children: [
+                                                        Text(totalStores.toString(),
+                                                            style: headline(
+                                                                black,
+                                                                size.width < 1000
+                                                                    ? 15
+                                                                    : 23)),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      size.width < 1000
+                                                          ? 'Staff'
+                                                          : "Total Staff",
+                                                      style: bodyText(
+                                                          black,
+                                                          size.width < 1000
+                                                              ? 13
+                                                              : 16),
+                                                    ),
+                                                    const SizedBox(height: 25),
+                                                    Text('4',
                                                         style: headline(
                                                             black,
                                                             size.width < 1000
                                                                 ? 15
                                                                 : 23)),
                                                   ],
-                                                ),
+                                                )
                                               ],
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  size.width < 1000
-                                                      ? 'Staff'
-                                                      : "Total Staff",
-                                                  style: bodyText(
-                                                      black,
-                                                      size.width < 1000
-                                                          ? 13
-                                                          : 16),
-                                                ),
-                                                const SizedBox(height: 25),
-                                                Text('4',
-                                                    style: headline(
-                                                        black,
-                                                        size.width < 1000
-                                                            ? 15
-                                                            : 23)),
-                                              ],
-                                            )
-                                          ],
-                                        ));
-                                  }
-                                }),
-                          ]),
-                      const SizedBox(height: 20),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: _buildPerformanceList(
-                                  context, 'Best Performers', bestPerformers),
-                            ),
-                            SizedBox(width: 20),
-                            Container(
-                              child: _buildPerformanceList(
-                                  context, 'Worst Performers', bestPerformers),
-                            ),
-                            SizedBox(width: 20),
-                            Container(
-                              child: _buildPerformanceList(
-                                  context, 'Top Suppliers', bestPerformers),
-                            ),
-                          ],
+                                            ));
+                                      }
+                                    }),
+                              ]),
                         ),
-                      )
-                    ]);
+                        const SizedBox(height: 20),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: _buildPerformanceList(
+                                    context, 'Best Performers', bestPerformers),
+                              ),
+                              SizedBox(width: 20),
+                              Container(
+                                child: _buildPerformanceList(
+                                    context, 'Worst Performers', bestPerformers),
+                              ),
+                              SizedBox(width: 20),
+                              Container(
+                                child: _buildPerformanceList(
+                                    context, 'Top Suppliers', bestPerformers),
+                              ),
+                            ],
+                          ),
+                        )
+                      ]),
+                );
               }
             }),
       );

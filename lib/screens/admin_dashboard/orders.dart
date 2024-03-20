@@ -24,6 +24,7 @@ class _OrdersState extends ConsumerState<Orders> {
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
     final widgetSize = (widget.screenWidth - 293) / 12;
+    final size = MediaQuery.of(context).size;
 
     return Column(children: [
       StreamBuilder(
@@ -69,40 +70,43 @@ class _OrdersState extends ConsumerState<Orders> {
                         children: [
                           Text('Overall Orders', style: headline(black, 17)),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Boxes(
-                                icon: Icons.category,
-                                circleColor: Colors.purple[50]!,
-                                iconColor:
-                                    const Color.fromARGB(255, 146, 71, 188),
-                                title: 'Total Orders',
-                                total: totalOrders.toString(),
-                              ),
-                              Boxes(
-                                icon: Icons.shopping_cart,
-                                circleColor: Colors.green[50]!,
-                                iconColor:
-                                    const Color.fromARGB(255, 85, 196, 89),
-                                title: 'Total Delivered',
-                                total: confirmedCount.toString(),
-                              ),
-                              Boxes(
-                                icon: Icons.delivery_dining_sharp,
-                                circleColor: Colors.blue[50]!,
-                                iconColor: Colors.blue,
-                                title: ' In Transit',
-                                total: deliveryCount.toString(),
-                              ),
-                              Boxes(
-                                icon: Icons.sell,
-                                circleColor: Colors.red[50]!,
-                                iconColor: red,
-                                title: 'Total Returned',
-                                total: returnedCount.toString(),
-                              ),
-                            ],
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Boxes(
+                                  icon: Icons.category,
+                                  circleColor: Colors.purple[50]!,
+                                  iconColor:
+                                      const Color.fromARGB(255, 146, 71, 188),
+                                  title: 'Total Orders',
+                                  total: totalOrders.toString(),
+                                ),
+                                Boxes(
+                                  icon: Icons.shopping_cart,
+                                  circleColor: Colors.green[50]!,
+                                  iconColor:
+                                      const Color.fromARGB(255, 85, 196, 89),
+                                  title: 'Total Delivered',
+                                  total: confirmedCount.toString(),
+                                ),
+                                Boxes(
+                                  icon: Icons.delivery_dining_sharp,
+                                  circleColor: Colors.blue[50]!,
+                                  iconColor: Colors.blue,
+                                  title: ' In Transit',
+                                  total: deliveryCount.toString(),
+                                ),
+                                Boxes(
+                                  icon: Icons.sell,
+                                  circleColor: Colors.red[50]!,
+                                  iconColor: red,
+                                  title: 'Total Returned',
+                                  total: returnedCount.toString(),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -261,7 +265,7 @@ class _OrdersState extends ConsumerState<Orders> {
                             ]),
                             SizedBox(
                               width: widget.screenWidth - 280,
-                              height: 446,
+                              height: size.height-560,
                               child: ListView.builder(
                                   itemCount: stocks.length,
                                   itemBuilder: (context, index) {

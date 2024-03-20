@@ -23,12 +23,14 @@ class _SupplierState extends ConsumerState<Supplier> {
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
     final widgetSize = (widget.screenWidth - 293) / 12;
-
+    final size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: widget.screenWidth <1000? widget.screenWidth - 270 :widget.screenWidth - 293,
+          width: widget.screenWidth < 1000
+              ? widget.screenWidth - 270
+              : widget.screenWidth - 293,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -94,7 +96,9 @@ class _SupplierState extends ConsumerState<Supplier> {
           height: 40,
         ),
         Container(
-          width: widget.screenWidth <1000? widget.screenWidth - 270 :widget.screenWidth - 293,
+          width: widget.screenWidth < 1000
+              ? widget.screenWidth - 270
+              : widget.screenWidth - 293,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5), color: white),
@@ -109,49 +113,49 @@ class _SupplierState extends ConsumerState<Supplier> {
                   width: widgetSize,
                   child: Text(
                     'S/N',
-                    style: headline(black,widget.screenWidth <1000?11: 14),
+                    style: headline(black, widget.screenWidth < 1000 ? 11 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'COMPANY',
-                    style: headline(black,widget.screenWidth <1000?11: 14),
+                    style: headline(black, widget.screenWidth < 1000 ? 11 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'REG DATE',
-                    style: headline(black,widget.screenWidth <1000?11: 14),
+                    style: headline(black, widget.screenWidth < 1000 ? 11 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'E-MAIL',
-                    style: headline(black,widget.screenWidth <1000?11: 14),
+                    style: headline(black, widget.screenWidth < 1000 ? 11 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'PHONE',
-                    style: headline(black,widget.screenWidth <1000?11: 14),
+                    style: headline(black, widget.screenWidth < 1000 ? 11 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ADDRESS',
-                    style: headline(black,widget.screenWidth <1000?11: 14),
+                    style: headline(black, widget.screenWidth < 1000 ? 11 : 14),
                   ),
                 ),
                 SizedBox(
                   width: widgetSize,
                   child: Text(
                     'ACTIONS',
-                    style: headline(black,widget.screenWidth <1000?11: 14),
+                    style: headline(black, widget.screenWidth < 1000 ? 11 : 14),
                   ),
                 ),
               ],
@@ -166,8 +170,10 @@ class _SupplierState extends ConsumerState<Supplier> {
                     final suppliers = snapshot.data!;
                     if (suppliers.isNotEmpty) {
                       return SizedBox(
-                        width:widget.screenWidth <1000?  widget.screenWidth - 270:widget.screenWidth - 280,
-                        height: 446,
+                        width: widget.screenWidth < 1000
+                            ? widget.screenWidth - 270
+                            : widget.screenWidth - 280,
+                        height: size.height - 400,
                         child: ListView.builder(
                             itemCount: suppliers.length,
                             itemBuilder: (context, index) {
@@ -367,42 +373,42 @@ class _SupplierState extends ConsumerState<Supplier> {
             width: widgetSize,
             child: Text(
               sn.toString(),
-                    style: bodyText(black,widget.screenWidth <1000?11: 14),
+              style: bodyText(black, widget.screenWidth < 1000 ? 11 : 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               company,
-                    style: bodyText(black,widget.screenWidth <1000?11: 14),
+              style: bodyText(black, widget.screenWidth < 1000 ? 11 : 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               regDate,
-                    style: bodyText(black,widget.screenWidth <1000?11: 14),
+              style: bodyText(black, widget.screenWidth < 1000 ? 11 : 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               email,
-                    style: bodyText(black,widget.screenWidth <1000?11: 14),
+              style: bodyText(black, widget.screenWidth < 1000 ? 11 : 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               phone,
-                    style: bodyText(black,widget.screenWidth <1000?11: 14),
+              style: bodyText(black, widget.screenWidth < 1000 ? 11 : 14),
             ),
           ),
           SizedBox(
             width: widgetSize,
             child: Text(
               address,
-                    style: bodyText(black,widget.screenWidth <1000?11: 14),
+              style: bodyText(black, widget.screenWidth < 1000 ? 11 : 14),
             ),
           ),
           SizedBox(

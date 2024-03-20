@@ -125,52 +125,57 @@ class _HomeState extends ConsumerState<Home> {
           builder: (BuildContext context, BoxConstraints constraints) {
         screenWidth = constraints.maxWidth;
 
-        return Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              MenuContainer(
-                onSelectedItem: (item) {
-                  setState(() => currentItem = item);
-                },
-                currentItem: currentItem,
-                screenWidth: screenWidth,
-                size: size,
-              ),
-              const SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                 userDetailsAsyncValue.when(
-                    data: (userDetails) {
-                      if (userDetails != null) {
-                        name = userDetails.name;
-                        email = userDetails.email;
-                        image = userDetails.image;
-
-                        return Header(
-                            image: image,
-                            email: email,
-                            name: name,
-                            screenWidth: screenWidth,
-                            searchController: searchController);
-                      } else {
-                        return Header(
-                            image:
-                                'https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg',
-                            email: 'admin@gmail.com',
-                            name: 'Admin',
-                            screenWidth: screenWidth,
-                            searchController: searchController);
-                      }
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height:size.height,
+                  child: MenuContainer(
+                    onSelectedItem: (item) {
+                      setState(() => currentItem = item);
                     },
-                    loading: () => const CircularProgressIndicator(),
-                    error: (error, stackTrace) => Text('Error: $error'),
+                    currentItem: currentItem,
+                    screenWidth: screenWidth,
+                    size: size,
                   ),
-                  getScreen()
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                   userDetailsAsyncValue.when(
+                      data: (userDetails) {
+                        if (userDetails != null) {
+                          name = userDetails.name;
+                          email = userDetails.email;
+                          image = userDetails.image;
+          
+                          return Header(
+                              image: image,
+                              email: email,
+                              name: name,
+                              screenWidth: screenWidth,
+                              searchController: searchController);
+                        } else {
+                          return Header(
+                              image:
+                                  'https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg',
+                              email: 'admin@gmail.com',
+                              name: 'Admin',
+                              screenWidth: screenWidth,
+                              searchController: searchController);
+                        }
+                      },
+                      loading: () => const CircularProgressIndicator(),
+                      error: (error, stackTrace) => Text('Error: $error'),
+                    ),
+                    SizedBox(height: 20,),
+                    SingleChildScrollView(child: getScreen())
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       }),

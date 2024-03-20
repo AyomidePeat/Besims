@@ -25,6 +25,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
   Widget build(BuildContext context) {
     final cloudStoreRef = ref.watch(cloudStoreProvider);
     final widgetSize = (widget.screenWidth - 293) / 12;
+    final size = MediaQuery.of(context).size;
 
     return StreamBuilder(
         stream: cloudStoreRef.getStocks(),
@@ -48,38 +49,40 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                     children: [
                       Text('Overall Inventory', style: headline(black, 17)),
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Boxes(
-                            icon: Icons.category,
-                            circleColor: Colors.purple[50]!,
-                            iconColor: const Color.fromARGB(255, 146, 71, 188),
-                            title: 'Categories',
-                            total: '14',
-                          ),
-                          Boxes(
-                            icon: Icons.shopping_cart,
-                            circleColor: Colors.green[50]!,
-                            iconColor: const Color.fromARGB(255, 85, 196, 89),
-                            title: 'Total Products',
-                            total: totalProducts.toString(),
-                          ),
-                          Boxes(
-                            icon: Icons.sell,
-                            circleColor: Colors.blue[50]!,
-                            iconColor: Colors.blue,
-                            title: 'Top Selling',
-                            total: '5',
-                          ),
-                          Boxes(
-                            icon: Icons.production_quantity_limits,
-                            circleColor: Colors.red[50]!,
-                            iconColor: Colors.red,
-                            title: 'Low Stocks',
-                            total: '12',
-                          ),
-                        ],
+                      SingleChildScrollView(scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Boxes(
+                              icon: Icons.category,
+                              circleColor: Colors.purple[50]!,
+                              iconColor: const Color.fromARGB(255, 146, 71, 188),
+                              title: 'Categories',
+                              total: '14',
+                            ),
+                            Boxes(
+                              icon: Icons.shopping_cart,
+                              circleColor: Colors.green[50]!,
+                              iconColor: const Color.fromARGB(255, 85, 196, 89),
+                              title: 'Total Products',
+                              total: totalProducts.toString(),
+                            ),
+                            Boxes(
+                              icon: Icons.sell,
+                              circleColor: Colors.blue[50]!,
+                              iconColor: Colors.blue,
+                              title: 'Top Selling',
+                              total: '5',
+                            ),
+                            Boxes(
+                              icon: Icons.production_quantity_limits,
+                              circleColor: Colors.red[50]!,
+                              iconColor: Colors.red,
+                              title: 'Low Stocks',
+                              total: '12',
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -233,7 +236,7 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                             const Divider(),
                             SizedBox(
                               width: widget.screenWidth - 280,
-                              height: 446,
+                        height: size.height - 520,
                               child: ListView.builder(
                                   itemCount: stocks.length,
                                   itemBuilder: (context, index) {
@@ -700,7 +703,6 @@ class _StockInventoryState extends ConsumerState<StockInventory> {
                       const SizedBox(width: 30),
                       InkWell(
                         onTap: () async {
-
                           final uploadSuccess =
                               await firestore.addStockInventory(
                                   name: nameController.text,

@@ -95,7 +95,8 @@ class _SalesState extends ConsumerState<Sales> {
   Widget build(BuildContext context) {
     final multiply = 0.012;
     final widgetSize = (widget.screenWidth - 293) / 12;
-    final cloudstoreRef = ref.watch(cloudStoreProvider);
+    final cloudstoreRef = ref.watch(cloudStoreProvider);    final size = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -192,7 +193,7 @@ class _SalesState extends ConsumerState<Sales> {
                                 quantity: quantity[index]);
                           }),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     Container(
                       width: widget.size.width - 293,
                       padding: const EdgeInsets.all(10),
@@ -293,7 +294,7 @@ class _SalesState extends ConsumerState<Sales> {
                                 ),
                                 SizedBox(
                                   width: 250,
-                                  height: 40,
+                                  height: 35,
                                   child: TextField(
                                     decoration: const InputDecoration(
                                         hintText: 'dd/mm/yyyy',
@@ -413,20 +414,20 @@ class _SalesState extends ConsumerState<Sales> {
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 20,
                     ),
                     SizedBox(
                         width: (widget.screenWidth - 293),
                         child: SaleHeadings(widgetSize: widgetSize)),
                     const Divider(),
                     SizedBox(
-                      height: 200,
+                     height: size.height<500? 50: size.height < 700 && size.height > 500 ? 100 : 200,
                       width: widget.screenWidth - 290,
                       child: FutureBuilder<List<ProductModel>>(
                         future: getSales(),
@@ -521,6 +522,8 @@ class SaleHeadings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final size = MediaQuery.of(context).size;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

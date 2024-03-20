@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Color.fromARGB(255, 226, 222, 235),
       body: Center(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 70, vertical: 100),
+          margin: const EdgeInsets.symmetric(horizontal: 70, vertical: 0),
           width: containerWidth,
           height: size.height * 0.8,
           decoration: BoxDecoration(
@@ -60,13 +60,13 @@ class _LoginPageState extends State<LoginPage> {
                 width: containerWidth / 2,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    top: 50.0,
+                    top: 30.0,
                     left: 50,
                   ),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 50),
+                        SizedBox(height: size.width * 0.008),
                         Row(
                           children: [
                             Text('BeSeamless',
@@ -79,13 +79,13 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                         SizedBox(
-                          height: size.width < 1500 ? 25 : 40,
+                              height:size.height<500?20:size.height < 700 && size.height > 500 ?30: 50,
                         ),
                         TextFieldWidget(
                             controller: emailAddressController,
                             label: 'Email Address'),
                         SizedBox(
-                          height: size.width < 1500 ? 15 : 20,
+                              height:size.height<500?20:size.height < 700 && size.height > 500 ?30: 50,
                         ),
                         TextFieldWidget(
                             isObscure: isObscure,
@@ -113,7 +113,8 @@ class _LoginPageState extends State<LoginPage> {
                         if (!kIsWeb)
                           CustomMainButton(
                               width: size.width < 1500 ? 200 : 400,
-                              height: 50,
+                              height:size.height<500?20:size.height < 700 && size.height > 500 ?30: 50,
+
                               onPressed: () {
                                 Navigator.push(
                                     context,
@@ -192,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               color: purple!,
                               child: isLoading
-                                  ? LoadingAnimationWidget.beat(
+                                  ? LoadingAnimationWidget.hexagonDots(
                                       color: white, size: 20)
                                   : Text(
                                       'Login',
@@ -259,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(
-                        height: size.width < 1500 ? 400 : 540,
+                        height:size.height<500? 200: size.height < 700 && size.height > 500 ? 300 : 400,
                         child: Image.asset('assets/bgg.png')),
                   ],
                 ),

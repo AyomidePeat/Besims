@@ -7,44 +7,47 @@ class AuthenticationMethod {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirestoreClass firestoreClass = FirestoreClass();
 
-  Future<String> firstSignUp(
-      {required String email,
-      required String password,
-      required String businessName,
-      required String name}) async {
+  Future<String> firstSignUp({
+    required String email,
+    required String password,
+    required String businessName,
+    required String name,
+  }) async {
     String message = 'Something went wrong';
-    email.trim();
-    password.trim();
-    if (name != "" && email != "" && password != "") {
-      try {
-        // final userCredential = await auth.createUserWithEmailAndPassword(
-        //     email: email, password: password);
+    email = email.trim();
+    password = password.trim();
 
+    if (name.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
+      try {
+         final userCredential = await auth.createUserWithEmailAndPassword(
+            email: email, password: password);
         await firestoreClass.addUser(
-            name: name,
-            username: name,
-            email: email,
-            role: 'admin',
-            image: '',
-            phoneNumber: '',
-            gender: '');
-        message = "Success";
+          name: name,
+          username: name,
+          email: email,
+          role: 'admin',
+          image: '',
+          phoneNumber: '',
+          gender: '',
+        );
+        
+        message = 'Success';
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
-          message = "Password is too weak";
+          message = 'Password is too weak';
         } else if (e.code == 'email-already-in-use') {
           message = 'Email already registered';
-        } else if (e.code == 'user not found') {
-          message = 'Email or Password is incorrect';
-        } else if (e.code == '') {
-          message = 'No internet connection';
+        } else if (e.code == 'user-not-found') {
+          message = 'User not found';
+        } else {
+          message = 'An error occurred: ${e.code}';
         }
-        return message;
       } catch (e) {
-        return e.toString();
+        print('Error: $e');
+        message = 'An error occurred';
       }
     } else {
-      message = "Please fill up all the fields.";
+      message = 'Please fill up all the fields.';
     }
     return message;
   }
@@ -63,8 +66,8 @@ class AuthenticationMethod {
     password.trim();
     if (name != "" && email != "" && password != "") {
       try {
-        // final userCredential = await auth.createUserWithEmailAndPassword(
-        //     email: email, password: password);
+        final userCredential = await auth.createUserWithEmailAndPassword(
+            email: email, password: password);
         final fileName = name;
         final firebaseStorageRef =
             firebase_storage.FirebaseStorage.instance.ref().child(fileName);
@@ -93,9 +96,8 @@ class AuthenticationMethod {
         } else if (e.code == 'network-request-failed') {
           message = 'No internet connection';
         } else {
-     
-      message = 'Authentication failed. Please try again.';
-    }
+          message = 'Authentication failed. Please try again.';
+        }
         return message;
       } catch (e) {
         return e.toString();
@@ -120,13 +122,11 @@ class AuthenticationMethod {
           message = 'Username or password is incorrect';
         } else if (e.code == 'network-request-failed') {
           message = 'No internet connection';
+        } else if (e.code == 'wrong-password') {
+          message = 'Email or Password is incorrect';
+        } else {
+          message = 'Authentication failed. Please try again.';
         }
-        else if (e.code == 'wrong-password') {
-      message = 'Email or Password is incorrect';
-    } else {
-     
-      message = 'Authentication failed. Please try again.';
-    }
       } catch (e) {
         return e.toString();
       }

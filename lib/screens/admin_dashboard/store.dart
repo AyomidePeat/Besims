@@ -112,7 +112,7 @@ class _StoreState extends ConsumerState<Store> {
                     if (stores.isNotEmpty) {
                       return SizedBox(
                         width: widget.screenWidth - 280,
-                        height: size.height - 320,
+                        height: size.height - 258,
                         child: ListView.builder(
                             itemCount: stores.length,
                             itemBuilder: (context, index) {
