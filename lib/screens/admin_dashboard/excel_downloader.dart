@@ -4,33 +4,34 @@ import 'dart:typed_data';
 import 'package:universal_html/html.dart' as html;
 
 FirebaseFirestore firestore = FirebaseFirestore.instance;
+
 Future<void> exportInventoryExcelFile() async {
   final querySnapshot = await firestore.collection('stock-inventory').get();
 
   final excel = Excel.createExcel();
   final sheet = excel['Sheet1'];
   sheet.appendRow([
-    'Product Name',
-    'Category',
-    'Expiry Date',
-    'Cost Price',
-    'Selling Price',
-    'Supplier',
-    'Quantity',
-    'Status'
+     TextCellValue('Product Name'),
+     TextCellValue('Category'),
+     TextCellValue('Expiry Date'),
+     TextCellValue('Cost Price'),
+     TextCellValue('Selling Price'),
+     TextCellValue('Supplier'),
+     TextCellValue('Quantity'),
+     TextCellValue('Status'),
   ]);
   for (final doc in querySnapshot.docs) {
     final data = doc.data();
 
-    final List<dynamic> rowData = [
-      data['name'],
-      data['category'],
-      data['expiryDate'],
-      data['costPrice'],
-      data['sellingPrice'],
-      data['supplier'],
-      data['quantity'],
-      data['status'],
+    final List<CellValue> rowData = [
+      TextCellValue(data['name']?.toString() ?? ''),
+      TextCellValue(data['category']?.toString() ?? ''),
+      TextCellValue(data['expiryDate']?.toString() ?? ''),
+      DoubleCellValue(data['costPrice'] is num ? data['costPrice'] : double.tryParse(data['costPrice']?.toString() ?? '0') ?? 0.0),
+      DoubleCellValue(data['sellingPrice'] is num ? data['sellingPrice'] : double.tryParse(data['sellingPrice']?.toString() ?? '0') ?? 0.0),
+      TextCellValue(data['supplier']?.toString() ?? ''),
+      IntCellValue(data['quantity'] is num ? data['quantity'].toInt() : int.tryParse(data['quantity']?.toString() ?? '0') ?? 0),
+      TextCellValue(data['status']?.toString() ?? ''),
     ];
 
     sheet.appendRow(rowData);
@@ -40,6 +41,11 @@ Future<void> exportInventoryExcelFile() async {
   final blob = html.Blob([Uint8List.fromList(fileBytes!)]);
   final url = html.Url.createObjectUrlFromBlob(blob);
 
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute('download', 'Inventory file.xlsx')
+    ..click();
+
+  await Future.delayed( Duration(seconds: 1));
   html.Url.revokeObjectUrl(url);
 }
 
@@ -49,27 +55,27 @@ Future<void> exportOrdersExcelFile() async {
   final excel = Excel.createExcel();
   final sheet = excel['Sheet1'];
   sheet.appendRow([
-    'Products',
-    'Category',
-    'Price',
-    'Stock Quantity',
-    'Quantity',
-    'Seller',
-    'Payment Method',
-    'Status',
+     TextCellValue('Products'),
+     TextCellValue('Category'),
+     TextCellValue('Price'),
+     TextCellValue('Stock Quantity'),
+     TextCellValue('Quantity'),
+     TextCellValue('Seller'),
+     TextCellValue('Payment Method'),
+     TextCellValue('Status'),
   ]);
   for (final doc in querySnapshot.docs) {
     final data = doc.data();
 
-    final List<dynamic> rowData = [
-      data['productName'],
-      data['category'],
-      data['unitPrice'],
-      data['stockQty'],
-      data['quantity'],
-      data['Seller'],
-      data['paymentMethod'],
-      data['status'],
+    final List<CellValue> rowData = [
+      TextCellValue(data['productName']?.toString() ?? ''),
+      TextCellValue(data['category']?.toString() ?? ''),
+      DoubleCellValue(data['unitPrice'] is num ? data['unitPrice'] : double.tryParse(data['unitPrice']?.toString() ?? '0') ?? 0.0),
+      IntCellValue(data['stockQty'] is num ? data['stockQty'].toInt() : int.tryParse(data['stockQty']?.toString() ?? '0') ?? 0),
+      IntCellValue(data['quantity'] is num ? data['quantity'].toInt() : int.tryParse(data['quantity']?.toString() ?? '0') ?? 0),
+      TextCellValue(data['Seller']?.toString() ?? ''),
+      TextCellValue(data['paymentMethod']?.toString() ?? ''),
+      TextCellValue(data['status']?.toString() ?? ''),
     ];
 
     sheet.appendRow(rowData);
@@ -79,6 +85,11 @@ Future<void> exportOrdersExcelFile() async {
   final blob = html.Blob([Uint8List.fromList(fileBytes!)]);
   final url = html.Url.createObjectUrlFromBlob(blob);
 
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute('download', 'Orders file.xlsx')
+    ..click();
+
+  await Future.delayed(const Duration(seconds: 1));
   html.Url.revokeObjectUrl(url);
 }
 
@@ -88,21 +99,21 @@ Future<void> exportStoreExcelFile() async {
   final excel = Excel.createExcel();
   final sheet = excel['Sheet1'];
   sheet.appendRow([
-    'Name',
-    'Location',
-    'Manager',
-    'Phone',
-    'Status',
+     TextCellValue('Name'),
+     TextCellValue('Location'),
+     TextCellValue('Manager'),
+     TextCellValue('Phone'),
+     TextCellValue('Status'),
   ]);
   for (final doc in querySnapshot.docs) {
     final data = doc.data();
 
-    final List<dynamic> rowData = [
-      data['name'],
-      data['manager'],
-      data['location'],
-      data['phone'],
-      data['status'],
+    final List<CellValue> rowData = [
+      TextCellValue(data['name']?.toString() ?? ''),
+      TextCellValue(data['manager']?.toString() ?? ''), 
+      TextCellValue(data['location']?.toString() ?? ''),
+      TextCellValue(data['phone']?.toString() ?? ''),
+      TextCellValue(data['status']?.toString() ?? ''),
     ];
 
     sheet.appendRow(rowData);
@@ -112,6 +123,11 @@ Future<void> exportStoreExcelFile() async {
   final blob = html.Blob([Uint8List.fromList(fileBytes!)]);
   final url = html.Url.createObjectUrlFromBlob(blob);
 
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute('download', 'Stores.xlsx')
+    ..click();
+
+  await Future.delayed(const Duration(seconds: 1));
   html.Url.revokeObjectUrl(url);
 }
 
@@ -121,21 +137,21 @@ Future<void> exportSupplierExcelFile() async {
   final excel = Excel.createExcel();
   final sheet = excel['Sheet1'];
   sheet.appendRow([
-    'Company',
-    'Reg Date',
-    'E-mail',
-    'Phone',
-    'Address',
+     TextCellValue('Company'),
+     TextCellValue('Reg Date'),
+     TextCellValue('E-mail'),
+     TextCellValue('Phone'),
+     TextCellValue('Address'),
   ]);
   for (final doc in querySnapshot.docs) {
     final data = doc.data();
 
-    final List<dynamic> rowData = [
-      data['name'],
-      data['company'],
-      data['address'],
-      data['email'],
-      data['phone'],
+    final List<CellValue> rowData = [
+      TextCellValue(data['name']?.toString() ?? ''),
+      TextCellValue(data['company']?.toString() ?? ''),
+      TextCellValue(data['address']?.toString() ?? ''),
+      TextCellValue(data['email']?.toString() ?? ''),
+      TextCellValue(data['phone']?.toString() ?? ''),
     ];
 
     sheet.appendRow(rowData);
@@ -145,6 +161,11 @@ Future<void> exportSupplierExcelFile() async {
   final blob = html.Blob([Uint8List.fromList(fileBytes!)]);
   final url = html.Url.createObjectUrlFromBlob(blob);
 
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute('download', 'Supplier file.xlsx')
+    ..click();
+
+  await Future.delayed(const Duration(seconds: 1));
   html.Url.revokeObjectUrl(url);
 }
 
@@ -156,27 +177,27 @@ Future<void> exportReportsExcelFile() async {
   final excel = Excel.createExcel();
   final sheet = excel['Sheet1'];
   sheet.appendRow([
-    'Products',
-    'Category',
-    'Price',
-    'Stock Quantity',
-    'Quantity',
-    'Seller',
-    'Payment Method',
-    'Status',
+     TextCellValue('Products'),
+     TextCellValue('Category'),
+     TextCellValue('Price'),
+     TextCellValue('Stock Quantity'),
+     TextCellValue('Quantity'),
+     TextCellValue('Seller'),
+     TextCellValue('Payment Method'),
+     TextCellValue('Status'),
   ]);
   for (final doc in querySnapshot.docs) {
     final data = doc.data();
 
-    final List<dynamic> rowData = [
-      data['productName'],
-      data['category'],
-      data['unitPrice'],
-      data['stockQty'],
-      data['quantity'],
-      data['Seller'],
-      data['paymentMethod'],
-      data['status'],
+    final List<CellValue> rowData = [
+      TextCellValue(data['productName']?.toString() ?? ''),
+      TextCellValue(data['category']?.toString() ?? ''),
+      DoubleCellValue(data['unitPrice'] is num ? data['unitPrice'] : double.tryParse(data['unitPrice']?.toString() ?? '0') ?? 0.0),
+      IntCellValue(data['stockQty'] is num ? data['stockQty'].toInt() : int.tryParse(data['stockQty']?.toString() ?? '0') ?? 0),
+      IntCellValue(data['quantity'] is num ? data['quantity'].toInt() : int.tryParse(data['quantity']?.toString() ?? '0') ?? 0),
+      TextCellValue(data['Seller']?.toString() ?? ''),
+      TextCellValue(data['paymentMethod']?.toString() ?? ''),
+      TextCellValue(data['status']?.toString() ?? ''),
     ];
 
     sheet.appendRow(rowData);
@@ -186,5 +207,10 @@ Future<void> exportReportsExcelFile() async {
   final blob = html.Blob([Uint8List.fromList(fileBytes!)]);
   final url = html.Url.createObjectUrlFromBlob(blob);
 
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute('download', 'Reports file.xlsx')
+    ..click();
+
+  await Future.delayed(const Duration(seconds: 1));
   html.Url.revokeObjectUrl(url);
 }
