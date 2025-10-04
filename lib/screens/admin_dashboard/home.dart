@@ -65,8 +65,7 @@ class _HomeState extends ConsumerState<Home> {
           children: [
             SingleChildScrollView(
               child: Dashboard(
-                screenWidth: screenWidth,
-                size: size,
+               
               ),
             ),
           ],
@@ -100,8 +99,7 @@ class _HomeState extends ConsumerState<Home> {
         return PointofSales(screenWidth: screenWidth);
       default:
         return Dashboard(
-          screenWidth: screenWidth,
-          size: size,
+        
         );
     }
   }

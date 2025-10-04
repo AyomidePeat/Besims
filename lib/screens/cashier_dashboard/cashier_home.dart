@@ -3,7 +3,6 @@ import 'package:bsims/firebase_repos/cloud_firestore.dart';
 import 'package:bsims/models/user_model.dart';
 import 'package:bsims/screens/admin_dashboard/category.dart';
 import 'package:bsims/screens/admin_dashboard/dashboard.dart';
-import 'package:bsims/screens/admin_dashboard/orders.dart';
 import 'package:bsims/screens/admin_dashboard/point_of_sales.dart';
 import 'package:bsims/screens/admin_dashboard/stock_inventory.dart';
 import 'package:bsims/screens/cashier_dashboard/cashier_dashboard.dart';
@@ -81,8 +80,7 @@ class _CashierHomeState extends ConsumerState<CashierHome> {
         return PointofSales(screenWidth: screenWidth);
       default:
         return Dashboard(
-          screenWidth: screenWidth,
-          size: size,
+       
         );
     }
   }
